@@ -15,7 +15,7 @@ public class LiftSubsystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
  
-  public static final int KLiftTalon = 0; 
+  public static final int KLiftTalon = 7; 
 
   private TalonSRX liftMotor;
 
