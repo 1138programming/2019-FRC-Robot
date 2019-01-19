@@ -17,20 +17,20 @@ public class ArmSubsystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
  
-  public static final int KArmLeftTalon = 0; 
-  public static final int KArmRightTalon = 0; 
-  public static final int KCollectorTalon = 0; 
+  public static final int KArmTalon = 4; 
+  public static final int KArmVictor = 5; 
+  public static final int KCollectorVictor = 8; 
   public static final double KArmSpeed = 1.0; 
 
   private TalonSRX armLeft;
   private VictorSPX armRight;
-  private VictorSPX collectorMotor;
+  private VictorSPX collectorVictor;
 
   public ArmSubsystem()
   {
-    armLeft = new TalonSRX(KArmLeftTalon); 
-    armRight = new VictorSPX(KArmRightTalon); 
-    collectorMotor = new VictorSPX(KCollectorTalon);
+    armLeft = new TalonSRX(KArmTalon); 
+    armRight = new VictorSPX(KArmVictor); 
+    collectorVictor = new VictorSPX(KCollectorVictor);
     
     armLeft.follow(armRight);
   }
@@ -38,13 +38,13 @@ public class ArmSubsystem extends Subsystem {
   @Override
   public void initDefaultCommand() {
     //default command for a subsystem here.
-   setDefaultCommand(new ArmStop());
+   //setDefaultCommand(new ArmStop());
   }
 
   
   public void Move(double speed) {
     armLeft.set(ControlMode.PercentOutput, speed);
-    collectorMotor.set(ControlMode.PercentOutput, speed);
+    collectorVictor.set(ControlMode.PercentOutput, speed);
   }
 
   public void liftClearSticky() {

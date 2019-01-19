@@ -19,24 +19,15 @@ public class DriveSubsystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  // public static final int KDriveRightTopTalon = 4; 
-  // public static final int KDriveLeftTopTalon = 9; 
-  public static final int KDriveRightFrontTalon = 0; 
-  public static final int KDriveLeftFrontTalon = 1; 
-  public static final int KDriveRightRearTalon = 6; 
-  public static final int KDriveLeftRearTalon = 5; 
-
-  public static final int KShifterSolenoid1 = 1;
-  public static final int KShifterSolenoid2 = 2; 
-
-  // private TalonSRX driveRightTop;
-  // private TalonSRX driveLeftTop;  
+  public static final int KDriveLeftFrontTalon = 0;
+  public static final int KDriveRightFrontTalon = 1;  
+  public static final int KDriveLeftRearTalon = 2; 
+  public static final int KDriveRightRearTalon = 3; 
+  
   private TalonSRX driveRightFront; 
   private TalonSRX driveLeftFront;
   private VictorSPX driveRightRear; 
   private VictorSPX driveLeftRear;
-
-  private DoubleSolenoid shifterSolenoid;
 
   public DriveSubsystem()
   {
