@@ -9,13 +9,14 @@ package frc.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.subsystems.ArmSubsystem;
 
-public class ShiftDrive extends Command
+public class ArmUp extends Command
 {
-	public ShiftDrive()
+	public ArmUp()
 	{
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot.DRIVE_SUBSYSTEM);
+		requires(Robot.ARM_SUBSYSTEM);
 	}
 
 	// Called just before this Command runs the first time
@@ -29,7 +30,7 @@ public class ShiftDrive extends Command
 	@Override
 	protected void execute()
 	{
-		Robot.DRIVE_SUBSYSTEM.toggleShift();
+		Robot.ARM_SUBSYSTEM.Move(ArmSubsystem.KArmSpeed);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

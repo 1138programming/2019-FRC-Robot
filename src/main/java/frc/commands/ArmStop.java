@@ -10,12 +10,12 @@ package frc.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class ShiftDrive extends Command
+public class ArmStop extends Command
 {
-	public ShiftDrive()
+	public ArmStop()
 	{
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot.DRIVE_SUBSYSTEM);
+		requires(Robot.ARM_SUBSYSTEM);
 	}
 
 	// Called just before this Command runs the first time
@@ -29,14 +29,14 @@ public class ShiftDrive extends Command
 	@Override
 	protected void execute()
 	{
-		Robot.DRIVE_SUBSYSTEM.toggleShift();
+		Robot.ARM_SUBSYSTEM.Move(0);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished()
 	{
-		return true;
+		return false;
 	}
 
 	// Called once after isFinished returns true
