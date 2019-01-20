@@ -11,6 +11,14 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.Joystick;
 
 import frc.commands.ShiftDrive;
+import frc.commands.ArmDown;
+import frc.commands.ArmUp;
+import frc.commands.CarriageDown;
+import frc.commands.CarriageUp;
+import frc.commands.ClimbUp;
+import frc.commands.ClimbDown;
+import frc.commands.CollectorBackwards;
+import frc.commands.CollectorForward;
 import frc.commands.Diagnostic;
 
 /**
@@ -86,6 +94,14 @@ public class OI {
     //Button Assigned Commands 
     btn5.whenPressed(new ShiftDrive());
     btn2.whenPressed(new Diagnostic());
+    btnLB.whenPressed(new ArmDown());
+    btnRB.whenPressed(new ArmUp());
+    btnLT.whenPressed(new CarriageDown());
+    btnRT.whenPressed(new CarriageUp());
+    btnX.whenPressed(new CollectorBackwards());
+    btnB.whenPressed(new CollectorForward());
+    btnA.whenPressed(new ClimbUp());
+    btnY.whenPressed(new ClimbDown());
 
   }
 

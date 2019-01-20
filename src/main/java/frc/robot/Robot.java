@@ -15,7 +15,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import frc.subsystems.DriveSubsystem;
-import frc.subsystems.ArmSubsystem; 
+import frc.subsystems.ArmSubsystem;
+import frc.subsystems.CarriageSubsystem; 
+import frc.subsystems.CollectorSubsystem;
+import frc.subsystems.X_TableSubsystem;
+import frc.subsystems.ClimbSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,6 +31,10 @@ import frc.subsystems.ArmSubsystem;
 public class Robot extends TimedRobot {
   public static DriveSubsystem DRIVE_SUBSYSTEM = new DriveSubsystem();
   public static ArmSubsystem ARM_SUBSYSTEM = new ArmSubsystem(); 
+  public static CarriageSubsystem CARRIAGE_SUBSYSTEM = new CarriageSubsystem(); 
+  public static CollectorSubsystem COLLECTOR_SUBSYSTEM = new CollectorSubsystem(); 
+  public static ClimbSubsystem CLIMB_SUBSYSTEM = new ClimbSubsystem(); 
+  public static X_TableSubsystem X_TABLE_SUBSYSTEM = new X_TableSubsystem(); 
   public static OI oi;
 
   Command m_autonomousCommand;

@@ -9,13 +9,14 @@ package frc.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.subsystems.CollectorSubsystem;
 
-public class ArmStop extends Command
+public class CollectorBackwards extends Command
 {
-	public ArmStop()
+	public CollectorBackwards()
 	{
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot.ARM_SUBSYSTEM);
+		requires(Robot.COLLECTOR_SUBSYSTEM);
 	}
 
 	// Called just before this Command runs the first time
@@ -29,14 +30,14 @@ public class ArmStop extends Command
 	@Override
 	protected void execute()
 	{
-		Robot.ARM_SUBSYSTEM.moveArm(0);
+		Robot.COLLECTOR_SUBSYSTEM.moveCollector(-CollectorSubsystem.KCollecterSpeed);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished()
 	{
-		return false;
+		return true;
 	}
 
 	// Called once after isFinished returns true

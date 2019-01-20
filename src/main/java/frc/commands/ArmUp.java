@@ -30,7 +30,7 @@ public class ArmUp extends Command
 	@Override
 	protected void execute()
 	{
-		Robot.ARM_SUBSYSTEM.Move(ArmSubsystem.KArmSpeed);
+		Robot.ARM_SUBSYSTEM.moveArm(ArmSubsystem.KArmSpeed);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

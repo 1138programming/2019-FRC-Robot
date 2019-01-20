@@ -9,11 +9,12 @@ package frc.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.subsystems.CarriageSubsystem;
 
-public class Diagnostic extends Command {
-  public Diagnostic() {
+public class CarriageStop extends Command {
+  public CarriageStop() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.DRIVE_SUBSYSTEM);
+    requires(Robot.CARRIAGE_SUBSYSTEM);
   }
 
   // Called just before this Command runs the first time
@@ -24,13 +25,13 @@ public class Diagnostic extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
+    Robot.CARRIAGE_SUBSYSTEM.moveCarriage(0); 
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

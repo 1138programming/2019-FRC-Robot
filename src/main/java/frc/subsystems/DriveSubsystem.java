@@ -19,36 +19,44 @@ public class DriveSubsystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  /**
+   *  public static final int KDriveLeftFrontTalon = 0;
+      public static final int KDriveRightFrontTalon = 1;  
+      public static final int KDriveLeftRearTalon = 2; 
+      public static final int KDriveRightRearTalon = 3;
+
+      public static final int KShifterSolenoid1 = 12;
+      public static final int KShifterSolenoid2 = 13;
+   */
+
   public static final int KDriveLeftFrontTalon = 0;
   public static final int KDriveRightFrontTalon = 1;  
   public static final int KDriveLeftRearTalon = 2; 
-  public static final int KDriveRightRearTalon = 3; 
+  public static final int KDriveRightRearTalon = 3;
+
+  public static final int KShifterSolenoid1 = 12;
+  public static final int KShifterSolenoid2 = 13;
   
   private TalonSRX driveRightFront; 
   private TalonSRX driveLeftFront;
   private VictorSPX driveRightRear; 
   private VictorSPX driveLeftRear;
+  private DoubleSolenoid shifterSolenoid;
 
   public DriveSubsystem()
   {
-    // driveRightTop = new TalonSRX(KDriveRightTopTalon);
-    // driveLeftTop = new TalonSRX(KDriveLeftTopTalon);
     driveRightFront = new TalonSRX(KDriveRightFrontTalon); 
     driveLeftFront = new TalonSRX(KDriveLeftFrontTalon);
     driveRightRear = new VictorSPX(KDriveRightRearTalon);
     driveLeftRear = new VictorSPX(KDriveLeftRearTalon);
 
     driveRightFront.setInverted(true);
-    // driveRightTop.setInverted(true);
     driveRightRear.setInverted(true);
 
     shifterSolenoid = new DoubleSolenoid(KShifterSolenoid1, KShifterSolenoid2);
 
-    // driveRightTop.set(ControlMode.Follower, driveRightFront.getDeviceID());
     driveRightRear.follow(driveRightFront);
-    // driveLeftTop.set(ControlMode.Follower, driveLeftFront.getDeviceID());
     driveLeftRear.follow(driveLeftFront);
-
   }
 
   @Override
@@ -81,9 +89,5 @@ public class DriveSubsystem extends Subsystem {
 		else {
 			lowShiftBase();
 		}
-  }
-  public void driveClearSticky() {
-    driveRightFront.clearStickyFaults(1000);
-    driveLeftFront.clearStickyFaults(1000);
   }
 }

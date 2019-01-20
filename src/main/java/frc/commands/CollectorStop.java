@@ -10,12 +10,12 @@ package frc.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class ArmStop extends Command
+public class CollectorStop extends Command
 {
-	public ArmStop()
+	public CollectorStop()
 	{
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot.ARM_SUBSYSTEM);
+		requires(Robot.COLLECTOR_SUBSYSTEM);
 	}
 
 	// Called just before this Command runs the first time
@@ -29,7 +29,7 @@ public class ArmStop extends Command
 	@Override
 	protected void execute()
 	{
-		Robot.ARM_SUBSYSTEM.moveArm(0);
+		Robot.COLLECTOR_SUBSYSTEM.moveCollector(0);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

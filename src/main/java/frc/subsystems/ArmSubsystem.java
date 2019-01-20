@@ -5,8 +5,6 @@ package frc.subsystems;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-import frc.commands.DriveWithJoysticks;
-
 //import static org.junit.Assume.assumeNoException;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -16,23 +14,25 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 public class ArmSubsystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+  /**
+   *public static final int KArmMaster = 4; 
+    public static final int KArmSlave = 5;  
+    public static final double KArmSpeed = 1.0; 
+   */
  
-  public static final int KArmTalon = 4; 
-  public static final int KArmVictor = 5; 
-  public static final int KCollectorVictor = 8; 
+  public static final int KArmMaster = 4; 
+  public static final int KArmSlave = 5;  
   public static final double KArmSpeed = 1.0; 
 
-  private TalonSRX armLeft;
-  private VictorSPX armRight;
-  private VictorSPX collectorVictor;
+  private TalonSRX armMaster;
+  private VictorSPX armSlave;
 
   public ArmSubsystem()
   {
-    armLeft = new TalonSRX(KArmTalon); 
-    armRight = new VictorSPX(KArmVictor); 
-    collectorVictor = new VictorSPX(KCollectorVictor);
+    armMaster = new TalonSRX(KArmMaster); 
+    armSlave = new VictorSPX(KArmSlave);
     
-    armLeft.follow(armRight);
+    armSlave.follow(armMaster);
   }
 
   @Override
@@ -42,12 +42,7 @@ public class ArmSubsystem extends Subsystem {
   }
 
   
-  public void Move(double speed) {
-    armLeft.set(ControlMode.PercentOutput, speed);
-    collectorVictor.set(ControlMode.PercentOutput, speed);
-  }
-
-  public void liftClearSticky() {
-    armLeft.clearStickyFaults(1000);
+  public void moveArm(double speed) {
+    armMaster.set(ControlMode.PercentOutput, speed);
   }
 }
