@@ -37,7 +37,7 @@ public class OI {
   public static final int KXboxArms = 1;
 
   //DeadZone
-  public static final double KDeadZoneAxis = 0.2; 
+  //public static final double KDeadZone = 0.2; 
   public static final double KDeadZone = 0.2; 
 
   //Logitech Button Constants 
@@ -106,7 +106,7 @@ public class OI {
   }
 
   public double getRightAxis() {
-    if(logitech.getThrottle() > KDeadZoneAxis || logitech.getThrottle() < -KDeadZoneAxis){
+    if(logitech.getThrottle() > KDeadZone || logitech.getThrottle() < -KDeadZone){
       return logitech.getThrottle(); 
     }
     else {
@@ -114,11 +114,29 @@ public class OI {
     }
   }
   public double getLeftAxis() {
-    if(logitech.getY() > KDeadZoneAxis || logitech.getY() < -KDeadZoneAxis){
+    if(logitech.getY() > KDeadZone || logitech.getY() < -KDeadZone){
       return logitech.getY(); 
     }
     else {
       return 0; 
+    }
+  }
+
+  public double getRightXbox() {
+    if(xbox.getThrottle() > KDeadZone || xbox.getThrottle() < -KDeadZone) {
+      return xbox.getThrottle();
+    }
+    else {
+      return 0;
+    }
+  }
+
+  public double getLeftXbox() {
+    if(xbox.getY() > KDeadZone || xbox.getY() < -KDeadZone) {
+      return xbox.getY();
+    }
+    else {
+      return 0;
     }
   }
   //Joystick stick = new Joystick(port);

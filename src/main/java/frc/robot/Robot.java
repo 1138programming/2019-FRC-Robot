@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import frc.subsystems.DriveSubsystem;
+import frc.subsystems.LiftSubsystem;
 import frc.subsystems.ArmSubsystem;
 import frc.subsystems.CarriageSubsystem; 
 import frc.subsystems.CollectorSubsystem;
@@ -32,6 +33,7 @@ public class Robot extends TimedRobot {
   public static DriveSubsystem DRIVE_SUBSYSTEM = new DriveSubsystem();
   public static ArmSubsystem ARM_SUBSYSTEM = new ArmSubsystem(); 
   public static CarriageSubsystem CARRIAGE_SUBSYSTEM = new CarriageSubsystem(); 
+  public static LiftSubsystem LIFT_SUBSYSTEM = new LiftSubsystem();
   public static CollectorSubsystem COLLECTOR_SUBSYSTEM = new CollectorSubsystem(); 
   public static ClimbSubsystem CLIMB_SUBSYSTEM = new ClimbSubsystem(); 
   public static X_TableSubsystem X_TABLE_SUBSYSTEM = new X_TableSubsystem(); 

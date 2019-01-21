@@ -34,8 +34,8 @@ public class DriveSubsystem extends Subsystem {
   public static final int KDriveLeftRearTalon = 2; 
   public static final int KDriveRightRearTalon = 3;
 
-  public static final int KShifterSolenoid1 = 12;
-  public static final int KShifterSolenoid2 = 13;
+  public static final int KShifterSolenoid1 = 0;
+  public static final int KShifterSolenoid2 = 1;
   
   private TalonSRX driveRightFront; 
   private TalonSRX driveLeftFront;

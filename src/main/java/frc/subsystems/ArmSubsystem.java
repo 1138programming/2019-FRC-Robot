@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import frc.commands.ArmWithJoysticks;
 
 
 public class ArmSubsystem extends Subsystem {
@@ -38,7 +39,7 @@ public class ArmSubsystem extends Subsystem {
   @Override
   public void initDefaultCommand() {
     //default command for a subsystem here.
-   //setDefaultCommand(new ArmStop());
+    setDefaultCommand(new ArmWithJoysticks());
   }
 
   
