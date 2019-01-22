@@ -2,10 +2,11 @@ package frc.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.subsystems.CarriageSubsystem;
 
-public class DriveWithJoysticks extends Command {
-  public DriveWithJoysticks() {
-    requires(Robot.DRIVE_SUBSYSTEM);
+public class CarriageOuttake extends Command {
+  public CarriageOuttake() {
+    requires(Robot.CARRIAGE_SUBSYSTEM);
   }
 
   @Override
@@ -14,12 +15,12 @@ public class DriveWithJoysticks extends Command {
 
   @Override
   protected void execute() {
-    Robot.DRIVE_SUBSYSTEM.tankDrive(Robot.oi.getLeftAxis(), Robot.oi.getRightAxis());
+    Robot.CARRIAGE_SUBSYSTEM.moveCarriage(CarriageSubsystem.KCarriageSpeed); 
   }
 
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   @Override

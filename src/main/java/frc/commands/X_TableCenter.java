@@ -2,13 +2,11 @@ package frc.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.subsystems.ArmSubsystem;
-import frc.robot.OI;
+import frc.subsystems.X_TableSubsystem;
 
-public class ArmWithJoysticks extends Command
-{
-	public ArmWithJoysticks() {
-		requires(Robot.ARM_SUBSYSTEM);
+public class X_TableCenter extends Command {
+	public X_TableCenter() {
+		requires(Robot.X_TABLE_SUBSYSTEM);
 	}
 
 	@Override
@@ -17,7 +15,7 @@ public class ArmWithJoysticks extends Command
 
 	@Override
 	protected void execute() {
-		Robot.ARM_SUBSYSTEM.moveArm(Robot.oi.getRightXbox());
+		Robot.X_TABLE_SUBSYSTEM.moveX_Table(KX_TableSpeed);
 	}
 
 	@Override

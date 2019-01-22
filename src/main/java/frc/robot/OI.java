@@ -1,15 +1,14 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
+@TODO //Figure out XBox triggers, get Sparks MAX working, make Pneumatics and Camera subsystems, vision integration into 
+//the hatches, the hatch commands themselves (with x_table), and all of the encoder-based stuff for the arm and lift positions 
+//(and maybe climb but that's lower priority)
 
 package frc.robot;
 
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+
 import frc.commands.ShiftDrive;
 import frc.commands.X_TableLeft;
 import frc.commands.ArmDown;
@@ -21,25 +20,13 @@ import frc.commands.ClimbDown;
 import frc.commands.CollectorBackwards;
 import frc.commands.CollectorForward;
 import frc.commands.Diagnostic;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 
-/**
- * This class is the glue that binds the controls on the physical operator
- * interface to the commands and command groups that allow control of the robot.
- */
 public class OI {
-  //// CREATING BUTTONS
-  // One type of button is a joystick button which is any button on a
-  //// joystick.
-  // You create one by telling it which joystick it's on and which button
-  // number it is.
-
   //Controller Constants 
   public static final int KLogitechDrive = 0;
   public static final int KXboxArms = 1;
 
-  //DeadZone
-  //public static final double KDeadZone = 0.2; 
+  //DeadZone 
   public static final double KDeadZone = 0.2; 
 
   //Logitech Button Constants 
@@ -68,7 +55,7 @@ public class OI {
 	public JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8; // Logitech Button
 	public JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
 
-  public OI(){
+  public OI() {
     //Controllers 
     logitech = new Joystick(KLogitechDrive);
     xbox = new XboxController(KXboxArms);
@@ -95,25 +82,23 @@ public class OI {
     btnRT = new JoystickButton(xbox, KRightTrigger);
     
     //Button Assigned Commands 
-    btn5.whenPressed(new ShiftDrive());
     btn2.whenPressed(new Diagnostic());
-    btnLB.whileHeld(new ArmDown());
-    btnRB.whileHeld(new ArmUp()); 
-    btnLT.whileHeld(new CarriageDown());  //triggers don't work
-    btnA.whileHeld(new CarriageUp());
-    btnX.whileHeld(new CollectorBackwards()); 
-    btnB.whileHeld(new CollectorForward());
-    btnRT.whileHeld(new ClimbUp());   //triggers don't work
-    btnY.whileHeld(new X_TableLeft());    //
+    btn5.whenPressed(new ShiftDrive());
+    btn7.whenPressed(new X_TableCenter());  //1. Sparks MAX not working right now. 2. Picking up hatches and scoring will be on btns 6 & 8. 3. Triggers on XBox aren't working
+
+    btnLB.whileHeld(new CollectorBackwards()); 
+    btnRB.whileHeld(new CollectorForward()); 
+    btnA.whileHeld(new CarriageOuttake());
+    btnB.whileHeld(new CarriageIntake());
+    btnX.whileHeld(new ClimbDown()); 
+    btnY.whileHeld(new ClimbUp());
   }
 
   public double getRightAxis() {
-    if(logitech.getThrottle() > KDeadZone || logitech.getThrottle() < -KDeadZone){
+    if(logitech.getThrottle() > KDeadZone || logitech.getThrottle() < -KDeadZone)
       return logitech.getThrottle(); 
-    }
-    else {
+    else 
       return 0; 
-    }
   }
 
   public double getArcadeRightAxis() {
@@ -124,52 +109,25 @@ public class OI {
   }
 
   public double getLeftAxis() {
-    if(logitech.getY() > KDeadZone || logitech.getY() < -KDeadZone){
+    if(logitech.getY() > KDeadZone || logitech.getY() < -KDeadZone)
       return logitech.getY(); 
-    }
-    else {
+    else 
       return 0; 
-    }
   }
 
   public double getRightXbox() {
-    if(xbox.getY(Hand.kRight) > KDeadZone || xbox.getY(Hand.kRight) < -KDeadZone) {
+    if(xbox.getY(Hand.kRight) > KDeadZone || xbox.getY(Hand.kRight) < -KDeadZone) 
       return xbox.getY(Hand.kRight);
-    }
-    else {
+    else 
       return 0;
-    }
   }
 
   public double getLeftXbox() {
-    if(xbox.getY(Hand.kLeft) > KDeadZone || xbox.getY(Hand.kLeft) < -KDeadZone) {
+    if(xbox.getY(Hand.kLeft) > KDeadZone || xbox.getY(Hand.kLeft) < -KDeadZone) 
       return xbox.getY(Hand.kLeft);
-    }
-    else {
+    else 
       return 0;
-    }
   }
-
-  public double getRightTrigger() {
-    //if(xbox.getTriggerAxis(Hand.kRight) < KDeadZone) {
-      return xbox.getTriggerAxis(Hand.kRight);
-    //} else {
-    //  return 0;
-    //}
-  }
-
-  public double getLeftTrigger() {
-      return xbox.getTriggerAxis(Hand.kLeft);
-  }
-  // Joystick stick = new Joystick(port);
-  //Button button = new JoystickButton(stick, buttonNumber);
-  // There are a few additional built in buttons you can use. Additionally,
-  // by subclassing Button you can create custom triggers and bind those to
-  // commands the same as any other Button.
-
-  //// TRIGGERING COMMANDS WITH BUTTONS
-  // Once you have a button, it's trivial to bind it to a button in one of
-  // three ways:
 
   // Start the command when the button is pressed and let it run the command
   // until it is finished as determined by it's isFinished method.
