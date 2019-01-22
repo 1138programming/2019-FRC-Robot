@@ -4,7 +4,7 @@ package frc.subsystems;
 
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
+import frc.commands.LiftWithJoysticks;
 
 //import static org.junit.Assume.assumeNoException;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -30,7 +30,7 @@ public class LiftSubsystem extends Subsystem {
   @Override
   public void initDefaultCommand() {
     //default command for a subsystem here.
-   //setDefaultCommand(new ());
+    setDefaultCommand(new LiftWithJoysticks());
   }
   
   public void moveLift(double speed) {

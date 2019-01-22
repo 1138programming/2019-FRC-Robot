@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.commands.ArmWithJoysticks;
 
 
+
 public class ArmSubsystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -45,5 +46,6 @@ public class ArmSubsystem extends Subsystem {
   
   public void moveArm(double speed) {
     armMaster.set(ControlMode.PercentOutput, speed);
+    //if (speed != 0) System.out.println(1 / 0);
   }
 }

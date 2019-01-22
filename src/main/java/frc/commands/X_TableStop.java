@@ -29,7 +29,7 @@ public class X_TableStop extends Command
 	@Override
 	protected void execute()
 	{
-		Robot.X_TABLE_SUBSYSTEM.moveX_Table(0);
+		Robot.X_TABLE_SUBSYSTEM.moveX_Table();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

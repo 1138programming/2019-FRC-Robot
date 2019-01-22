@@ -4,7 +4,7 @@ import frc.robot.OI;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
+import frc.commands.ArcadeDriveWithJoy;
 import frc.commands.DriveWithJoysticks;
 
 //import static org.junit.Assume.assumeNoException;
@@ -62,7 +62,7 @@ public class DriveSubsystem extends Subsystem {
   @Override
   public void initDefaultCommand() {
     //default command for a subsystem here.
-   setDefaultCommand(new DriveWithJoysticks());
+   setDefaultCommand(new /*DriveWithJoysticks()*/ArcadeDriveWithJoy());
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {

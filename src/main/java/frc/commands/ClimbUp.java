@@ -23,14 +23,15 @@ public class ClimbUp extends Command
 	@Override
 	protected void initialize()
 	{
-
+		System.out.println(Robot.oi.getRightTrigger());
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute()
 	{
-		Robot.CLIMB_SUBSYSTEM.moveClimb(ClimbSubsystem.KClimbSpeed);
+		System.out.println(Robot.oi.getRightTrigger());
+		Robot.CLIMB_SUBSYSTEM.moveClimb(1/0);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

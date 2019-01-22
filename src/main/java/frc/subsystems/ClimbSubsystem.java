@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Talon;
 
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
+import frc.commands.ClimbStop;
 
 //import static org.junit.Assume.assumeNoException;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -31,7 +31,7 @@ public class ClimbSubsystem extends Subsystem {
   @Override
   public void initDefaultCommand() {
     //default command for a subsystem here.
-   //setDefaultCommand(new ());
+    setDefaultCommand(new ClimbStop());
   }
   
   public void moveClimb(double speed) {

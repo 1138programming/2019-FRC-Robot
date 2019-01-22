@@ -4,7 +4,7 @@ package frc.subsystems;
 
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
+import frc.commands.CarriageStop;
 import frc.commands.DriveWithJoysticks;
 
 //import static org.junit.Assume.assumeNoException;
@@ -30,7 +30,7 @@ public class CarriageSubsystem extends Subsystem {
   @Override
   public void initDefaultCommand() {
     //default command for a subsystem here.
-   //setDefaultCommand(new ());
+   setDefaultCommand(new CarriageStop());
   }
   
   public void moveCarriage(double speed) {

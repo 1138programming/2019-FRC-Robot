@@ -25,7 +25,8 @@ public class CarriageDown extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.CARRIAGE_SUBSYSTEM.moveCarriage(-CarriageSubsystem.KCarriageSpeed); 
+    Robot.CARRIAGE_SUBSYSTEM.moveCarriage(Robot.oi.getLeftTrigger()); 
+    //System.out.println(1 / 0);
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -9,8 +9,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.Joystick;
-
+import edu.wpi.first.wpilibj.XboxController;
 import frc.commands.ShiftDrive;
+import frc.commands.X_TableLeft;
 import frc.commands.ArmDown;
 import frc.commands.ArmUp;
 import frc.commands.CarriageDown;
@@ -20,6 +21,7 @@ import frc.commands.ClimbDown;
 import frc.commands.CollectorBackwards;
 import frc.commands.CollectorForward;
 import frc.commands.Diagnostic;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -61,14 +63,15 @@ public class OI {
 	public static final int KLeftTrigger = 9;
   public static final int KRightTrigger = 10;
 
-  public Joystick logitech, xbox;
+  public Joystick logitech;
+  public XboxController xbox;
 	public JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8; // Logitech Button
 	public JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
 
   public OI(){
     //Controllers 
     logitech = new Joystick(KLogitechDrive);
-    xbox = new Joystick(KXboxArms);
+    xbox = new XboxController(KXboxArms);
 
     //Logitech Buttons
 		btn1 = new JoystickButton(logitech, KButton1);
@@ -94,15 +97,14 @@ public class OI {
     //Button Assigned Commands 
     btn5.whenPressed(new ShiftDrive());
     btn2.whenPressed(new Diagnostic());
-    btnLB.whenPressed(new ArmDown());
-    btnRB.whenPressed(new ArmUp());
-    btnLT.whenPressed(new CarriageDown());
-    btnRT.whenPressed(new CarriageUp());
-    btnX.whenPressed(new CollectorBackwards());
-    btnB.whenPressed(new CollectorForward());
-    btnA.whenPressed(new ClimbUp());
-    btnY.whenPressed(new ClimbDown());
-
+    btnLB.whileHeld(new ArmDown());
+    btnRB.whileHeld(new ArmUp()); 
+    btnLT.whileHeld(new CarriageDown());  //triggers don't work
+    btnA.whileHeld(new CarriageUp());
+    btnX.whileHeld(new CollectorBackwards()); 
+    btnB.whileHeld(new CollectorForward());
+    btnRT.whileHeld(new ClimbUp());   //triggers don't work
+    btnY.whileHeld(new X_TableLeft());    //
   }
 
   public double getRightAxis() {
@@ -113,6 +115,14 @@ public class OI {
       return 0; 
     }
   }
+
+  public double getArcadeRightAxis() {
+    if(logitech.getTwist() > KDeadZone || logitech.getTwist() < -KDeadZone)
+      return logitech.getTwist();
+    else
+      return 0;
+  }
+
   public double getLeftAxis() {
     if(logitech.getY() > KDeadZone || logitech.getY() < -KDeadZone){
       return logitech.getY(); 
@@ -123,8 +133,8 @@ public class OI {
   }
 
   public double getRightXbox() {
-    if(xbox.getThrottle() > KDeadZone || xbox.getThrottle() < -KDeadZone) {
-      return xbox.getThrottle();
+    if(xbox.getY(Hand.kRight) > KDeadZone || xbox.getY(Hand.kRight) < -KDeadZone) {
+      return xbox.getY(Hand.kRight);
     }
     else {
       return 0;
@@ -132,16 +142,27 @@ public class OI {
   }
 
   public double getLeftXbox() {
-    if(xbox.getY() > KDeadZone || xbox.getY() < -KDeadZone) {
-      return xbox.getY();
+    if(xbox.getY(Hand.kLeft) > KDeadZone || xbox.getY(Hand.kLeft) < -KDeadZone) {
+      return xbox.getY(Hand.kLeft);
     }
     else {
       return 0;
     }
   }
-  //Joystick stick = new Joystick(port);
-  //Button button = new JoystickButton(stick, buttonNumber);
 
+  public double getRightTrigger() {
+    //if(xbox.getTriggerAxis(Hand.kRight) < KDeadZone) {
+      return xbox.getTriggerAxis(Hand.kRight);
+    //} else {
+    //  return 0;
+    //}
+  }
+
+  public double getLeftTrigger() {
+      return xbox.getTriggerAxis(Hand.kLeft);
+  }
+  // Joystick stick = new Joystick(port);
+  //Button button = new JoystickButton(stick, buttonNumber);
   // There are a few additional built in buttons you can use. Additionally,
   // by subclassing Button you can create custom triggers and bind those to
   // commands the same as any other Button.

@@ -30,7 +30,7 @@ public class CollectorBackwards extends Command
 	@Override
 	protected void execute()
 	{
-		Robot.COLLECTOR_SUBSYSTEM.moveCollector(-CollectorSubsystem.KCollecterSpeed);
+	Robot.COLLECTOR_SUBSYSTEM.moveCollector(-CollectorSubsystem.KCollecterSpeed);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

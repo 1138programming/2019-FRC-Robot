@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 //import static org.junit.Assume.assumeNoException;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import frc.commands.CollectorStop;
 
 
 public class CollectorSubsystem extends Subsystem {
@@ -32,7 +33,7 @@ public class CollectorSubsystem extends Subsystem {
   @Override
   public void initDefaultCommand() {
     //default command for a subsystem here.
-   //setDefaultCommand(new ArmStop());
+    setDefaultCommand(new CollectorStop());
   }
 
   
