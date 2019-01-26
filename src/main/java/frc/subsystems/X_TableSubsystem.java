@@ -2,7 +2,7 @@ package frc.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.commands.X_TableStop;
+import frc.commands.X_TableCenter;
 import edu.wpi.first.wpilibj.Spark;
 
 public class X_TableSubsystem extends Subsystem {
@@ -13,13 +13,14 @@ public class X_TableSubsystem extends Subsystem {
 
   public X_TableSubsystem() {
     X_Table = new Spark(KX_Table);
-  }
-  @Override
-  public void initDefaultCommand() {
-    setDefaultCommand(new moveX_Table(0));
-  }
-  
+  } 
+
   public void moveX_Table(double speed) {
     X_Table.set(speed);
+  }
+
+  @Override
+  public void initDefaultCommand() {
+    setDefaultCommand(new X_TableCenter());
   }
 }

@@ -2,11 +2,11 @@ package frc.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.subsystems.X_TableSubsystem;
+import frc.subsystems.CarriageSubsystem;
 
-public class X_TableCenter extends Command {
-	public X_TableCenter() {
-		requires(Robot.X_TABLE_SUBSYSTEM);
+public class CarriageReset extends Command {
+	public CarriageReset() {
+		requires(Robot.CARRIAGE_SUBSYSTEM);
 	}
 
 	@Override
@@ -15,7 +15,7 @@ public class X_TableCenter extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.X_TABLE_SUBSYSTEM.moveX_Table(X_TableSubsystem.KX_TableSpeed);
+		Robot.CARRIAGE_SUBSYSTEM.moveCarriage(0);
 	}
 
 	@Override

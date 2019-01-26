@@ -2,10 +2,10 @@ package frc.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.commands.CarriageStop;
 import frc.commands.DriveWithJoysticks;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import frc.commands.CarriageReset;
 
 public class CarriageSubsystem extends Subsystem {
   public static final int KCarriage = 9;
@@ -18,7 +18,7 @@ public class CarriageSubsystem extends Subsystem {
   }
   @Override
   public void initDefaultCommand() {
-   setDefaultCommand(new moveCarriage(0));
+   setDefaultCommand(new CarriageReset());
   }
   
   public void moveCarriage(double speed) {

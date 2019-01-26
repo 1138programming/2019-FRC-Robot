@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import frc.commands.CollectorStop;
+import frc.commands.CollectorReset;
 
 
 public class CollectorSubsystem extends Subsystem {
@@ -19,7 +19,7 @@ public class CollectorSubsystem extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new moveCollector(0));
+    setDefaultCommand(new CollectorReset());
   }
 
   

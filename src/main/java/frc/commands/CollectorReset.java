@@ -2,11 +2,11 @@ package frc.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.subsystems.X_TableSubsystem;
+import frc.subsystems.CollectorSubsystem;
 
-public class X_TableCenter extends Command {
-	public X_TableCenter() {
-		requires(Robot.X_TABLE_SUBSYSTEM);
+public class CollectorReset extends Command {
+	public CollectorReset() {
+		requires(Robot.COLLECTOR_SUBSYSTEM);
 	}
 
 	@Override
@@ -15,7 +15,7 @@ public class X_TableCenter extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.X_TABLE_SUBSYSTEM.moveX_Table(X_TableSubsystem.KX_TableSpeed);
+		Robot.COLLECTOR_SUBSYSTEM.moveCollector(0);
 	}
 
 	@Override

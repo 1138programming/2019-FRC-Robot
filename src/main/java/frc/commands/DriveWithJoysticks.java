@@ -14,7 +14,7 @@ public class DriveWithJoysticks extends Command {
 
   @Override
   protected void execute() {
-    Robot.DRIVE_SUBSYSTEM.tankDrive(Robot.oi.getLeftAxis(), Robot.oi.getRightAxis());
+    Robot.DRIVE_SUBSYSTEM.baseDrive(Robot.oi.getLeftAxis(), Robot.oi.getRightAxis());
   }
 
   @Override

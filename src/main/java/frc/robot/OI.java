@@ -1,4 +1,4 @@
-@TODO //Figure out XBox triggers, get Sparks MAX working, make Pneumatics and Camera subsystems, vision integration into 
+//@TODO Figure out XBox triggers, get Sparks MAX working, make Pneumatics and Camera subsystems, vision integration into 
 //the hatches, the hatch commands themselves (with x_table), and all of the encoder-based stuff for the arm and lift positions 
 //(and maybe climb but that's lower priority)
 
@@ -10,11 +10,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 import frc.commands.ShiftDrive;
-import frc.commands.X_TableLeft;
-import frc.commands.ArmDown;
-import frc.commands.ArmUp;
-import frc.commands.CarriageDown;
-import frc.commands.CarriageUp;
+import frc.commands.X_TableCenter;
+import frc.commands.ArmWithJoysticks;
+import frc.commands.CarriageIntake;
+import frc.commands.CarriageOuttake;
 import frc.commands.ClimbUp;
 import frc.commands.ClimbDown;
 import frc.commands.CollectorBackwards;

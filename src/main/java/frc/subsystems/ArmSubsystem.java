@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.commands.ArmWithJoysticks;
+import frc.commands.ArmReset;
 
 
 
@@ -32,8 +33,9 @@ public class ArmSubsystem extends Subsystem {
   public void moveArm(double speed) {
     armMaster.set(ControlMode.PercentOutput, speed);
   }
-
+/**
   public double getArm() {
-    return ArmSubsystem.armMaster;
+    //return ArmSubsystem.armMaster;
   }
+  */
 }
