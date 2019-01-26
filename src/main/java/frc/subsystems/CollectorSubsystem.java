@@ -8,6 +8,11 @@ import frc.commands.CollectorReset;
 
 
 public class CollectorSubsystem extends Subsystem {
+  /**
+   * public static final int KCollectorVictor = 8; 
+   * public static final double KCollecterSpeed = 1.0; 
+   * private VictorSPX collectorVictor;
+   */
   public static final int KCollectorVictor = 8; 
   public static final double KCollecterSpeed = 1.0; 
 

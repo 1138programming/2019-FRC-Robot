@@ -11,6 +11,14 @@ import frc.commands.ArmReset;
 
 
 public class ArmSubsystem extends Subsystem {
+  /**
+   * public static final int KArmMaster = 4; 
+   * public static final int KArmSlave = 5;  
+   * public static final double KArmSpeed = 1.0; 
+   * 
+   * private TalonSRX armMaster;
+   * private VictorSPX armSlave;
+  */
   public static final int KArmMaster = 4; 
   public static final int KArmSlave = 5;  
   public static final double KArmSpeed = 1.0; 

@@ -7,6 +7,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class LiftSubsystem extends Subsystem {
+  /**
+   * public static final int KLiftTalon = 7; 
+   * private TalonSRX liftMotor;
+   */
   public static final int KLiftTalon = 7; 
 
   private TalonSRX liftMotor;

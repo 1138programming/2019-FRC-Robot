@@ -6,6 +6,11 @@ import frc.commands.X_TableCenter;
 import edu.wpi.first.wpilibj.Spark;
 
 public class X_TableSubsystem extends Subsystem {
+  /**
+   * public static final int KX_Table = 10;
+   * public static final double KX_TableSpeed = .8;
+   * private Spark X_Table; 
+   */
   public static final int KX_Table = 10;
   public static final double KX_TableSpeed = .8;
 

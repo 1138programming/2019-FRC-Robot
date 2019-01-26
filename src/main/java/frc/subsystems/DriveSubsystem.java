@@ -10,13 +10,28 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class DriveSubsystem extends Subsystem {
+  /**
+   * public static final int KDriveLeftFrontTalon = 0;
+   * public static final int KDriveRightFrontTalon = 1;  
+   * public static final int KDriveLeftRearTalon = 2; 
+   * public static final int KDriveRightRearTalon = 3;
+   * 
+   * public static final int KShifterSolenoid1 = 1;
+   * public static final int KShifterSolenoid2 = 2;
+   * 
+   * private TalonSRX driveRightFront;
+   * private TalonSRX driveLeftFront;
+   * private VictorSPX driveRightRear; 
+   * private VictorSPX driveLeftRear;
+   * private DoubleSolenoid shifterSolenoid;
+   */
   public static final int KDriveLeftFrontTalon = 0;
   public static final int KDriveRightFrontTalon = 1;  
   public static final int KDriveLeftRearTalon = 2; 
   public static final int KDriveRightRearTalon = 3;
 
-  public static final int KShifterSolenoid1 = 0;
-  public static final int KShifterSolenoid2 = 1;
+  public static final int KShifterSolenoid1 = 1;
+  public static final int KShifterSolenoid2 = 2;
   
   private TalonSRX driveRightFront; 
   private TalonSRX driveLeftFront;

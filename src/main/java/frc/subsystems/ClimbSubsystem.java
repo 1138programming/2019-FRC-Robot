@@ -8,6 +8,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.commands.ClimbReset;
 
 public class ClimbSubsystem extends Subsystem {
+  /**
+   * public static final int KClimb = 6;
+   * public static final double KClimbSpeed = 1.0;
+   * 
+   * private TalonSRX climb;
+   */
   public static final int KClimb = 6;
   public static final double KClimbSpeed = 1.0;
 

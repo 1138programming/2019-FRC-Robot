@@ -8,6 +8,12 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.commands.CarriageReset;
 
 public class CarriageSubsystem extends Subsystem {
+  /**
+   * public static final int KCarriage = 9;
+   * public static final double KCarriageSpeed = 1.0;
+   * 
+   * private VictorSPX carriage;
+   */
   public static final int KCarriage = 9;
   public static final double KCarriageSpeed = 1.0;
 

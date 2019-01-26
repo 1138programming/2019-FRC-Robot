@@ -19,8 +19,45 @@ import frc.commands.ClimbDown;
 import frc.commands.CollectorBackwards;
 import frc.commands.CollectorForward;
 import frc.commands.Diagnostic;
+import frc.commands.HatchDisengage;
+import frc.commands.HatchEngage;
 
 public class OI {
+  /**
+   * Controller Constants 
+   * public static final int KLogitechDrive = 0;
+   * public static final int KXboxArms = 1;
+   * 
+   * DeadZone 
+   * public static final double KDeadZone = 0.2; 
+   * 
+   * Logitech Button Constants 
+   * public static final int KButton1 = 1;
+   * public static final int KButton2 = 2;
+   * public static final int KButton3 = 3;
+   * public static final int KButton4 = 4;
+   * public static final int KButton5 = 5;
+   * public static final int KButton6 = 6;
+   * public static final int KButton7 = 7;
+   * public static final int KButton8 = 8;
+   * 
+   * Xbox Button Constants 
+   * public static final int KButtonA = 1;
+   * public static final int KButtonB = 2;
+   * public static final int KButtonX = 3;
+   * public static final int KButtonY = 4;
+   * public static final int KLeftBumper = 5;
+   * public static final int KRightBumper = 6;
+   * public static final int KStartButton = 8;
+   * public static final int KLeftTrigger = 9;
+   * public static final int KRightTrigger = 10;
+   * 
+   * public Joystick logitech;
+   * public XboxController xbox;
+   * public JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8; // Logitech Button
+   * public JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
+   */
+  
   //Controller Constants 
   public static final int KLogitechDrive = 0;
   public static final int KXboxArms = 1;
@@ -84,6 +121,8 @@ public class OI {
     btn2.whenPressed(new Diagnostic());
     btn5.whenPressed(new ShiftDrive());
     btn7.whenPressed(new X_TableCenter());  //1. Sparks MAX not working right now. 2. Picking up hatches and scoring will be on btns 6 & 8. 3. Triggers on XBox aren't working
+    btn1.whileHeld(new HatchEngage());
+    btn3.whileHeld(new HatchDisengage()); 
 
     btnLB.whileHeld(new CollectorBackwards()); 
     btnRB.whileHeld(new CollectorForward()); 
