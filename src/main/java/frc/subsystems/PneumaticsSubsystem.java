@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj.Compressor;
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
  */
-public class PnematicsSubsystem extends Subsystem {
+public class PneumaticsSubsystem extends Subsystem {
   	private Compressor pCompressor;
 
-	public void PneumaticsSubsystem()
+	public PneumaticsSubsystem()
 	{
 		pCompressor = new Compressor(0);
 	}

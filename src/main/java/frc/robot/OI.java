@@ -126,8 +126,8 @@ public class OI {
 
     btnLB.whileHeld(new CollectorBackwards()); 
     btnRB.whileHeld(new CollectorForward()); 
-    btnA.whileHeld(new CarriageOuttake());
-    btnB.whileHeld(new CarriageIntake());
+    btnA.whileHeld(new CarriageIntake());
+    btnB.whileHeld(new CarriageOuttake());
     btnX.whileHeld(new ClimbDown()); 
     btnY.whileHeld(new ClimbUp());
   }
@@ -155,14 +155,14 @@ public class OI {
 
   public double getRightXbox() {
     if(xbox.getY(Hand.kRight) > KDeadZone || xbox.getY(Hand.kRight) < -KDeadZone) 
-      return xbox.getY(Hand.kRight);
+      return -xbox.getY(Hand.kRight);
     else 
       return 0;
   }
 
   public double getLeftXbox() {
     if(xbox.getY(Hand.kLeft) > KDeadZone || xbox.getY(Hand.kLeft) < -KDeadZone) 
-      return xbox.getY(Hand.kLeft);
+      return -xbox.getY(Hand.kLeft);
     else 
       return 0;
   }

@@ -14,7 +14,7 @@ import frc.subsystems.CarriageSubsystem;
 import frc.subsystems.CollectorSubsystem;
 import frc.subsystems.X_TableSubsystem;
 import frc.subsystems.ClimbSubsystem;
-import frc.subsystems.PnematicsSubsystem;
+import frc.subsystems.PneumaticsSubsystem;
 import frc.subsystems.HatchSubsystem;
 
 /**
@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
   public static CollectorSubsystem COLLECTOR_SUBSYSTEM = new CollectorSubsystem(); 
   public static ClimbSubsystem CLIMB_SUBSYSTEM = new ClimbSubsystem(); 
   public static X_TableSubsystem X_TABLE_SUBSYSTEM = new X_TableSubsystem(); 
-  public static PnematicsSubsystem PNEMATICSSUBSYSTEM = new PnematicsSubsystem();
+  public static PneumaticsSubsystem PNEMATICSSUBSYSTEM = new PneumaticsSubsystem();
   public static HatchSubsystem HATCH_SUBSYSTEM = new HatchSubsystem(); 
   public static OI oi;
 
