@@ -14,7 +14,7 @@ public class CarriageSubsystem extends Subsystem {
    * 
    * private VictorSPX carriage;
    */
-  public static final int KCarriage = 9;
+  public static final int KCarriage = 8;
   public static final double KCarriageSpeed = 1.0;
 
   private VictorSPX carriage; 

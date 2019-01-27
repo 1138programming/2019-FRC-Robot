@@ -21,13 +21,13 @@ public class HatchSubsystem extends Subsystem {
 	 * 
 	 * private DoubleSolenoid Hatch;
 	*/
-	public static final int KSolenoid1 = 3;
-  	public static final int KSolenoid2 = 4;
+	public static final int KSolenoid3 = 3;
+  	public static final int KSolenoid4 = 4;
 
 	private DoubleSolenoid Hatch;
 	 
 	public HatchSubsystem() {
-		Hatch = new DoubleSolenoid(KSolenoid1, KSolenoid2);
+		Hatch = new DoubleSolenoid(KSolenoid3, KSolenoid4);
 	 }
 	@Override
   	public void initDefaultCommand() {

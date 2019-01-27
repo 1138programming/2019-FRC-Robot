@@ -6,6 +6,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.commands.ArmWithJoysticks;
+import edu.wpi.first.wpilibj.DigitalInput;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import frc.commands.ArmReset;
 
 
@@ -22,6 +24,11 @@ public class ArmSubsystem extends Subsystem {
   public static final int KArmMaster = 4; 
   public static final int KArmSlave = 5;  
   public static final double KArmSpeed = 1.0; 
+
+  public static final double KArmFullDown = 0; //These numbers are arbitrary rn, we need to calc this
+  public static final double KArmLow = 1000;
+  public static final double KArmHigh = 2000;
+  public static final double KArmFullUp = 3000; 
 
   private TalonSRX armMaster;
   private VictorSPX armSlave;
@@ -40,6 +47,18 @@ public class ArmSubsystem extends Subsystem {
   
   public void moveArm(double speed) {
     armMaster.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void moveArmWithEncoders(double position) {
+    if(armMaster.getSensorCollection().getQuadraturePosition() < position) {
+      armMaster.set(ControlMode.PercentOutput, KArmSpeed);
+    }
+    else if(armMaster.getSensorCollection().getQuadraturePosition() > position) {
+      armMaster.set(ControlMode.PercentOutput, -KArmSpeed);
+    }
+    else {
+      armMaster.set(ControlMode.PercentOutput, 0);
+    }
   }
 /**
   public double getArm() {

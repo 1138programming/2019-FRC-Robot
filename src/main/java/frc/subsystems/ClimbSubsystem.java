@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.commands.ClimbReset;
 
 public class ClimbSubsystem extends Subsystem {
@@ -14,13 +15,18 @@ public class ClimbSubsystem extends Subsystem {
    * 
    * private TalonSRX climb;
    */
-  public static final int KClimb = 6;
+  public static final int KClimbMaster = 6;
+  public static final int KClimbSlave = 7;
   public static final double KClimbSpeed = 1.0;
 
-  private TalonSRX climb; 
+  private TalonSRX climbMaster; 
+  private VictorSPX climbSlave;
 
   public ClimbSubsystem() {
-    climb = new TalonSRX(KClimb);
+    climbMaster = new TalonSRX(KClimbMaster);
+    climbSlave = new VictorSPX(KClimbSlave);
+
+    climbSlave.follow(climbMaster);
   }
   @Override
   public void initDefaultCommand() {
@@ -28,6 +34,6 @@ public class ClimbSubsystem extends Subsystem {
   }
   
   public void moveClimb(double speed) {
-    climb.set(ControlMode.PercentOutput, speed);
+    climbMaster.set(ControlMode.PercentOutput, speed);
   }
 }
