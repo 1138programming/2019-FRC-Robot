@@ -11,7 +11,7 @@ public class LiftSubsystem extends Subsystem {
    * public static final int KLiftTalon = 7; 
    * private TalonSRX liftMotor;
    */
-  public static final int KLiftTalon = 9; 
+  public static final int KLiftTalon = 7; 
   public static final double KLiftSpeed = 1.0; 
 
   public static final double KLiftFullDown = 0; //These numbers are arbitrary rn, we need to calc this

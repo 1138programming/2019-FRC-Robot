@@ -5,8 +5,8 @@ package frc.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class HatchDisengage extends Command {
-  public HatchDisengage() {
+public class HatchOff extends Command {
+  public HatchOff() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.HATCH_SUBSYSTEM);
   }
@@ -19,7 +19,7 @@ public class HatchDisengage extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.HATCH_SUBSYSTEM.moveHatch(false);
+    Robot.HATCH_SUBSYSTEM.YMechanismOff();
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -57,7 +57,7 @@ public class DriveSubsystem extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-   setDefaultCommand(new /*DriveWithJoysticks()*/ArcadeDriveWithJoy()); //Arcade Drive is for Gio, pretty much everyone else uses Tank (DriveWithJoysticks)
+   setDefaultCommand(new DriveWithJoysticks()/*ArcadeDriveWithJoy()*/); //Arcade Drive is for Gio, pretty much everyone else uses Tank (DriveWithJoysticks)
   }
 
   public void baseDrive(double leftSpeed, double rightSpeed) {

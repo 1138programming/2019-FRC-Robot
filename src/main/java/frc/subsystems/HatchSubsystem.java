@@ -8,8 +8,10 @@
 package frc.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.commands.HatchDisengage;
+import frc.commands.HatchOff;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -22,18 +24,39 @@ public class HatchSubsystem extends Subsystem {
 	 * private DoubleSolenoid Hatch;
 	*/
 	public static final int KSolenoid3 = 3;
-  	public static final int KSolenoid4 = 4;
+	public static final int KSolenoid4 = 4;
+	public static final int KSolenoid5 = 5;
 
-	private DoubleSolenoid Hatch;
+	private Solenoid HatchMechanism;
+	private DoubleSolenoid YMechanism;
 	 
 	public HatchSubsystem() {
-		Hatch = new DoubleSolenoid(KSolenoid3, KSolenoid4);
-	 }
+		HatchMechanism = new Solenoid(KSolenoid3);
+		YMechanism = new DoubleSolenoid(KSolenoid4, KSolenoid5);
+	}
+
 	@Override
   	public void initDefaultCommand() {
-		setDefaultCommand(new HatchDisengage());
+		setDefaultCommand(new HatchOff());
 	}
-	public void moveHatch(boolean on) {
-		
+
+	public void moveHatchMechanism(boolean status) {
+		if(status != HatchMechanism.get()) {
+			HatchMechanism.set(status);
+		}
+		else {
+		}
+	}
+
+	public void YMechanismForward() {
+		YMechanism.set(Value.kForward);
+	}
+
+	public void YMechanismBackward() {
+		YMechanism.set(Value.kReverse);
+	}
+
+	public void YMechanismOff() {
+		YMechanism.set(Value.kOff);
 	}
 }

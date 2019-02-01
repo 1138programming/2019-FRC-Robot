@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.commands.ShiftDrive;
 import frc.commands.X_TableCenter;
 import frc.commands.ArmWithJoysticks;
+import frc.commands.AttainHatch;
 import frc.commands.CarriageIntake;
 import frc.commands.CarriageOuttake;
 import frc.commands.ClimbUp;
@@ -19,8 +20,8 @@ import frc.commands.ClimbDown;
 import frc.commands.CollectorBackwards;
 import frc.commands.CollectorForward;
 import frc.commands.Diagnostic;
-import frc.commands.HatchDisengage;
-import frc.commands.HatchEngage;
+import frc.commands.ScoreHatch;
+import frc.commands.AttainHatch;
 
 public class OI {
   /**
@@ -121,8 +122,8 @@ public class OI {
     btn2.whenPressed(new Diagnostic());
     btn5.whenPressed(new ShiftDrive());
     btn7.whenPressed(new X_TableCenter());  //1. Sparks MAX not working right now. 2. Picking up hatches and scoring will be on btns 6 & 8. 3. Triggers on XBox aren't working
-    btn1.whileHeld(new HatchEngage());
-    btn3.whileHeld(new HatchDisengage()); 
+    btn6.whenPressed(new AttainHatch());
+    btn8.whenPressed(new ScoreHatch());
 
     btnLB.whileHeld(new CollectorBackwards()); 
     btnRB.whileHeld(new CollectorForward()); 
@@ -134,21 +135,21 @@ public class OI {
 
   public double getRightAxis() {
     if(logitech.getThrottle() > KDeadZone || logitech.getThrottle() < -KDeadZone)
-      return logitech.getThrottle(); 
+      return -logitech.getThrottle(); 
     else 
       return 0; 
   }
 
   public double getArcadeRightAxis() {
     if(logitech.getTwist() > KDeadZone || logitech.getTwist() < -KDeadZone)
-      return logitech.getTwist();
+      return -logitech.getTwist();
     else
       return 0;
   }
 
   public double getLeftAxis() {
     if(logitech.getY() > KDeadZone || logitech.getY() < -KDeadZone)
-      return logitech.getY(); 
+      return -logitech.getY(); 
     else 
       return 0; 
   }
