@@ -25,6 +25,9 @@ public class DriveSubsystem extends Subsystem {
    * private VictorSPX driveLeftRear;
    * private DoubleSolenoid shifterSolenoid;
    */
+  public static final double KDriveSpeed = 1.0;
+  public static final double KYoteDistance = 1.0;
+  
   public static final int KDriveLeftFrontTalon = 0;
   public static final int KDriveRightFrontTalon = 1;  
   public static final int KDriveLeftRearTalon = 2; 
@@ -83,5 +86,25 @@ public class DriveSubsystem extends Subsystem {
 		else {
 			lowShiftBase();
 		}
+  }
+  public void moveWithEncoders(double position) {
+    if(driveLeftFront.getSensorCollection().getQuadraturePosition() < position) {
+      driveLeftFront.set(ControlMode.PercentOutput, KDriveSpeed);
+    }
+    else if(driveLeftFront.getSensorCollection().getQuadraturePosition() > position) {
+      driveLeftFront.set(ControlMode.PercentOutput, -KDriveSpeed);
+    }
+    else {
+      driveLeftFront.set(ControlMode.PercentOutput, 0);
+    }
+    if(driveRightFront.getSensorCollection().getQuadraturePosition() < position) {
+      driveRightFront.set(ControlMode.PercentOutput, KDriveSpeed);
+    }
+    else if(driveRightFront.getSensorCollection().getQuadraturePosition() > position) {
+      driveRightFront.set(ControlMode.PercentOutput, -KDriveSpeed);
+    }
+    else {
+      driveRightFront.set(ControlMode.PercentOutput, 0);
+    }
   }
 }
