@@ -16,6 +16,7 @@ import frc.subsystems.X_TableSubsystem;
 import frc.subsystems.ClimbSubsystem;
 import frc.subsystems.PneumaticsSubsystem;
 import frc.subsystems.HatchSubsystem;
+import frc.subsystems.Camera;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
   public static PneumaticsSubsystem PNEMATICSSUBSYSTEM = new PneumaticsSubsystem();
   public static HatchSubsystem HATCH_SUBSYSTEM = new HatchSubsystem(); 
   public static OI oi;
+  public static Camera CAMERA = new Camera();
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();

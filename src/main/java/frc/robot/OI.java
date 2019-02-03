@@ -22,6 +22,7 @@ import frc.commands.CollectorForward;
 import frc.commands.Diagnostic;
 import frc.commands.ScoreHatch;
 import frc.commands.AttainHatch;
+import frc.commands.SwitchCamera;
 
 public class OI {
   /**
@@ -121,7 +122,7 @@ public class OI {
     //Button Assigned Commands 
     btn2.whenPressed(new Diagnostic());
     btn5.whenPressed(new ShiftDrive());
-    btn7.whenPressed(new X_TableCenter());  //1. Sparks MAX not working right now. 2. Picking up hatches and scoring will be on btns 6 & 8. 3. Triggers on XBox aren't working
+    btn7.whenPressed(new SwitchCamera());  //1. Sparks MAX not working right now. 2. Picking up hatches and scoring will be on btns 6 & 8. 3. Triggers on XBox aren't working
     btn6.whenPressed(new AttainHatch());
     btn8.whenPressed(new ScoreHatch());
 
