@@ -135,35 +135,35 @@ public class OI {
 
   public double getRightAxis() {
     if(logitech.getThrottle() > KDeadZone || logitech.getThrottle() < -KDeadZone)
-      return -logitech.getThrottle(); 
+      return logitech.getThrottle(); 
     else 
       return 0; 
   }
 
   public double getArcadeRightAxis() {
     if(logitech.getTwist() > KDeadZone || logitech.getTwist() < -KDeadZone)
-      return -logitech.getTwist();
+      return logitech.getTwist();
     else
       return 0;
   }
 
   public double getLeftAxis() {
     if(logitech.getY() > KDeadZone || logitech.getY() < -KDeadZone)
-      return -logitech.getY(); 
+      return logitech.getY(); 
     else 
       return 0; 
   }
 
   public double getRightXbox() {
     if(xbox.getY(Hand.kRight) > KDeadZone || xbox.getY(Hand.kRight) < -KDeadZone) 
-      return -xbox.getY(Hand.kRight);
+      return xbox.getY(Hand.kRight);
     else 
       return 0;
   }
 
   public double getLeftXbox() {
     if(xbox.getY(Hand.kLeft) > KDeadZone || xbox.getY(Hand.kLeft) < -KDeadZone) 
-      return -xbox.getY(Hand.kLeft);
+      return xbox.getY(Hand.kLeft);
     else 
       return 0;
   }

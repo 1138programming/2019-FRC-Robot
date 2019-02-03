@@ -16,17 +16,17 @@ public class ClimbSubsystem extends Subsystem {
    * private TalonSRX climb;
    */
   public static final int KClimbMaster = 6;
-  public static final int KClimbSlave = 7;
+  // public static final int KClimbSlave = 7;
   public static final double KClimbSpeed = 1.0;
 
   private TalonSRX climbMaster; 
-  private VictorSPX climbSlave;
+  // private VictorSPX climbSlave;
 
   public ClimbSubsystem() {
     climbMaster = new TalonSRX(KClimbMaster);
-    climbSlave = new VictorSPX(KClimbSlave);
+    // climbSlave = new VictorSPX(KClimbSlave);
 
-    climbSlave.follow(climbMaster);
+    // climbSlave.follow(climbMaster);
   }
   @Override
   public void initDefaultCommand() {

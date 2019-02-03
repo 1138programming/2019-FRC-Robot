@@ -15,7 +15,7 @@ public class X_TableCenter extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.X_TABLE_SUBSYSTEM.moveX_Table(X_TableSubsystem.KX_TableSpeed);
+		Robot.X_TABLE_SUBSYSTEM.moveX_Table(0);
 	}
 
 	@Override

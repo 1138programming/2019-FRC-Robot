@@ -24,20 +24,20 @@ public class ArmSubsystem extends Subsystem {
   public static final int KArmMaster = 4; 
   public static final int KArmSlave = 5;  
   public static final double KArmSpeed = 1.0; 
+  public static final double KArmDeadZone = 1;
 
   public static final double KArmFullDown = 0; //These numbers are arbitrary rn, we need to calc this
   public static final double KArmLow = 1000;
+  public static final double KArmMiddle = 1500;
   public static final double KArmHigh = 2000;
   public static final double KArmFullUp = 3000; 
 
   private TalonSRX armMaster;
-  private VictorSPX armSlave;
+  private TalonSRX armSlave;
 
   public ArmSubsystem() {
     armMaster = new TalonSRX(KArmMaster); 
-    armSlave = new VictorSPX(KArmSlave);
-    
-    armSlave.follow(armMaster);
+    armSlave = new TalonSRX(KArmSlave);
   }
 
   @Override
@@ -47,6 +47,7 @@ public class ArmSubsystem extends Subsystem {
   
   public void moveArm(double speed) {
     armMaster.set(ControlMode.PercentOutput, speed);
+    armSlave.set(ControlMode.PercentOutput, speed);
   }
 
   public void moveArmWithEncoders(double position) {
@@ -58,6 +59,38 @@ public class ArmSubsystem extends Subsystem {
     }
     else {
       armMaster.set(ControlMode.PercentOutput, 0);
+    }
+
+    if(armSlave.getSensorCollection().getQuadraturePosition() < position) {
+      armSlave.set(ControlMode.PercentOutput, -KArmSpeed);
+    }
+    else if(armSlave.getSensorCollection().getQuadraturePosition() > position) {
+      armSlave.set(ControlMode.PercentOutput, KArmSpeed);
+    }
+    else {
+      armSlave.set(ControlMode.PercentOutput, 0);
+    }
+  }
+
+  public void resetArm() {
+    if(armMaster.getSensorCollection().getQuadraturePosition() > KArmMiddle) {
+      armMaster.set(ControlMode.PercentOutput, KArmSpeed);
+    }
+    else if(armMaster.getSensorCollection().getQuadraturePosition() <= KArmMiddle) {
+      armMaster.set(ControlMode.PercentOutput, -KArmSpeed);
+    }
+    else {
+      armMaster.set(ControlMode.PercentOutput, 0);
+    }
+
+    if(armSlave.getSensorCollection().getQuadraturePosition() > KArmMiddle) {
+      armSlave.set(ControlMode.PercentOutput, KArmSpeed);
+    }
+    else if(armSlave.getSensorCollection().getQuadraturePosition() <= KArmMiddle) {
+      armSlave.set(ControlMode.PercentOutput, -KArmSpeed);
+    }
+    else {
+      armSlave.set(ControlMode.PercentOutput, 0);
     }
   }
 /**
