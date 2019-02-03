@@ -2,7 +2,7 @@ package frc.subsystems;
 
 // import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.commands.StartCameraFeed;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.opencv.videoio.VideoCapture;
 
@@ -32,12 +32,12 @@ public class Camera extends Subsystem
     }
     
     public void switchToCamera2() {
-        System.out.println("Setting camera 2");
+        SmartDashboard.putString("Setting camera", "1");
         server.setSource(camera2);
     }
 
     public void switchToCamera1() {
-        System.out.println("Setting camera 1");
+        SmartDashboard.putString("Setting camera", "2");
         server.setSource(camera1);
     }
 }

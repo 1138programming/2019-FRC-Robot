@@ -1,6 +1,7 @@
 package frc.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class SwitchCamera extends Command {
@@ -18,13 +19,14 @@ int SwitchCase = 0;
 
 	@Override
 	protected void execute() {
+	SmartDashboard.putNumber("SwitchCase", SwitchCase);
     switch (SwitchCase) {
         case 1: 
-            Robot.CAMERA.switchToCamera1();
+            Robot.CAMERA.switchToCamera2();
             SwitchCase++;
             break;
         case 3:
-            Robot.CAMERA.switchToCamera2();
+            Robot.CAMERA.switchToCamera1();
             SwitchCase = 0;
             break;
         default:
