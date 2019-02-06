@@ -38,6 +38,8 @@ public class DriveSubsystem extends Subsystem {
 
   public AnalogAccelerometer Accel; 
   
+  private Boolean isReversed = false;
+
   private TalonSRX driveRightFront; 
   private TalonSRX driveLeftFront;
   private VictorSPX driveRightRear; 
@@ -68,11 +70,22 @@ public class DriveSubsystem extends Subsystem {
   }
 
   public void baseDrive(double leftSpeed, double rightSpeed) {
+    if (isReversed) {
+      double tempLeftSpeed = leftSpeed;
+      double tempRightSpeed = rightSpeed;
+      leftSpeed = -tempRightSpeed;
+      rightSpeed = -tempLeftSpeed;
+    }
+    
     SmartDashboard.putNumber("Left Base Input", leftSpeed);
 		SmartDashboard.putNumber("Right Base Input", rightSpeed);
     
     driveRightFront.set(ControlMode.PercentOutput, rightSpeed);
     driveLeftFront.set(ControlMode.PercentOutput, leftSpeed);
+  }
+
+  public void switchDriveBase(boolean Switch) {
+      isReversed = Switch;
   }
 
 	public void highShiftBase() {

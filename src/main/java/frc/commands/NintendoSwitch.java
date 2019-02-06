@@ -3,12 +3,13 @@ package frc.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.subsystems.DriveSubsystem;
 
-public class SwitchCamera extends Command {
+public class NintendoSwitch extends Command {
 
 int SwitchCase = 0;
 
-	public SwitchCamera() {
+	public NintendoSwitch() {
 		requires(Robot.CLIMB_SUBSYSTEM);
 	}
 
@@ -22,11 +23,13 @@ int SwitchCase = 0;
 	SmartDashboard.putNumber("SwitchCase", SwitchCase);
     switch (SwitchCase) {
         case 1: 
-            Robot.CAMERA.switchToCamera2();
-            SwitchCase++;
+			Robot.CAMERA.switchToCamera2();
+			Robot.DRIVE_SUBSYSTEM.switchDriveBase(true);
+			SwitchCase++;
             break;
         case 3:
-            Robot.CAMERA.switchToCamera1();
+			Robot.CAMERA.switchToCamera1();
+			Robot.DRIVE_SUBSYSTEM.switchDriveBase(false);
             SwitchCase = 0;
             break;
         default:
