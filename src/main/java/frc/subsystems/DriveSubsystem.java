@@ -111,4 +111,35 @@ public class DriveSubsystem extends Subsystem {
 
     }
   }
+
+   // Resets both of the base encoders
+	public void resetEncoders()
+	{
+		driveLeftFront.getSensorCollection().setQuadraturePosition(0, 0);
+		driveRightFront.getSensorCollection().setQuadraturePosition(0, 0);
+	}
+
+  // This sets the motion control mode for the left side of the base
+	public void setLeftMotionControl(ControlMode mode, double value) {
+		this.driveLeftFront.set(mode, value);
+	}
+	
+	// This sets the motion control mode for the right side of the base
+	public void setRightMotionControl(ControlMode mode, double value) {
+		this.driveRightFront.set(mode, value);
+	}
+  
+  public void driveClearSticky() {
+    driveRightFront.clearStickyFaults(1000);
+    driveLeftFront.clearStickyFaults(1000);
+  }
+
+  // These methods just return the base talons if we need to access them somewhere else
+	public TalonSRX getBaseLeftFront() {
+		return this.driveLeftFront;
+  }
+  
+	public TalonSRX getBaseRightFront() {
+		return this.driveRightFront;
+  }
 }
