@@ -22,9 +22,17 @@ public class TrajectoryCommand extends Command
 {
 	private TrajectoryExecutor trajectoryExecutor;
 	private Trajectory leftTrajectory, rightTrajectory;
-	//private double kP = 0.05, kI = 0, kD = 0.1;
+	
+	// PID constants
 	private double kP = 0.05, kI = 0, kD = 0;
-	public TrajectoryCommand(Waypoint[] points, double maxVel, double maxAccel, double maxJerk, double dt, double width)
+
+	// MP constants
+	private double maxVel = 20, maxAccel = 5, maxJerk = 70, dt = 0.05, width = 2.2083;
+
+	// F-gains
+	private double kF_left = 2.753552972, kF_right = 2.756520802;
+
+	public TrajectoryCommand(Waypoint[] points)
 	{
 		requires(Robot.DRIVE_SUBSYSTEM);
 		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, dt, maxVel, maxAccel, maxJerk);
@@ -45,12 +53,12 @@ public class TrajectoryCommand extends Command
 		Robot.DRIVE_SUBSYSTEM.getBaseLeftFront().config_kP(0, kP, Constants.kTimeoutMs);
         Robot.DRIVE_SUBSYSTEM.getBaseLeftFront().config_kI(0, kI, Constants.kTimeoutMs);
 		Robot.DRIVE_SUBSYSTEM.getBaseLeftFront().config_kD(0, kD, Constants.kTimeoutMs);
-        Robot.DRIVE_SUBSYSTEM.getBaseLeftFront().config_kF(0, 2.753552972, Constants.kTimeoutMs);
+        Robot.DRIVE_SUBSYSTEM.getBaseLeftFront().config_kF(0, kF_left, Constants.kTimeoutMs);
 
 		Robot.DRIVE_SUBSYSTEM.getBaseRightFront().config_kP(0, kP, Constants.kTimeoutMs);
         Robot.DRIVE_SUBSYSTEM.getBaseRightFront().config_kI(0, kI, Constants.kTimeoutMs);
         Robot.DRIVE_SUBSYSTEM.getBaseRightFront().config_kD(0, kD, Constants.kTimeoutMs);
-		Robot.DRIVE_SUBSYSTEM.getBaseRightFront().config_kF(0, 2.756520802, Constants.kTimeoutMs);
+		Robot.DRIVE_SUBSYSTEM.getBaseRightFront().config_kF(0, kF_right, Constants.kTimeoutMs);
 		
 		Robot.DRIVE_SUBSYSTEM.resetEncoders();
 	}
@@ -76,7 +84,6 @@ public class TrajectoryCommand extends Command
 	@Override
 	protected boolean isFinished()
 	{
-		//return false;
 		return trajectoryExecutor.getLeftValue() == SetValueMotionProfile.Hold || trajectoryExecutor.getRightValue() == SetValueMotionProfile.Hold;
 	}
 
@@ -87,7 +94,6 @@ public class TrajectoryCommand extends Command
         Robot.DRIVE_SUBSYSTEM.setLeftMotionControl(ControlMode.PercentOutput, 0);
 		Robot.DRIVE_SUBSYSTEM.setRightMotionControl(ControlMode.PercentOutput, 0);
 		trajectoryExecutor.reset();
-		//Robot.DRIVE_SUBSYSTEM.resetEncoders();
 	}
 
 	// Called when another command which requires one or more of the same
