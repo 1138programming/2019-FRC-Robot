@@ -8,7 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.commands.ArmWithJoysticks;
 import edu.wpi.first.wpilibj.DigitalInput;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import frc.commands.ArmReset;
+import frc.commands.ArmStop;
 
 
 
@@ -42,7 +42,7 @@ public class ArmSubsystem extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new ArmWithJoysticks());
+    setDefaultCommand(new ArmStop());
   }
   
   public void moveArm(double speed) {

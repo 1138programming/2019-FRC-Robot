@@ -24,6 +24,10 @@ import frc.commands.NintendoSwitch;
 import frc.commands.ScoreHatch;
 import frc.commands.AttainHatch;
 import frc.commands.NintendoSwitch;
+import frc.commands.CollectCargo;
+import frc.commands.ScoreCargoInCargo;
+import frc.commands.ScoreCargoInShip;
+import frc.commands.SetCargoToDrive;
 
 public class OI {
   /**
@@ -64,6 +68,7 @@ public class OI {
   //Controller Constants 
   public static final int KLogitechDrive = 0;
   public static final int KXboxArms = 1;
+  public static final int KStick = 2;
 
   //DeadZone 
   public static final double KDeadZone = 0.2; 
@@ -89,15 +94,24 @@ public class OI {
 	public static final int KLeftTrigger = 9;
   public static final int KRightTrigger = 10;
 
-  public Joystick logitech;
+  //Stick Button Constants
+  public static final int KBtn2Stick = 2;
+  public static final int KBtn3Stick = 3;
+  public static final int KBtn4Stick = 4;
+  public static final int KBtn5Stick = 5;
+  public static final int KBtn6Stick = 6;
+
+  public Joystick logitech, stick;
   public XboxController xbox;
 	public JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8; // Logitech Button
-	public JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
+  public JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
+  public JoystickButton btn2Stick, btn3Stick, btn4Stick, btn5Stick, btn6Stick; // Stick Buttons
 
   public OI() {
     //Controllers 
     logitech = new Joystick(KLogitechDrive);
     xbox = new XboxController(KXboxArms);
+    stick = new Joystick(KStick);
 
     //Logitech Buttons
 		btn1 = new JoystickButton(logitech, KButton1);
@@ -119,20 +133,35 @@ public class OI {
 		btnStrt = new JoystickButton(xbox, KStartButton);
 		btnLT = new JoystickButton(xbox, KLeftTrigger);
     btnRT = new JoystickButton(xbox, KRightTrigger);
-    
+
+    //Stick Buttons
+    btn2Stick = new JoystickButton(stick, KBtn2Stick);
+    btn3Stick = new JoystickButton(stick, KBtn3Stick);
+    btn4Stick = new JoystickButton(stick, KBtn4Stick);
+    btn5Stick = new JoystickButton(stick, KBtn5Stick);
+    btn6Stick = new JoystickButton(stick, KBtn6Stick);
+
     //Button Assigned Commands 
+    //Logitech
     btn2.whenPressed(new Diagnostic());
     btn5.whenPressed(new ShiftDrive());
     btn7.whenPressed(new NintendoSwitch());  //1. Sparks MAX not working right now. 2. Picking up hatches and scoring will be on btns 6 & 8. 3. Triggers on XBox aren't working
     btn6.whenPressed(new AttainHatch());
     btn8.whenPressed(new ScoreHatch());
 
+    //Xbox
     btnLB.whileHeld(new CollectorBackwards()); 
     btnRB.whileHeld(new CollectorForward()); 
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
     btnX.whileHeld(new ClimbDown()); 
     btnY.whileHeld(new ClimbUp());
+
+    //Stick
+    btn3Stick.whenPressed(new SetCargoToDrive());
+    btn4Stick.whenPressed(new ScoreCargoInCargo());
+    btn5Stick.whenPressed(new CollectCargo());
+    btn6Stick.whenPressed(new ScoreCargoInShip());
   }
 
   public double getRightAxis() {

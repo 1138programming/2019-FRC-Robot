@@ -4,9 +4,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.subsystems.ArmSubsystem;
 
-public class ArmReset extends Command {
-	public ArmReset() {
-		requires(Robot.ARM_SUBSYSTEM);
+public class MoveArmToPosition extends Command {
+    double armPosition;
+
+	public MoveArmToPosition(double armPosition) {
+        requires(Robot.ARM_SUBSYSTEM);
+        this.armPosition = armPosition;
 	}
 
 	@Override
@@ -15,12 +18,12 @@ public class ArmReset extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.ARM_SUBSYSTEM.moveArm(0);
+		Robot.ARM_SUBSYSTEM.moveArmWithEncoders(armPosition);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	@Override
