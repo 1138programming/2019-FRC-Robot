@@ -2,8 +2,8 @@ package frc.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.commands.ArcadeDriveWithJoy;
-import frc.commands.DriveWithJoysticks;
+import frc.commands.Drive.ArcadeDriveWithJoy;
+import frc.commands.Drive.DriveWithJoysticks;
 import edu.wpi.first.wpilibj.AnalogAccelerometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import com.ctre.phoenix.motorcontrol.ControlMode;

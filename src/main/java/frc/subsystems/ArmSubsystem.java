@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import frc.commands.ArmWithJoysticks;
+import frc.commands.Arm.ArmWithJoysticks;
 import edu.wpi.first.wpilibj.DigitalInput;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import frc.commands.ArmStop;
+import frc.commands.Arm.ArmStop;
 
 
 

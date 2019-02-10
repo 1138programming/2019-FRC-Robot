@@ -9,25 +9,24 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
-import frc.commands.ShiftDrive;
-import frc.commands.X_TableCenter;
-import frc.commands.ArmWithJoysticks;
-import frc.commands.AttainHatch;
-import frc.commands.CarriageIntake;
-import frc.commands.CarriageOuttake;
-import frc.commands.ClimbUp;
-import frc.commands.ClimbDown;
-import frc.commands.CollectorBackwards;
-import frc.commands.CollectorForward;
+import frc.commands.Drive.ShiftDrive;
+import frc.commands.X_Table.X_TableCenter;
+import frc.commands.Arm.ArmWithJoysticks;
+import frc.commands.Hatch.AttainHatch;
+import frc.commands.Carriage.CarriageIntake;
+import frc.commands.Carriage.CarriageOuttake;
+import frc.commands.Climb.ClimbUp;
+import frc.commands.Climb.ClimbDown;
+import frc.commands.Collector.CollectorBackwards;
+import frc.commands.Collector.CollectorForward;
 import frc.commands.Diagnostic;
-import frc.commands.NintendoSwitch;
-import frc.commands.ScoreHatch;
-import frc.commands.AttainHatch;
-import frc.commands.NintendoSwitch;
-import frc.commands.CollectCargo;
-import frc.commands.ScoreCargoInCargo;
-import frc.commands.ScoreCargoInShip;
-import frc.commands.SetCargoToDrive;
+import frc.commands.Drive.NintendoSwitch;
+import frc.commands.Hatch.ScoreHatch;
+import frc.commands.Hatch.AttainHatch;
+import frc.commands.ScoringCommandGroups.CollectCargo;
+import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
+import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
+import frc.commands.ScoringCommandGroups.SetCargoToDrive;
 
 public class OI {
   /**

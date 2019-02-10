@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import frc.commands.X_TableCenter;
+import frc.commands.X_Table.X_TableCenter;
 
 public class X_TableSubsystem extends Subsystem {
   /**

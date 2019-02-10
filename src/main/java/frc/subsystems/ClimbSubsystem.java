@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import frc.commands.ClimbReset;
+import frc.commands.Climb.ClimbReset;
 
 public class ClimbSubsystem extends Subsystem {
   /**
