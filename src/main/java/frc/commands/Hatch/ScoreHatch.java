@@ -6,7 +6,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 public class ScoreHatch extends Command {
-  private static final int msDelay = 1000;
+  private static final double[] KDelays = {1, 1.5};
+  private double timeout = 0;
   private int c = 0;
 
   public ScoreHatch() {
@@ -23,33 +24,30 @@ public class ScoreHatch extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    switch ((int)(Math.floor(timeSinceInitialized() * (1000 / msDelay)))) {
-      case 1:
-        if (c == 1) {
+    if (timeSinceInitialized() - timeout > 0) {
+      switch (c) {
+        case 0:
           Robot.HATCH_SUBSYSTEM.YMechanismForward();
-          c++;
-        }
-        break;
-      case 2:
-        if (c == 2) {
+          break;
+        case 1:
           Robot.HATCH_SUBSYSTEM.moveHatchMechanism(false);
-          c++;
-        }
-        break;
-      case 3:
-        if (c == 3) {
+          break;
+        case 2:
           Robot.HATCH_SUBSYSTEM.YMechanismBackward();
-          c++;
-        }
-        break;
+          break;
+      }
+
+      if (c < 2)
+        timeout = KDelays[c] + timeSinceInitialized();
+
+      c++;
     }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return c >= 4 || timeSinceInitialized() > 5;
+    return c >= 3;
   }
 
   // Called once after isFinished returns true

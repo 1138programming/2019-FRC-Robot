@@ -5,11 +5,20 @@ import frc.robot.Robot;
 import frc.subsystems.ArmSubsystem;
 
 public class MoveArmToPosition extends Command {
-    double armPosition;
+	double armPosition;
+	double error;
+	boolean runOnce;
 
 	public MoveArmToPosition(double armPosition) {
         requires(Robot.ARM_SUBSYSTEM);
-        this.armPosition = armPosition;
+		this.armPosition = armPosition;
+		runOnce = true;
+	}
+
+	public MoveArmToPosition(double armPosition, boolean runOnce) {
+        requires(Robot.ARM_SUBSYSTEM);
+		this.armPosition = armPosition;
+		this.runOnce = runOnce;
 	}
 
 	@Override
@@ -18,12 +27,12 @@ public class MoveArmToPosition extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.ARM_SUBSYSTEM.moveArmWithEncoders(armPosition);
+		error = Robot.ARM_SUBSYSTEM.moveArmWithEncoders(armPosition);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return true;
+		return Math.abs(error) < 15 || runOnce;
 	}
 
 	@Override

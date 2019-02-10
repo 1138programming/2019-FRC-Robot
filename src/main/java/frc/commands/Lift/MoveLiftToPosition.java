@@ -5,11 +5,20 @@ import frc.robot.Robot;
 import frc.subsystems.LiftSubsystem;
 
 public class MoveLiftToPosition extends Command {
-    double liftPosition;
+	double liftPosition;
+	double error;
+	boolean runOnce;
 
 	public MoveLiftToPosition(double liftPosition) {
         requires(Robot.LIFT_SUBSYSTEM);
-        this.liftPosition = liftPosition;
+		this.liftPosition = liftPosition;
+		runOnce = true;
+	}
+
+	public MoveLiftToPosition(double liftPosition, boolean runOnce) {
+        requires(Robot.LIFT_SUBSYSTEM);
+		this.liftPosition = liftPosition;
+		this.runOnce = runOnce;
 	}
 
 	@Override
@@ -18,12 +27,12 @@ public class MoveLiftToPosition extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.LIFT_SUBSYSTEM.moveLiftWithEncoders(liftPosition);
+		error = Robot.LIFT_SUBSYSTEM.moveLiftWithEncoders(liftPosition);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return true;
+		return Math.abs(error) < 15 || runOnce;
 	}
 
 	@Override

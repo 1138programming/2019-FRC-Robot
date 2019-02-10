@@ -1,10 +1,13 @@
 package frc.commands.ScoringCommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+
 import frc.robot.Robot;
+
 import frc.subsystems.ArmSubsystem;
-import frc.robot.OI;
-import edu.wpi.first.wpilibj.GenericHID;
+import frc.subsystems.CollectorSubsystem;
+import frc.subsystems.CarriageSubsystem;
+import frc.subsystems.LiftSubsystem;
 
 import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.Lift.MoveLiftToPosition;

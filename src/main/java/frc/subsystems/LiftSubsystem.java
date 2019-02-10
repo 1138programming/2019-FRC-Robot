@@ -18,6 +18,8 @@ public class LiftSubsystem extends Subsystem {
   public static final double KLiftCargo = 1500;
   public static final double KLiftShip = 3000; 
 
+  private static final double KP = 0.01;
+
   private TalonSRX liftMotor;
 
   public LiftSubsystem() {
@@ -33,15 +35,17 @@ public class LiftSubsystem extends Subsystem {
     liftMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  public void moveLiftWithEncoders(double position) {
-    if(liftMotor.getSensorCollection().getQuadraturePosition() < position) {
-      liftMotor.set(ControlMode.PercentOutput, KLiftSpeed);
-    }
-    else if(liftMotor.getSensorCollection().getQuadraturePosition() > position) {
-      liftMotor.set(ControlMode.PercentOutput, -KLiftSpeed);
-    }
-    else {
-      liftMotor.set(ControlMode.PercentOutput, 0);
-    }
+  public double moveLiftWithEncoders(double position) {
+    double error = position - liftMotor.getSelectedSensorPosition();
+    double speed = error * KLiftSpeed * KP;
+
+    if (speed > 1.0)
+      speed = 1.0;
+    else if (speed < -1.0)
+      speed = -1.0;
+
+    liftMotor.set(ControlMode.PercentOutput, speed);
+
+    return error;
   }
 }
