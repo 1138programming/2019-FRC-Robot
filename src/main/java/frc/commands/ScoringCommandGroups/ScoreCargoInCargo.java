@@ -15,13 +15,13 @@ import frc.commands.Collector.Collect;
 
 public class ScoreCargoInCargo extends CommandGroup {
 	public ScoreCargoInCargo() {
-        	requires(Robot.ARM_SUBSYSTEM);
-        	requires(Robot.COLLECTOR_SUBSYSTEM);
-        	requires(Robot.CARRIAGE_SUBSYSTEM);
+        requires(Robot.ARM_SUBSYSTEM);
+        requires(Robot.COLLECTOR_SUBSYSTEM);
+        requires(Robot.CARRIAGE_SUBSYSTEM);
 		requires(Robot.LIFT_SUBSYSTEM);
 
-		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmHigh));
-		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftCargo));
+		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmHigh, false));
+		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftCargo, false));
 		addSequential(new Collect(Robot.oi.btn4Stick));
 	}
 }

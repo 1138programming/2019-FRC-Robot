@@ -20,10 +20,10 @@ public class CollectCargo extends CommandGroup {
 		requires(Robot.CARRIAGE_SUBSYSTEM);
 		requires(Robot.LIFT_SUBSYSTEM);
 		
-		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle));
-		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftFullDown));
+		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle, false));
+		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftFullDown, false));
 		addSequential(new Collect(Robot.oi.btn5Stick));
-		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftCargo));
-		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmHigh));
+		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftCargo, false));
+		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmHigh, false));
 	}
 }
