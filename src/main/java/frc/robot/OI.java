@@ -23,10 +23,12 @@ import frc.commands.Diagnostic;
 import frc.commands.Drive.NintendoSwitch;
 import frc.commands.Hatch.ScoreHatch;
 import frc.commands.Hatch.AttainHatch;
+import frc.commands.Lift.MoveLiftToPosition;
 import frc.commands.ScoringCommandGroups.CollectCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
 import frc.commands.ScoringCommandGroups.SetCargoToDrive;
+import frc.subsystems.LiftSubsystem;
 
 public class OI {
   /**
@@ -153,7 +155,7 @@ public class OI {
     btnRB.whileHeld(new CollectorForward()); 
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
-    btnX.whileHeld(new ClimbDown()); 
+    btnX.whenPressed(new MoveLiftToPosition(LiftSubsystem.KLiftCargo)); 
     btnY.whileHeld(new ClimbUp());
 
     //Stick

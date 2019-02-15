@@ -24,6 +24,7 @@ public class LiftSubsystem extends Subsystem {
 
   public LiftSubsystem() {
     liftMotor = new TalonSRX(KLiftTalon); 
+    liftMotor.getSensorCollection().setQuadraturePosition(0,0);
   }
 
   @Override
@@ -35,9 +36,13 @@ public class LiftSubsystem extends Subsystem {
     liftMotor.set(ControlMode.PercentOutput, speed);
   }
 
+  public int getLiftEncoder() {
+    return liftMotor.getSensorCollection().getQuadraturePosition();
+  }
+
   public double moveLiftWithEncoders(double position) {
     double error = position - liftMotor.getSelectedSensorPosition();
-    double speed = error * KLiftSpeed * KP;
+    double speed = /*error */ KLiftSpeed /* KP*/;
 
     if (speed > 1.0)
       speed = 1.0;
