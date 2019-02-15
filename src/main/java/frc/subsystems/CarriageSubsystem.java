@@ -2,6 +2,7 @@ package frc.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.DigitalInput;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.commands.Carriage.CarriageReset;
@@ -16,10 +17,14 @@ public class CarriageSubsystem extends Subsystem {
   public static final int KCarriage = 8;
   public static final double KCarriageSpeed = 1.0;
 
+  private static final int KBumpSwitchChannel = 0;
+
   private VictorSPX carriage; 
+  private DigitalInput bumpSwitch;
 
   public CarriageSubsystem() {
     carriage = new VictorSPX(KCarriage);
+    bumpSwitch = new DigitalInput(KBumpSwitchChannel);
   }
   @Override
   public void initDefaultCommand() {
@@ -28,5 +33,9 @@ public class CarriageSubsystem extends Subsystem {
   
   public void moveCarriage(double speed) {
     carriage.set(ControlMode.PercentOutput, speed);
+  }
+
+  public boolean bumpSwitchClosed() {
+    return bumpSwitch.get();
   }
 }
