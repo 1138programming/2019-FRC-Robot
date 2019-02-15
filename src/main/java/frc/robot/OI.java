@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 import frc.commands.Drive.ShiftDrive;
-import frc.commands.X_Table.X_TableCenter;
+//import frc.commands.X_Table.X_TableCenter;
 import frc.commands.Arm.ArmWithJoysticks;
 import frc.commands.Hatch.AttainHatch;
 import frc.commands.Carriage.CarriageIntake;
@@ -100,11 +100,11 @@ public class OI {
   public static final int KBtn5Stick = 5;
   public static final int KBtn6Stick = 6;
 
-  public Joystick logitech, stick;
-  public XboxController xbox;
-	public JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8; // Logitech Button
-  public JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
-  public JoystickButton btn2Stick, btn3Stick, btn4Stick, btn5Stick, btn6Stick; // Stick Buttons
+  public static Joystick logitech, stick;
+  public static XboxController xbox;
+	public static JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8; // Logitech Button
+  public static JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
+  public static JoystickButton btn2Stick, btn3Stick, btn4Stick, btn5Stick, btn6Stick; // Stick Buttons
 
   public OI() {
     //Controllers 
