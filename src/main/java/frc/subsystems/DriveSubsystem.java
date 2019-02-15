@@ -33,8 +33,8 @@ public class DriveSubsystem extends Subsystem {
   public static final int KDriveRightRearTalon = 3;
   public static final int KAccelerometer = 0;
 
-  public static final int KShifterSolenoid1 = 1;
-  public static final int KShifterSolenoid2 = 2;
+  public static final int KShifterSolenoid1 = 0;
+  public static final int KShifterSolenoid2 = 1;
 
   public AnalogAccelerometer Accel; 
   

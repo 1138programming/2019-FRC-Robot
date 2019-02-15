@@ -42,11 +42,12 @@ public class ArmSubsystem extends Subsystem {
     armSlave = new TalonSRX(KArmSlave);
 
     armSlave.follow(armMaster);
+    armSlave.setInverted(true);
   }
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new ArmStop());
+    setDefaultCommand(new ArmWithJoysticks());
   }
   
   public void moveArm(double speed) {
