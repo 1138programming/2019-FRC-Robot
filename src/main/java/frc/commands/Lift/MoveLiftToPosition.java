@@ -35,7 +35,7 @@ public class MoveLiftToPosition extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(error) < 15 || runOnce;
+		return Math.abs(error) < 500;
 	}
 
 	@Override

@@ -7,13 +7,15 @@
 
 package frc.commands.Lift;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.subsystems.LiftSubsystem;
 
-public class LiftWithJoysticks extends Command {
-	public LiftWithJoysticks() {
+public class LiftStop extends Command {
+	public LiftStop() {
 		requires(Robot.LIFT_SUBSYSTEM);
 	}
 
@@ -23,18 +25,7 @@ public class LiftWithJoysticks extends Command {
 
 	@Override
 	protected void execute() {
-		double joystickValue = Robot.oi.getLeftXbox();
-		if(Robot.LIFT_SUBSYSTEM.topLimitClosed() == true) {
-			if (joystickValue > 0) 
-				joystickValue = 0;
-			Robot.LIFT_SUBSYSTEM.topLimitReset();
-		} 
-		else if(Robot.LIFT_SUBSYSTEM.bottomLimitClosed() == true) {
-			if (joystickValue < 0)
-				joystickValue = 0;
-			Robot.LIFT_SUBSYSTEM.bottomLimitReset();
-		} 
-		Robot.LIFT_SUBSYSTEM.moveLift(joystickValue + .05);
+		Robot.LIFT_SUBSYSTEM.moveLift(.05);
 	}
 
 	@Override

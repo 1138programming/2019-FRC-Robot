@@ -157,7 +157,7 @@ public class OI {
     btnRB.whileHeld(new CollectorForward()); 
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
-    btnX.whileHeld(new MoveLiftToPosition(LiftSubsystem.KLiftCargo)); 
+    btnX.whenPressed(new MoveLiftToPosition(LiftSubsystem.KLiftCargo)); 
     btnY.whileHeld(new ClimbUp());
 
     //Stick

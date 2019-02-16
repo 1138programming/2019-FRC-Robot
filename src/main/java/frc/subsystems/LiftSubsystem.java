@@ -6,6 +6,8 @@ import frc.commands.Lift.LiftWithJoysticks;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
+import frc.commands.Lift.LiftStop;
 
 public class LiftSubsystem extends Subsystem {
   /**
@@ -15,8 +17,10 @@ public class LiftSubsystem extends Subsystem {
   public static final int KLiftTalon = 7; 
   public static final double KLiftSpeed = 1.0; 
 
+  private DigitalInput topLimit, bottomLimit;
+
   public static final double KLiftFullDown = 0; //These numbers are arbitrary rn, we need to calc this
-  public static final double KLiftCargo = 10000;
+  public static final double KLiftCargo = 24000;
   public static final double KLiftShip = 12500; 
 
   private static final double KP = 0.00017;
@@ -29,6 +33,9 @@ public class LiftSubsystem extends Subsystem {
     liftMotor.setInverted(true);
     liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     liftMotor.getSensorCollection().setQuadraturePosition(0, 0);
+
+    topLimit = new DigitalInput(9);
+    bottomLimit = new DigitalInput(8);
   }
 
   @Override
@@ -55,15 +62,37 @@ public class LiftSubsystem extends Subsystem {
     double speed = error * KLiftSpeed * KP;
     SmartDashboard.putNumber("speed", speed);
 
-    if (speed > 1.0)
-      speed = 1.0;
-    else if (speed < -1.0)
-      speed = -1.0;
+    if (speed > .5)
+      speed = .5;
+    else if (speed < -.5)
+      speed = -.5;
 
     SmartDashboard.putNumber("speed 2", speed);
 
     liftMotor.set(ControlMode.PercentOutput, speed);
 
     return error;
+  }
+
+  public boolean topLimitClosed() {
+    // boolean isClosedTop = !topLimit.get();
+    // topLimit.close();
+    // SmartDashboard.putBoolean("Top limit closed: ", isClosedTop);
+    return !topLimit.get();
+  }
+
+  public boolean bottomLimitClosed() {
+    // boolean isClosedBottom = !bottomLimit.get();
+    // bottomLimit.close();
+    // SmartDashboard.putBoolean("Bottom limit closed: ", isClosedBottom);
+    return !bottomLimit.get();
+  }
+
+  public void topLimitReset() {
+    liftMotor.getSensorCollection().setQuadraturePosition(23500, 0);
+  }
+
+  public void bottomLimitReset() {
+    liftMotor.getSensorCollection().setQuadraturePosition(0, 0);
   }
 }
