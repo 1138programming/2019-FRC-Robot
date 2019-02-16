@@ -24,10 +24,12 @@ import frc.commands.Drive.NintendoSwitch;
 import frc.commands.Hatch.ScoreHatch;
 import frc.commands.Hatch.AttainHatch;
 import frc.commands.Lift.MoveLiftToPosition;
+import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.ScoringCommandGroups.CollectCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
 import frc.commands.ScoringCommandGroups.SetCargoToDrive;
+import frc.subsystems.ArmSubsystem;
 import frc.subsystems.LiftSubsystem;
 
 public class OI {
@@ -155,7 +157,7 @@ public class OI {
     btnRB.whileHeld(new CollectorForward()); 
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
-    btnX.whenPressed(new MoveLiftToPosition(LiftSubsystem.KLiftCargo)); 
+    btnX.whileHeld(new MoveLiftToPosition(LiftSubsystem.KLiftCargo)); 
     btnY.whileHeld(new ClimbUp());
 
     //Stick
@@ -195,7 +197,7 @@ public class OI {
 
   public double getLeftXbox() {
     if(xbox.getY(Hand.kLeft) > KDeadZone || xbox.getY(Hand.kLeft) < -KDeadZone) 
-      return xbox.getY(Hand.kLeft);
+      return -xbox.getY(Hand.kLeft);
     else 
       return 0;
   }

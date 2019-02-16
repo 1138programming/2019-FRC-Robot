@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
+    Robot.LIFT_SUBSYSTEM.resetLiftEncoder();
   }
 
   /**
@@ -109,6 +110,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    LIFT_SUBSYSTEM.resetLiftEncoder();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -117,6 +119,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    SmartDashboard.putNumber("Lift Encoder", Robot.LIFT_SUBSYSTEM.getLiftEncoder());
   }
 
   @Override

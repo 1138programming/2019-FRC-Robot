@@ -24,7 +24,6 @@ public class LiftWithJoysticks extends Command {
 	@Override
 	protected void execute() {
 		Robot.LIFT_SUBSYSTEM.moveLift(Robot.oi.getLeftXbox());
-		SmartDashboard.putNumber("Lift Encoder", Robot.LIFT_SUBSYSTEM.getLiftEncoder());
 	}
 
 	@Override

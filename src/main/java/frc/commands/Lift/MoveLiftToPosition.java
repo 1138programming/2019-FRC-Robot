@@ -3,6 +3,8 @@ package frc.commands.Lift;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.subsystems.LiftSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class MoveLiftToPosition extends Command {
 	double liftPosition;
@@ -28,6 +30,7 @@ public class MoveLiftToPosition extends Command {
 	@Override
 	protected void execute() {
 		error = Robot.LIFT_SUBSYSTEM.moveLiftWithEncoders(liftPosition);
+		SmartDashboard.putNumber("Lift Encoder", Robot.LIFT_SUBSYSTEM.getLiftEncoder());
 	}
 
 	@Override

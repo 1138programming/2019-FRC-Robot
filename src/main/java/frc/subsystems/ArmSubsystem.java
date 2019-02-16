@@ -43,6 +43,11 @@ public class ArmSubsystem extends Subsystem {
 
     armSlave.follow(armMaster);
     armSlave.setInverted(true);
+
+    armMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    armMaster.getSensorCollection().setQuadraturePosition(0, 0);
+    armSlave.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    armSlave.getSensorCollection().setQuadraturePosition(0, 0);
   }
 
   @Override
