@@ -10,6 +10,7 @@ package frc.commands.Lift;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.subsystems.ArmSubsystem;
 import frc.subsystems.LiftSubsystem;
 
 public class LiftWithJoysticks extends Command {
@@ -34,7 +35,7 @@ public class LiftWithJoysticks extends Command {
 				joystickValue = 0;
 			Robot.LIFT_SUBSYSTEM.bottomLimitReset();
 		} 
-		Robot.LIFT_SUBSYSTEM.moveLift(joystickValue + .05);
+		Robot.LIFT_SUBSYSTEM.moveLift(joystickValue + LiftSubsystem.KMotorOffset);
 	}
 
 	@Override

@@ -157,13 +157,13 @@ public class OI {
     btnRB.whileHeld(new CollectorForward()); 
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
-    btnX.whenPressed(new MoveLiftToPosition(LiftSubsystem.KLiftCargo)); 
-    btnY.whileHeld(new ClimbUp());
+    btnX.whenPressed(new CollectCargo()); 
+    btnY.whileHeld(new ScoreCargoInCargo());
 
     //Stick
     btn3Stick.whenPressed(new SetCargoToDrive());
-    btn4Stick.whenPressed(new ScoreCargoInCargo());
-    btn5Stick.whenPressed(new CollectCargo());
+    btn4Stick.whenPressed(new ClimbDown());
+    btn5Stick.whenPressed(new ClimbUp());
     btn6Stick.whenPressed(new ScoreCargoInShip());
   }
 

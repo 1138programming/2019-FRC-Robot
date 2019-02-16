@@ -23,5 +23,6 @@ public class ScoreCargoInShip extends CommandGroup {
 		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmHigh, false));
 		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftShip, false));
 		addSequential(new Collect(Robot.oi.btn6Stick));
+		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftFullDown, false));
 	}
 }

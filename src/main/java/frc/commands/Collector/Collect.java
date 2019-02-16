@@ -26,8 +26,16 @@ public class Collect extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.COLLECTOR_SUBSYSTEM.moveCollector(Robot.COLLECTOR_SUBSYSTEM.KCollecterSpeed);
-    Robot.CARRIAGE_SUBSYSTEM.moveCarriage(Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeed);
+    if(button == Robot.oi.btnX)
+    {
+      Robot.COLLECTOR_SUBSYSTEM.moveCollector(-Robot.COLLECTOR_SUBSYSTEM.KCollecterSpeed);
+      Robot.CARRIAGE_SUBSYSTEM.moveCarriage(-Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeed);
+    }
+    else if(button == Robot.oi.btnY)
+    {
+      Robot.COLLECTOR_SUBSYSTEM.moveCollector(Robot.COLLECTOR_SUBSYSTEM.KCollecterSpeed);
+      Robot.CARRIAGE_SUBSYSTEM.moveCarriage(Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeed);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

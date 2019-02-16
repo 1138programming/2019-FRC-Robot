@@ -26,11 +26,13 @@ public class ArmSubsystem extends Subsystem {
   public static final double KArmSpeed = 1; 
   public static final double KArmDeadZone = 1;
 
-  public static final double KArmFullDown = 0; //650, 1035, 1650, 1910
-  public static final double KArmLow = 1000;
-  public static final double KArmMiddle = 1500;
-  public static final double KArmHigh = 2000;
-  public static final double KArmFullUp = 3000; 
+  public static final double KArmFullDown = 1910; //650, 1035, 1650, 1910
+  public static final double KArmLow = 1650;
+  public static final double KArmMiddle = 1035;
+  public static final double KArmHigh = 650;
+  public static final double KArmFullUp = 0; 
+  public static final int KArmTopReset = 500;
+  public static final int KArmBottomReset = 1850;
 
   private static final double KP = 0.01;
 
@@ -66,7 +68,7 @@ public class ArmSubsystem extends Subsystem {
   }
 
   public double moveArmWithEncoders(double position) {
-    double error = position - armMaster.getSelectedSensorPosition();
+    double error = position - (armMaster.getSelectedSensorPosition() + armSlave.getSelectedSensorPosition())/2;
     double speed = error * KArmSpeed * KP;
 
     if (speed > KArmSpeed)
@@ -80,7 +82,7 @@ public class ArmSubsystem extends Subsystem {
   }
 
   public double resetArm() {
-    return moveArmWithEncoders(KArmMiddle);
+    return moveArmWithEncoders(KArmFullUp);
   }
 
   public int getRightArmEncoder() {
@@ -110,16 +112,16 @@ public class ArmSubsystem extends Subsystem {
   }
 
   public void leftLimitReset() {
-    if(armSlave.getSensorCollection().getQuadraturePosition() <= 500)
-      armSlave.getSensorCollection().setQuadraturePosition(0, 0);
-    else if(armSlave.getSensorCollection().getQuadraturePosition() >= 18500)
-      armSlave.getSensorCollection().setQuadraturePosition(19000, 0);
+    if(armSlave.getSensorCollection().getQuadraturePosition() <= KArmTopReset)
+      armSlave.getSensorCollection().setQuadraturePosition((int)KArmFullUp, 0);
+    else if(armSlave.getSensorCollection().getQuadraturePosition() >= KArmBottomReset)
+      armSlave.getSensorCollection().setQuadraturePosition((int)KArmFullDown, 0);
   }
 
   public void rightLimitReset() {
-    if(armMaster.getSensorCollection().getQuadraturePosition() <= 500)
-      armMaster.getSensorCollection().setQuadraturePosition(0, 0);
-    if(armMaster.getSensorCollection().getQuadraturePosition() >= 18500)
-      armMaster.getSensorCollection().setQuadraturePosition(19000, 0);
+    if(armMaster.getSensorCollection().getQuadraturePosition() <= KArmTopReset)
+      armMaster.getSensorCollection().setQuadraturePosition((int)KArmFullUp, 0);
+    if(armMaster.getSensorCollection().getQuadraturePosition() >= KArmBottomReset)
+      armMaster.getSensorCollection().setQuadraturePosition((int)KArmFullDown, 0);
   }
 }
