@@ -158,7 +158,7 @@ public class OI {
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
     btnX.whenPressed(new CollectCargo()); 
-    btnY.whileHeld(new ScoreCargoInCargo());
+    btnY.whenPressed(new ScoreCargoInCargo());
 
     //Stick
     btn3Stick.whenPressed(new SetCargoToDrive());

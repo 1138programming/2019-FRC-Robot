@@ -48,12 +48,12 @@ public class ArmWithJoysticks extends Command
 			}
 
 			Robot.ARM_SUBSYSTEM.rightLimitReset();
-		} 
+		}
 
-		Robot.ARM_SUBSYSTEM.moveArm(Robot.oi.getRightXbox());
-		
 		SmartDashboard.putNumber("Right Arm Encoder Position", Robot.ARM_SUBSYSTEM.getRightArmEncoder());
 		SmartDashboard.putNumber("Left Arm Encoder Position", Robot.ARM_SUBSYSTEM.getLeftArmEncoder());
+
+		Robot.ARM_SUBSYSTEM.moveArm(Robot.oi.getRightXbox());
 	}
 
 	@Override

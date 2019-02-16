@@ -13,16 +13,14 @@ import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.Lift.MoveLiftToPosition;
 import frc.commands.Collector.Collect;
 
-public class CollectCargo extends CommandGroup {
-	public CollectCargo() {
+public class CollectingPosition extends CommandGroup {
+	public CollectingPosition() {
 		requires(Robot.ARM_SUBSYSTEM);
 		requires(Robot.COLLECTOR_SUBSYSTEM);
 		requires(Robot.CARRIAGE_SUBSYSTEM);
 		requires(Robot.LIFT_SUBSYSTEM);
 		
-		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle, false));
+		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle));
 		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftFullDown, false));
-		addSequential(new Collect(Robot.oi.btnX));
-		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmHigh, false));
 	}
 }

@@ -14,16 +14,16 @@ import frc.commands.Arm.ArmStop;
 
 public class ArmSubsystem extends Subsystem {
   /**
-   * public static final int KArmMaster = 4;    ArmMaster is Right Arm
-   * public static final int KArmSlave = 5;     ArmSlave is Left Arm
+   * public static final int KArmLeft = 4;    ArmLeft is Right Arm
+   * public static final int KArmRight = 5;     ArmRight is Left Arm
    * public static final double KArmSpeed = 1.0; 
    * 
-   * private TalonSRX armMaster;
-   * private VictorSPX armSlave;
+   * private TalonSRX ArmLeft;
+   * private VictorSPX ArmRight;
   */
-  public static final int KArmMaster = 4; 
-  public static final int KArmSlave = 5;  
-  public static final double KArmSpeed = 1; 
+  public static final int KArmLeft = 4; 
+  public static final int KArmRight = 5;  
+  public static final double KArmSpeed = .5; 
   public static final double KArmDeadZone = 1;
 
   public static final double KArmFullDown = 1910; //650, 1035, 1650, 1910
@@ -34,24 +34,25 @@ public class ArmSubsystem extends Subsystem {
   public static final int KArmTopReset = 500;
   public static final int KArmBottomReset = 1850;
 
-  private static final double KP = 0.01;
+  private static final double KP = 0.008;
 
-  private TalonSRX armMaster;
-  private TalonSRX armSlave;
+  private TalonSRX ArmLeft;
+  private TalonSRX ArmRight;
 
   private DigitalInput rightLimit, leftLimit;
 
   public ArmSubsystem() {
-    armMaster = new TalonSRX(KArmMaster); 
-    armSlave = new TalonSRX(KArmSlave);
+    ArmLeft = new TalonSRX(KArmLeft); 
+    ArmRight = new TalonSRX(KArmRight);
 
-    armSlave.follow(armMaster);
-    armSlave.setInverted(true);
+    //ArmRight.follow(ArmLeft);
+    ArmRight.setInverted(true);
 
-    armMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-    armMaster.getSensorCollection().setQuadraturePosition(0, 0);
-    armSlave.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-    armSlave.getSensorCollection().setQuadraturePosition(0, 0);
+    ArmLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    ArmLeft.getSensorCollection().setQuadraturePosition(0, 0);
+    ArmRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    ArmRight.getSensorCollection().setQuadraturePosition(0, 0);
+    //ArmRight.setSensorPhase(true);
     
     rightLimit = new DigitalInput(7);
     leftLimit = new DigitalInput(6);
@@ -63,12 +64,12 @@ public class ArmSubsystem extends Subsystem {
   }
   
   public void moveArm(double speed) {
-    armMaster.set(ControlMode.PercentOutput, speed);
-    //armSlave.set(ControlMode.PercentOutput, speed);
+    ArmLeft.set(ControlMode.PercentOutput, speed);
+    ArmRight.set(ControlMode.PercentOutput, speed);
   }
 
   public double moveArmWithEncoders(double position) {
-    double error = position - (armMaster.getSelectedSensorPosition() + armSlave.getSelectedSensorPosition())/2;
+    double error = position - getRightArmEncoder();
     double speed = error * KArmSpeed * KP;
 
     if (speed > KArmSpeed)
@@ -76,7 +77,8 @@ public class ArmSubsystem extends Subsystem {
     else if (speed < -KArmSpeed)
       speed = -KArmSpeed;
 
-    armMaster.set(ControlMode.PercentOutput, speed);
+    ArmLeft.set(ControlMode.PercentOutput, speed);
+    ArmRight.set(ControlMode.PercentOutput, speed);
 
     return error;
   }
@@ -87,20 +89,20 @@ public class ArmSubsystem extends Subsystem {
 
   public int getRightArmEncoder() {
     //return liftMotor.getSelectedSensorPosition(0);
-    return armMaster.getSelectedSensorPosition();
+    return ArmRight.getSelectedSensorPosition();
   }
 
   public void resetRightArmEncoder() {
-    armMaster.getSensorCollection().setQuadraturePosition(0,0);
+    ArmRight.getSensorCollection().setQuadraturePosition(0,0);
   }
 
   public int getLeftArmEncoder() {
     //return liftMotor.getSelectedSensorPosition(0);
-    return armSlave.getSelectedSensorPosition();
+    return ArmLeft.getSelectedSensorPosition();
   }
 
   public void resetLeftArmEncoder() {
-    armSlave.getSensorCollection().setQuadraturePosition(0,0);
+    ArmLeft.getSensorCollection().setQuadraturePosition(0,0);
   }
 
   public boolean leftLimitClosed() {
@@ -111,17 +113,17 @@ public class ArmSubsystem extends Subsystem {
     return !rightLimit.get();
   }
 
-  public void leftLimitReset() {
-    if(armSlave.getSensorCollection().getQuadraturePosition() <= KArmTopReset)
-      armSlave.getSensorCollection().setQuadraturePosition((int)KArmFullUp, 0);
-    else if(armSlave.getSensorCollection().getQuadraturePosition() >= KArmBottomReset)
-      armSlave.getSensorCollection().setQuadraturePosition((int)KArmFullDown, 0);
+  public void rightLimitReset() {
+    if(ArmRight.getSensorCollection().getQuadraturePosition() <= KArmTopReset)
+      ArmRight.getSensorCollection().setQuadraturePosition((int)KArmFullUp, 0);
+    else if(ArmRight.getSensorCollection().getQuadraturePosition() >= KArmBottomReset)
+      ArmRight.getSensorCollection().setQuadraturePosition((int)KArmFullDown, 0);
   }
 
-  public void rightLimitReset() {
-    if(armMaster.getSensorCollection().getQuadraturePosition() <= KArmTopReset)
-      armMaster.getSensorCollection().setQuadraturePosition((int)KArmFullUp, 0);
-    if(armMaster.getSensorCollection().getQuadraturePosition() >= KArmBottomReset)
-      armMaster.getSensorCollection().setQuadraturePosition((int)KArmFullDown, 0);
+  public void leftLimitReset() {
+    if(ArmLeft.getSensorCollection().getQuadraturePosition() <= KArmTopReset)
+      ArmLeft.getSensorCollection().setQuadraturePosition((int)KArmFullUp, 0);
+    if(ArmLeft.getSensorCollection().getQuadraturePosition() >= KArmBottomReset)
+      ArmLeft.getSensorCollection().setQuadraturePosition((int)KArmFullDown, 0);
   }
 }

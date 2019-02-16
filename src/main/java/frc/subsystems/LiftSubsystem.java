@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import frc.commands.Lift.LiftStop;
 
 public class LiftSubsystem extends Subsystem {
-  /**
+  /** 
    * public static final int KLiftTalon = 7; 
    * private TalonSRX liftMotor;
    */
@@ -23,10 +23,10 @@ public class LiftSubsystem extends Subsystem {
   public static final double KLiftCargo = 24000;
   public static final double KLiftShip = 12500; //Haven't checked this one yet
   public static final int KLiftTopReset = 23500;
-  public static final int KLiftBottomReset = 500;
+  public static final int KLiftBottomReset = 0;
   public static final double KMotorOffset = .05;
 
-  private static final double KP = 0.00017;
+  private static final double KP = 0.00025;
 
   private TalonSRX liftMotor;
 
@@ -72,6 +72,7 @@ public class LiftSubsystem extends Subsystem {
 
     SmartDashboard.putNumber("speed 2", speed);
 
+    speed = checkLimits(speed);
     liftMotor.set(ControlMode.PercentOutput, speed);
 
     return error;
@@ -91,5 +92,19 @@ public class LiftSubsystem extends Subsystem {
 
   public void bottomLimitReset() {
     liftMotor.getSensorCollection().setQuadraturePosition(KLiftBottomReset, 0);
+  }
+
+  public double checkLimits(double targetSpeed) {
+    if(topLimitClosed() == true) {
+			if (targetSpeed > 0) 
+				targetSpeed = 0;
+			topLimitReset();
+		} 
+		else if(bottomLimitClosed() == true) {
+			if (targetSpeed < 0)
+				targetSpeed = 0;
+			bottomLimitReset();
+    }
+    return targetSpeed;
   }
 }

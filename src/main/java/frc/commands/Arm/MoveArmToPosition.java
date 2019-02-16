@@ -9,18 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class MoveArmToPosition extends Command {
 	double armPosition;
 	double error;
-	boolean runOnce;
 
 	public MoveArmToPosition(double armPosition) {
         requires(Robot.ARM_SUBSYSTEM);
 		this.armPosition = armPosition;
-		runOnce = true;
-	}
-
-	public MoveArmToPosition(double armPosition, boolean runOnce) {
-        requires(Robot.ARM_SUBSYSTEM);
-		this.armPosition = armPosition;
-		this.runOnce = runOnce;
 	}
 
 	@Override
@@ -30,17 +22,19 @@ public class MoveArmToPosition extends Command {
 	@Override
 	protected void execute() {
 		error = Robot.ARM_SUBSYSTEM.moveArmWithEncoders(armPosition);
-		SmartDashboard.putNumber("Left Arm Encoder", Robot.ARM_SUBSYSTEM.getLeftArmEncoder());
-		SmartDashboard.putNumber("Right Arm Encoder", Robot.ARM_SUBSYSTEM.getRightArmEncoder());
+		SmartDashboard.putNumber("Error Arm", error);
+		SmartDashboard.putNumber("Left Arm Encoder Position", Robot.ARM_SUBSYSTEM.getLeftArmEncoder());
+		SmartDashboard.putNumber("Right Arm Encoder Position", Robot.ARM_SUBSYSTEM.getRightArmEncoder());
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(error) < 500;
+		return Math.abs(error) < 50;
 	}
 
 	@Override
 	protected void end() {
+		Robot.ARM_SUBSYSTEM.moveArm(0);
 	}
 
 	@Override

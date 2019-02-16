@@ -25,21 +25,26 @@ public class MoveLiftToPosition extends Command {
 
 	@Override
 	protected void initialize() {
+		SmartDashboard.putBoolean("Move lift to position ended: ", false);
 	}
 
 	@Override
 	protected void execute() {
 		error = Robot.LIFT_SUBSYSTEM.moveLiftWithEncoders(liftPosition);
 		SmartDashboard.putNumber("Lift Encoder", Robot.LIFT_SUBSYSTEM.getLiftEncoder());
+		SmartDashboard.putNumber("error", error);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(error) < 500;
+		return Math.abs(error) < 600;
 	}
 
 	@Override
 	protected void end() {
+		SmartDashboard.putBoolean("Move lift to position ended: ", true);
+		Robot.LIFT_SUBSYSTEM.moveLift(0);
+		SmartDashboard.putBoolean("Move lift to position ended 2: ", true);
 	}
 
 	@Override
