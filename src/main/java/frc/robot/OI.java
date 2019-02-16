@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -25,7 +26,7 @@ import frc.commands.Hatch.ScoreHatch;
 import frc.commands.Hatch.AttainHatch;
 import frc.commands.Lift.MoveLiftToPosition;
 import frc.commands.Arm.MoveArmToPosition;
-import frc.commands.ScoringCommandGroups.CollectCargo;
+import frc.commands.ScoringCommandGroups.CollectingPosition;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
 import frc.commands.ScoringCommandGroups.SetCargoToDrive;
@@ -154,10 +155,10 @@ public class OI {
 
     //Xbox
     btnLB.whileHeld(new CollectorBackwards()); 
-    btnRB.whileHeld(new CollectorForward()); 
+    btnRB.whileHeld(new CollectorForward());
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
-    btnX.whenPressed(new CollectCargo()); 
+    btnX.whenPressed(new CollectingPosition());
     btnY.whenPressed(new ScoreCargoInCargo());
 
     //Stick

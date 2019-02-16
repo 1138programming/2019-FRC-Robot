@@ -16,6 +16,6 @@ public class SetCargoToDrive extends CommandGroup {
 		requires(Robot.LIFT_SUBSYSTEM);
 		
 		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle));
-        addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftShip, false));
+        addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftShip));
 	}
 }
