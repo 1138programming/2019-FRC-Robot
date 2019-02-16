@@ -111,6 +111,8 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     LIFT_SUBSYSTEM.resetLiftEncoder();
+    ARM_SUBSYSTEM.resetLeftArmEncoder();
+    ARM_SUBSYSTEM.resetRightArmEncoder();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

@@ -3,6 +3,8 @@ package frc.commands.Arm;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.subsystems.ArmSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class MoveArmToPosition extends Command {
 	double armPosition;
@@ -28,11 +30,13 @@ public class MoveArmToPosition extends Command {
 	@Override
 	protected void execute() {
 		error = Robot.ARM_SUBSYSTEM.moveArmWithEncoders(armPosition);
+		SmartDashboard.putNumber("Left Arm Encoder", Robot.ARM_SUBSYSTEM.getLeftArmEncoder());
+		SmartDashboard.putNumber("Right Arm Encoder", Robot.ARM_SUBSYSTEM.getRightArmEncoder());
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(error) < 15 || runOnce;
+		return Math.abs(error) < 500;
 	}
 
 	@Override

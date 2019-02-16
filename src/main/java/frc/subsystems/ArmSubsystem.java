@@ -14,8 +14,8 @@ import frc.commands.Arm.ArmStop;
 
 public class ArmSubsystem extends Subsystem {
   /**
-   * public static final int KArmMaster = 4; 
-   * public static final int KArmSlave = 5;  
+   * public static final int KArmMaster = 4;    ArmMaster is Right Arm
+   * public static final int KArmSlave = 5;     ArmSlave is Left Arm
    * public static final double KArmSpeed = 1.0; 
    * 
    * private TalonSRX armMaster;
@@ -23,10 +23,10 @@ public class ArmSubsystem extends Subsystem {
   */
   public static final int KArmMaster = 4; 
   public static final int KArmSlave = 5;  
-  public static final double KArmSpeed = 1.0; 
+  public static final double KArmSpeed = 1; 
   public static final double KArmDeadZone = 1;
 
-  public static final double KArmFullDown = 0; //These numbers are arbitrary rn, we need to calc this
+  public static final double KArmFullDown = 0; //650, 1035, 1650, 1910
   public static final double KArmLow = 1000;
   public static final double KArmMiddle = 1500;
   public static final double KArmHigh = 2000;
@@ -36,6 +36,8 @@ public class ArmSubsystem extends Subsystem {
 
   private TalonSRX armMaster;
   private TalonSRX armSlave;
+
+  private DigitalInput rightLimit, leftLimit;
 
   public ArmSubsystem() {
     armMaster = new TalonSRX(KArmMaster); 
@@ -48,6 +50,9 @@ public class ArmSubsystem extends Subsystem {
     armMaster.getSensorCollection().setQuadraturePosition(0, 0);
     armSlave.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
     armSlave.getSensorCollection().setQuadraturePosition(0, 0);
+    
+    rightLimit = new DigitalInput(7);
+    leftLimit = new DigitalInput(6);
   }
 
   @Override
@@ -64,61 +69,57 @@ public class ArmSubsystem extends Subsystem {
     double error = position - armMaster.getSelectedSensorPosition();
     double speed = error * KArmSpeed * KP;
 
-    if (speed > 1.0)
-      speed = 1.0;
-    else if (speed < -1.0)
-      speed = -1.0;
+    if (speed > KArmSpeed)
+      speed = KArmSpeed;
+    else if (speed < -KArmSpeed)
+      speed = -KArmSpeed;
 
     armMaster.set(ControlMode.PercentOutput, speed);
 
     return error;
-
-    /*if(armMaster.getSensorCollection().getQuadraturePosition() < position) {
-      armMaster.set(ControlMode.PercentOutput, KArmSpeed);
-    }
-    else if(armMaster.getSensorCollection().getQuadraturePosition() > position) {
-      armMaster.set(ControlMode.PercentOutput, -KArmSpeed);
-    }
-    else {
-      armMaster.set(ControlMode.PercentOutput, 0);
-    }
-
-    if(armSlave.getSensorCollection().getQuadraturePosition() < position) {
-      armSlave.set(ControlMode.PercentOutput, -KArmSpeed);
-    }
-    else if(armSlave.getSensorCollection().getQuadraturePosition() > position) {
-      armSlave.set(ControlMode.PercentOutput, KArmSpeed);
-    }
-    else {
-      armSlave.set(ControlMode.PercentOutput, 0);
-    }*/
   }
 
   public double resetArm() {
     return moveArmWithEncoders(KArmMiddle);
-    /*if(armMaster.getSensorCollection().getQuadraturePosition() > KArmMiddle) {
-      armMaster.set(ControlMode.PercentOutput, KArmSpeed);
-    }
-    else if(armMaster.getSensorCollection().getQuadraturePosition() <= KArmMiddle) {
-      armMaster.set(ControlMode.PercentOutput, -KArmSpeed);
-    }
-    else {
-      armMaster.set(ControlMode.PercentOutput, 0);
-    }
+  }
 
-    if(armSlave.getSensorCollection().getQuadraturePosition() > KArmMiddle) {
-      armSlave.set(ControlMode.PercentOutput, KArmSpeed);
-    }
-    else if(armSlave.getSensorCollection().getQuadraturePosition() <= KArmMiddle) {
-      armSlave.set(ControlMode.PercentOutput, -KArmSpeed);
-    }
-    else {
-      armSlave.set(ControlMode.PercentOutput, 0);
-    }*/
+  public int getRightArmEncoder() {
+    //return liftMotor.getSelectedSensorPosition(0);
+    return armMaster.getSelectedSensorPosition();
   }
-/**
-  public double getArm() {
-    //return ArmSubsystem.armMaster;
+
+  public void resetRightArmEncoder() {
+    armMaster.getSensorCollection().setQuadraturePosition(0,0);
   }
-  */
+
+  public int getLeftArmEncoder() {
+    //return liftMotor.getSelectedSensorPosition(0);
+    return armSlave.getSelectedSensorPosition();
+  }
+
+  public void resetLeftArmEncoder() {
+    armSlave.getSensorCollection().setQuadraturePosition(0,0);
+  }
+
+  public boolean leftLimitClosed() {
+    return !leftLimit.get();
+  }
+
+  public boolean rightLimitClosed() {
+    return !rightLimit.get();
+  }
+
+  public void leftLimitReset() {
+    if(armSlave.getSensorCollection().getQuadraturePosition() <= 500)
+      armSlave.getSensorCollection().setQuadraturePosition(0, 0);
+    else if(armSlave.getSensorCollection().getQuadraturePosition() >= 18500)
+      armSlave.getSensorCollection().setQuadraturePosition(19000, 0);
+  }
+
+  public void rightLimitReset() {
+    if(armMaster.getSensorCollection().getQuadraturePosition() <= 500)
+      armMaster.getSensorCollection().setQuadraturePosition(0, 0);
+    if(armMaster.getSensorCollection().getQuadraturePosition() >= 18500)
+      armMaster.getSensorCollection().setQuadraturePosition(19000, 0);
+  }
 }

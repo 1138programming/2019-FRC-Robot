@@ -15,7 +15,7 @@ public class LiftSubsystem extends Subsystem {
    * private TalonSRX liftMotor;
    */
   public static final int KLiftTalon = 7; 
-  public static final double KLiftSpeed = 1.0; 
+  public static final double KLiftSpeed = .5; 
 
   private DigitalInput topLimit, bottomLimit;
 
@@ -62,10 +62,10 @@ public class LiftSubsystem extends Subsystem {
     double speed = error * KLiftSpeed * KP;
     SmartDashboard.putNumber("speed", speed);
 
-    if (speed > .5)
-      speed = .5;
-    else if (speed < -.5)
-      speed = -.5;
+    if (speed > KLiftSpeed)
+      speed = KLiftSpeed;
+    else if (speed < -KLiftSpeed)
+      speed = -KLiftSpeed;
 
     SmartDashboard.putNumber("speed 2", speed);
 
@@ -75,16 +75,10 @@ public class LiftSubsystem extends Subsystem {
   }
 
   public boolean topLimitClosed() {
-    // boolean isClosedTop = !topLimit.get();
-    // topLimit.close();
-    // SmartDashboard.putBoolean("Top limit closed: ", isClosedTop);
     return !topLimit.get();
   }
 
   public boolean bottomLimitClosed() {
-    // boolean isClosedBottom = !bottomLimit.get();
-    // bottomLimit.close();
-    // SmartDashboard.putBoolean("Bottom limit closed: ", isClosedBottom);
     return !bottomLimit.get();
   }
 
