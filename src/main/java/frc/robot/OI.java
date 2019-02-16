@@ -153,19 +153,31 @@ public class OI {
     btn6.whenPressed(new AttainHatch());
     btn8.whenPressed(new ScoreHatch());
 
+    // Create command groups
+    CollectingPosition collectingPosition = new CollectingPosition();
+    ScoreCargoInCargo scoreCargoInCargo = new ScoreCargoInCargo();
+    ScoreCargoInShip scoreCargoInShip = new ScoreCargoInShip();
+    SetCargoToDrive setCargoToDrive = new SetCargoToDrive();
+
     //Xbox
     btnLB.whileHeld(new CollectorBackwards()); 
     btnRB.whileHeld(new CollectorForward());
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
-    btnX.whenPressed(new CollectingPosition());
-    btnY.whenPressed(new ScoreCargoInCargo());
+    btnX.whenPressed(collectingPosition);
+    btnY.whenPressed(scoreCargoInCargo);
 
     //Stick
-    btn3Stick.whenPressed(new SetCargoToDrive());
+    btn3Stick.whenPressed(setCargoToDrive);
     btn4Stick.whenPressed(new ClimbDown());
     btn5Stick.whenPressed(new ClimbUp());
-    btn6Stick.whenPressed(new ScoreCargoInShip());
+    btn6Stick.whenPressed(scoreCargoInShip);
+
+    // Cancel command groups
+    btnStrt.cancelWhenPressed(scoreCargoInCargo);
+    btnStrt.cancelWhenPressed(collectingPosition);
+    btnStrt.cancelWhenPressed(scoreCargoInShip);
+    btnStrt.cancelWhenPressed(setCargoToDrive);
   }
 
   public double getRightAxis() {
