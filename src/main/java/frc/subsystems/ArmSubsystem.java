@@ -23,7 +23,7 @@ public class ArmSubsystem extends Subsystem {
   */
   public static final int KArmLeft = 4; 
   public static final int KArmRight = 5;  
-  public static final double KArmSpeed = .5; 
+  public static final double KArmSpeed = .65; 
   public static final double KArmDeadZone = 1;
 
   public static final double KArmFullDown = 1795; //650, 1035, 1650, 1910

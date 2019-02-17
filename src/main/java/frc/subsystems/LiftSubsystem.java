@@ -15,7 +15,7 @@ public class LiftSubsystem extends Subsystem {
    * private TalonSRX liftMotor;
    */
   public static final int KLiftTalon = 7; 
-  public static final double KLiftSpeed = .5; 
+  public static final double KLiftSpeed = .65; 
 
   private DigitalInput topLimit, bottomLimit;
 
