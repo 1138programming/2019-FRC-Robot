@@ -2,7 +2,9 @@ package frc.commands.Drive;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.subsystems.PDP;
 
 public class DriveWithJoysticks extends Command {
   public DriveWithJoysticks() {
@@ -15,9 +17,22 @@ public class DriveWithJoysticks extends Command {
 
   @Override
   protected void execute() {
-    Robot.DRIVE_SUBSYSTEM.baseDrive(Robot.oi.getLeftAxis(), Robot.oi.getRightAxis());
-    SmartDashboard.putNumber("Left Logitech Axis", Robot.oi.getLeftAxis());
-    SmartDashboard.putNumber("Right Logitech Axis", Robot.oi.getRightAxis());
+    if(PDP.voltageSpikeOccured == false)
+    {
+      double leftSpeed = Robot.oi.getLeftAxis();
+      double rightSpeed = Robot.oi.getRightAxis();
+      Robot.DRIVE_SUBSYSTEM.baseDrive(leftSpeed, rightSpeed);
+      SmartDashboard.putNumber("Left Logitech Axis", leftSpeed);
+      SmartDashboard.putNumber("Right Logitech Axis", rightSpeed);
+    }
+    else if(PDP.voltageSpikeOccured == true)
+    {
+      double leftSpeed = (Robot.oi.getLeftAxis() * 3)/4;
+      double rightSpeed = (Robot.oi.getRightAxis() * 3)/4;
+      Robot.DRIVE_SUBSYSTEM.baseDrive(leftSpeed, rightSpeed);
+      SmartDashboard.putNumber("Left Logitech Axis", leftSpeed);
+      SmartDashboard.putNumber("Right Logitech Axis", rightSpeed);
+    }
   }
 
   @Override

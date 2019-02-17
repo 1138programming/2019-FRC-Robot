@@ -25,7 +25,10 @@ public class LiftWithJoysticks extends Command {
 	@Override
 	protected void execute() {
 		double joystickValue = Robot.LIFT_SUBSYSTEM.checkLimits(Robot.oi.getLeftXbox());
-		Robot.LIFT_SUBSYSTEM.moveLift(joystickValue + LiftSubsystem.KMotorOffset);
+		if(Robot.LIFT_SUBSYSTEM.getLiftEncoder() >= LiftSubsystem.KLiftTopReset || Robot.LIFT_SUBSYSTEM.getLiftEncoder() <= LiftSubsystem.KLiftBottomReset)
+			Robot.LIFT_SUBSYSTEM.moveLift((joystickValue/2) + LiftSubsystem.KMotorOffset);
+		else
+			Robot.LIFT_SUBSYSTEM.moveLift(joystickValue + LiftSubsystem.KMotorOffset);
 	}
 
 	@Override
