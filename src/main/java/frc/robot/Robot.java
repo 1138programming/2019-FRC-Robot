@@ -113,6 +113,7 @@ public class Robot extends TimedRobot {
     LIFT_SUBSYSTEM.resetLiftEncoder();
     ARM_SUBSYSTEM.resetLeftArmEncoder();
     ARM_SUBSYSTEM.resetRightArmEncoder();
+    SmartDashboard.putString("Robot Encoders", "NOT ALIGNED");
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

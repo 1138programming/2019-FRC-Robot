@@ -23,8 +23,10 @@ public class ArmWithJoysticks extends Command
 		if(Robot.ARM_SUBSYSTEM.leftLimitClosed() == true) {
 			if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() <= ArmSubsystem.KArmTopReset) {
 				joystickValue = 0;
+				SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED");
 			}
 			else if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() <= ArmSubsystem.KArmTopReset) {
+				SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED");
 			}
 			else if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() >= ArmSubsystem.KArmBottomReset) {
 			}
@@ -55,7 +57,10 @@ public class ArmWithJoysticks extends Command
 		SmartDashboard.putBoolean("left limit", Robot.ARM_SUBSYSTEM.leftLimitClosed());
 		SmartDashboard.putBoolean("right limit", Robot.ARM_SUBSYSTEM.rightLimitClosed());
 
-		Robot.ARM_SUBSYSTEM.moveArm(joystickValue);
+		if(Robot.ARM_SUBSYSTEM.getRightArmEncoder() <= ArmSubsystem.KArmTopReset || Robot.ARM_SUBSYSTEM.getRightArmEncoder() >= ArmSubsystem.KArmBottomReset || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() <= ArmSubsystem.KArmTopReset || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() >= ArmSubsystem.KArmBottomReset)
+			Robot.ARM_SUBSYSTEM.moveArm(joystickValue/2);
+		else
+			Robot.ARM_SUBSYSTEM.moveArm(joystickValue);
 	}
 
 	@Override
