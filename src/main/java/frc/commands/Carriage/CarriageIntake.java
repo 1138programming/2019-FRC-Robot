@@ -22,7 +22,7 @@ public class CarriageIntake extends Command {
 
   @Override
   protected void execute() {
-    Robot.CARRIAGE_SUBSYSTEM.moveCarriage(-CarriageSubsystem.KCarriageSpeed); 
+    Robot.CARRIAGE_SUBSYSTEM.moveCarriage(CarriageSubsystem.KCarriageSpeedIn); 
   }
 
   @Override

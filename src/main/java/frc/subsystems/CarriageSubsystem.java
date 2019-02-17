@@ -10,12 +10,14 @@ import frc.commands.Carriage.CarriageReset;
 public class CarriageSubsystem extends Subsystem {
   /**
    * public static final int KCarriage = 9;
-   * public static final double KCarriageSpeed = 1.0;
+   * public static final double KCarriageSpeedOut = 1.0;
    * 
    * private VictorSPX carriage;
    */
   public static final int KCarriage = 8;
-  public static final double KCarriageSpeed = 1.0;
+  public static final double KCarriageSpeedOut = 1.0;
+  public static final double KCarriageSpeedIn = 0.5;
+
 
   private static final int KBumpSwitchChannel = 0;
 

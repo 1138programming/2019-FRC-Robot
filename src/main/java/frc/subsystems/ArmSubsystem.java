@@ -26,13 +26,13 @@ public class ArmSubsystem extends Subsystem {
   public static final double KArmSpeed = .5; 
   public static final double KArmDeadZone = 1;
 
-  public static final double KArmFullDown = 1910; //650, 1035, 1650, 1910
-  public static final double KArmLow = 1650;
-  public static final double KArmMiddle = 1035;
-  public static final double KArmHigh = 650;
+  public static final double KArmFullDown = 1795; //650, 1035, 1650, 1910
+  public static final double KArmLow = 1525;
+  public static final double KArmMiddle = 985;
+  public static final double KArmHigh = 425;
   public static final double KArmFullUp = 0; 
   public static final int KArmTopReset = 500;
-  public static final int KArmBottomReset = 1850;
+  public static final int KArmBottomReset = 1400;
 
   private static final double KP = 0.008;
 
@@ -46,16 +46,19 @@ public class ArmSubsystem extends Subsystem {
     ArmRight = new TalonSRX(KArmRight);
 
     //ArmRight.follow(ArmLeft);
-    ArmRight.setInverted(true);
+    ArmLeft.setInverted(true);
 
     ArmLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
     ArmLeft.getSensorCollection().setQuadraturePosition(0, 0);
     ArmRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
     ArmRight.getSensorCollection().setQuadraturePosition(0, 0);
-    //ArmRight.setSensorPhase(true);
+    ArmRight.setSensorPhase(true);
+    ArmLeft.setSensorPhase(true);
     
     rightLimit = new DigitalInput(7);
     leftLimit = new DigitalInput(6);
+
+    SmartDashboard.putBoolean("activated", false);
   }
 
   @Override
@@ -123,7 +126,8 @@ public class ArmSubsystem extends Subsystem {
   public void leftLimitReset() {
     if(ArmLeft.getSensorCollection().getQuadraturePosition() <= KArmTopReset)
       ArmLeft.getSensorCollection().setQuadraturePosition((int)KArmFullUp, 0);
-    if(ArmLeft.getSensorCollection().getQuadraturePosition() >= KArmBottomReset)
+    else if(ArmLeft.getSensorCollection().getQuadraturePosition() >= KArmBottomReset)
       ArmLeft.getSensorCollection().setQuadraturePosition((int)KArmFullDown, 0);
+      SmartDashboard.putBoolean("activated", true);
   }
 }

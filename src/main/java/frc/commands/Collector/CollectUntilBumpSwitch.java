@@ -25,7 +25,7 @@ public class CollectUntilBumpSwitch extends Command {
   @Override
   protected void execute() {
       Robot.COLLECTOR_SUBSYSTEM.moveCollector(-Robot.COLLECTOR_SUBSYSTEM.KCollecterSpeed);
-      Robot.CARRIAGE_SUBSYSTEM.moveCarriage(-Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeed);
+      Robot.CARRIAGE_SUBSYSTEM.moveCarriage(-Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeedIn);
       Robot.LIFT_SUBSYSTEM.moveLift(LiftSubsystem.KMotorOffset);
   }
 

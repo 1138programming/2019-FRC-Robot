@@ -24,7 +24,7 @@ public class ScoreCargoInCargo extends CommandGroup {
 
 		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle));
 		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftCargo));
-		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmFullUp, holdLiftPosition));
+		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmFullUp));
 		addParallel(holdLiftPosition);
 	}
 }
