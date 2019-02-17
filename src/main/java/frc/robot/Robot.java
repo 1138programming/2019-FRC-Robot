@@ -1,11 +1,13 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.hal.PDPJNI;
 
 import frc.subsystems.DriveSubsystem;
 import frc.subsystems.LiftSubsystem;
@@ -17,6 +19,7 @@ import frc.subsystems.ClimbSubsystem;
 import frc.subsystems.PneumaticsSubsystem;
 import frc.subsystems.HatchSubsystem;
 import frc.subsystems.Camera;
+import frc.subsystems.PDP;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,6 +39,7 @@ public class Robot extends TimedRobot {
   public static PneumaticsSubsystem PNEMATICSSUBSYSTEM = new PneumaticsSubsystem();
   public static HatchSubsystem HATCH_SUBSYSTEM = new HatchSubsystem(); 
   public static OI oi;
+  public static PDP pdp;
   public static Camera CAMERA = new Camera();
 
   Command m_autonomousCommand;
@@ -123,6 +127,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     SmartDashboard.putNumber("Lift Encoder", Robot.LIFT_SUBSYSTEM.getLiftEncoder());
+    if(Robot.ARM_SUBSYSTEM.leftLimitClosed() == true && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() == true &&Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) {
+      SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED");
+    }
   }
 
   @Override

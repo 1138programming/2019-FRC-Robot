@@ -23,10 +23,8 @@ public class ArmWithJoysticks extends Command
 		if(Robot.ARM_SUBSYSTEM.leftLimitClosed() == true) {
 			if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() <= ArmSubsystem.KArmTopReset) {
 				joystickValue = 0;
-				SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED");
 			}
 			else if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() <= ArmSubsystem.KArmTopReset) {
-				SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED");
 			}
 			else if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() >= ArmSubsystem.KArmBottomReset) {
 			}

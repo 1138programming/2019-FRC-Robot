@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
-import edu.wpi.first.hal.PDPJNI;
 
 public class DriveSubsystem extends Subsystem {
   /**
@@ -47,10 +46,6 @@ public class DriveSubsystem extends Subsystem {
   private VictorSPX driveLeftRear;
   private DoubleSolenoid shifterSolenoid;
 
-  private PDPJNI PDP;
-  public static boolean voltageSpikeOccured = false;
-
-
   public DriveSubsystem()
   {
     driveRightFront = new TalonSRX(KDriveRightFrontTalon); 
@@ -59,8 +54,6 @@ public class DriveSubsystem extends Subsystem {
     driveLeftRear = new VictorSPX(KDriveLeftRearTalon);
 
     Accel = new AnalogAccelerometer(KAccelerometer);
-
-    PDP = new PDPJNI();
 
     driveRightFront.setInverted(true);
     driveRightRear.setInverted(true);
@@ -148,12 +141,5 @@ public class DriveSubsystem extends Subsystem {
   
 	public TalonSRX getBaseRightFront() {
 		return this.driveRightFront;
-  }
-
-  public void voltageSpikeRegulation() {
-    if(PDP.getPDPVoltage(0) <= 8)
-    {
-      voltageSpikeOccured = true;
-    }
   }
 }

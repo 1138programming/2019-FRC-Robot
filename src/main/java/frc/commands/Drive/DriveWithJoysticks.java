@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.subsystems.PDP;
 
 public class DriveWithJoysticks extends Command {
   public DriveWithJoysticks() {
@@ -16,8 +17,7 @@ public class DriveWithJoysticks extends Command {
 
   @Override
   protected void execute() {
-    Robot.DRIVE_SUBSYSTEM.voltageSpikeRegulation();
-    if(DriveSubsystem.voltageSpikeOccured == false)
+    if(PDP.voltageSpikeOccured == false)
     {
       double leftSpeed = Robot.oi.getLeftAxis();
       double rightSpeed = Robot.oi.getRightAxis();
@@ -25,7 +25,7 @@ public class DriveWithJoysticks extends Command {
       SmartDashboard.putNumber("Left Logitech Axis", leftSpeed);
       SmartDashboard.putNumber("Right Logitech Axis", rightSpeed);
     }
-    else if(DriveSubsystem.voltageSpikeOccured == true)
+    else if(PDP.voltageSpikeOccured == true)
     {
       double leftSpeed = (Robot.oi.getLeftAxis() * 3)/4;
       double rightSpeed = (Robot.oi.getRightAxis() * 3)/4;
