@@ -11,6 +11,7 @@ import frc.subsystems.LiftSubsystem;
 
 import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.Lift.MoveLiftToPosition;
+import frc.commands.Lift.HoldLiftPosition;
 
 public class ScoreCargoInCargo extends CommandGroup {
 	public ScoreCargoInCargo() {
@@ -19,7 +20,11 @@ public class ScoreCargoInCargo extends CommandGroup {
         requires(Robot.CARRIAGE_SUBSYSTEM);
 		requires(Robot.LIFT_SUBSYSTEM);
 
-		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmHigh));
+		HoldLiftPosition holdLiftPosition = new HoldLiftPosition();
+
+		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle));
 		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftCargo));
+		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmFullUp, holdLiftPosition));
+		addParallel(holdLiftPosition);
 	}
 }

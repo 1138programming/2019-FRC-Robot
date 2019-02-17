@@ -9,10 +9,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class MoveArmToPosition extends Command {
 	double armPosition;
 	double error;
+	Command commandToCancel;
 
 	public MoveArmToPosition(double armPosition) {
-        requires(Robot.ARM_SUBSYSTEM);
+		requires(Robot.ARM_SUBSYSTEM);
 		this.armPosition = armPosition;
+		this.commandToCancel = null;
+	}
+
+	public MoveArmToPosition(double armPosition, Command commandToCancel) {
+		requires(Robot.ARM_SUBSYSTEM);
+		this.armPosition = armPosition;
+		this.commandToCancel = commandToCancel;
 	}
 
 	@Override
@@ -35,6 +43,9 @@ public class MoveArmToPosition extends Command {
 	@Override
 	protected void end() {
 		Robot.ARM_SUBSYSTEM.moveArm(0);
+		if (commandToCancel != null) {
+			commandToCancel.cancel();
+		}
 	}
 
 	@Override
