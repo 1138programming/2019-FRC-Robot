@@ -12,6 +12,7 @@ import frc.subsystems.LiftSubsystem;
 import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.Lift.MoveLiftToPosition;
 import frc.commands.Collector.CollectUntilBumpSwitch;
+import frc.commands.Collector.CollectWithButtons;
 
 public class CollectingPosition extends CommandGroup {
 	public CollectingPosition() {
@@ -22,6 +23,6 @@ public class CollectingPosition extends CommandGroup {
 		
 		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle));
 		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftFullDown));
-		addSequential(new CollectUntilBumpSwitch());
+		addSequential(new CollectWithButtons(Robot.oi.btnY));
 	}
 }
