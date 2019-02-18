@@ -14,40 +14,44 @@ public class LiftSubsystem extends Subsystem {
    * public static final int KLiftTalon = 7; 
    * private TalonSRX liftMotor;
    */
-  public static final int KLiftTalon = 7; 
   public static final double KLiftSpeed = .75; 
+
+  public static enum LiftPosition { UNKNOWN, FULLDOWN, CARGO, SHIP, FULLUP }
 
   private DigitalInput topLimit, bottomLimit;
 
-  public static final double KLiftFullDown = 0; 
-  public static final double KLiftCargo = 24000;
-  public static final double KLiftShip = 14950; //Haven't checked this one yet
-  public static final int KLiftTopReset = 23500;
-  public static final int KLiftBottomReset = 0;
+  private static final double KLiftFullDown = 0; 
+  private static final double KLiftShip = 14950; //Haven't checked this one yet
+  private static final double KLiftCargo = 23500;
+  private static final double KLiftFullUp = 23500;
+  private static final int KLiftTopEncoderPosition = 23500;
+  private static final int KLiftBottomEncoderPosition = 0;
+  private static final double KLiftTopLimitHuntRange = 23000; //??
+  private static final double KLiftBottomLimitHuntRange = 500;
+
   public static final double KMotorOffset = 0.05;
 
   private static final double KP = 0.13;
 
   private TalonSRX liftMotor;
+  private static final int KLiftTalon = 7; 
+  private static final int KTopLimit = 9;
+  private static final int KBottomLimit = 8;
 
   public LiftSubsystem() {
     liftMotor = new TalonSRX(KLiftTalon); 
+    topLimit = new DigitalInput(KTopLimit);
+    bottomLimit = new DigitalInput(KBottomLimit);
+
     liftMotor.setSensorPhase(true);
     liftMotor.setInverted(true);
     liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     liftMotor.getSensorCollection().setQuadraturePosition(0, 0);
-
-    topLimit = new DigitalInput(9);
-    bottomLimit = new DigitalInput(8);
   }
 
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new LiftWithJoysticks());
-  }
-  
-  public void moveLift(double speed) {
-    liftMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public int getLiftEncoder() {
@@ -55,27 +59,25 @@ public class LiftSubsystem extends Subsystem {
     return liftMotor.getSelectedSensorPosition();
   }
 
-  public void resetLiftEncoder() {
-    liftMotor.getSensorCollection().setQuadraturePosition(0,0);
+  public LiftPosition getLiftPosition() {
+    if(getLiftEncoder() <= KLiftTopLimitHuntRange) {
+      return LiftPosition.FULLUP;
+    }
+
+    if(getLiftEncoder() >= KLiftBottomLimitHuntRange) {
+      return LiftPosition.FULLDOWN;
+    }
+    else {
+      return LiftPosition.UNKNOWN;
+    }
   }
 
-  public double moveLiftWithEncoders(double position) {
-    double error = position - liftMotor.getSensorCollection().getQuadraturePosition();
-    SmartDashboard.putNumber("error", error);
-    double speed = error * .001 * KLiftSpeed * KP;
-    SmartDashboard.putNumber("speed", speed);
+  public void setLiftEncoder(int position) {
+    liftMotor.getSensorCollection().setQuadraturePosition(position, 0);
+  }
 
-    if (speed > KLiftSpeed)
-      speed = KLiftSpeed;
-    else if (speed < -KLiftSpeed)
-      speed = -KLiftSpeed;
-
-    SmartDashboard.putNumber("speed 2", speed);
-
-    speed = checkLimits(speed);
-    liftMotor.set(ControlMode.PercentOutput, speed);
-
-    return error;
+  public void zeroLiftEncoder() {
+    liftMotor.getSensorCollection().setQuadraturePosition(0,0);
   }
 
   public boolean topLimitClosed() {
@@ -86,25 +88,61 @@ public class LiftSubsystem extends Subsystem {
     return !bottomLimit.get();
   }
 
-  public void topLimitReset() {
-    liftMotor.getSensorCollection().setQuadraturePosition(KLiftTopReset, 0);
+  public void resetTopLimit() {
+    setLiftEncoder((int)KLiftTopEncoderPosition);
   }
 
-  public void bottomLimitReset() {
-    liftMotor.getSensorCollection().setQuadraturePosition(KLiftBottomReset, 0);
+  public void resetBottomLimit() {
+    setLiftEncoder((int)KLiftBottomEncoderPosition);
   }
 
-  public double checkLimits(double targetSpeed) {
-    if(topLimitClosed() == true) {
+  public double checkLiftLimits(double targetSpeed) {
+    if(topLimitClosed()) {
 			if (targetSpeed > 0) 
 				targetSpeed = 0;
-			topLimitReset();
+			resetTopLimit();
 		} 
-		else if(bottomLimitClosed() == true) {
+		else if(bottomLimitClosed()) {
 			if (targetSpeed < 0)
 				targetSpeed = 0;
-			bottomLimitReset();
+			resetBottomLimit();
     }
+
     return targetSpeed;
+  }
+
+  public void moveLift(double speed) {
+    liftMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  private double moveLiftWithEncoders(double position) {
+    double error = position - getLiftEncoder();
+    double speed = error * KLiftSpeed * KP;
+    if (speed > KLiftSpeed)
+      speed = KLiftSpeed;
+    else if (speed < -KLiftSpeed)
+      speed = -KLiftSpeed;
+
+    speed = checkLiftLimits(speed);
+    liftMotor.set(ControlMode.PercentOutput, speed);
+
+    return error;
+  }
+
+  public double moveLiftToPosition(LiftPosition position) {
+    switch (position)
+    {
+      case FULLDOWN:
+        return moveLiftWithEncoders(KLiftFullDown);
+      case CARGO:
+        return moveLiftWithEncoders(KLiftCargo);
+      case SHIP:
+        return moveLiftWithEncoders(KLiftShip);
+      case FULLUP:
+        return moveLiftWithEncoders(KLiftFullUp);
+      default:
+        //Should really throw an exception;
+        return 0;
+    }
   }
 }

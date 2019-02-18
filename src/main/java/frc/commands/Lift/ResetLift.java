@@ -24,7 +24,7 @@ public class ResetLift extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.LIFT_SUBSYSTEM.bottomLimitClosed() == false)
+    if(!Robot.LIFT_SUBSYSTEM.bottomLimitClosed())
     Robot.LIFT_SUBSYSTEM.moveLift(-.25);
   else
     Robot.LIFT_SUBSYSTEM.moveLift(0);

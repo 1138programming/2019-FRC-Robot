@@ -8,6 +8,7 @@ import javax.lang.model.util.ElementScanner6;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.commands.Arm.ArmWithJoysticks;
+import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
@@ -70,45 +71,6 @@ public class ArmSubsystem extends Subsystem {
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new ArmWithJoysticks());
-  }
-  
-  public void moveArm(double speed) {
-    ArmLeft.set(ControlMode.PercentOutput, speed);
-    ArmRight.set(ControlMode.PercentOutput, speed);
-  }
-
-  private double moveArmWithEncoders(double position) {
-    double error = position - (getRightArmEncoder() + getLeftArmEncoder())/2;
-    double speed = error * KArmSpeed * KP;
-
-    if (speed > KArmSpeed)
-      speed = KArmSpeed;
-    else if (speed < -KArmSpeed)
-      speed = -KArmSpeed;
-
-    moveArm(speed);
-
-    return error;
-  }
-
-  public double moveArmToPosition(ArmPosition position)
-  {
-    switch (position)
-    {
-      case FULLDOWN:
-        return moveArmWithEncoders(KArmFullDown);
-      case LOW:
-        return moveArmWithEncoders(KArmLow);
-      case MIDDLE:
-        return moveArmWithEncoders(KArmMiddle);
-      case HIGH:
-        return moveArmWithEncoders(KArmHigh);
-      case FULLUP:
-        return moveArmWithEncoders(KArmFullUp);
-      default:
-        //Should really throw an exception;
-        return 0;
-    }
   }
 
   public int getRightArmEncoder() {
@@ -181,5 +143,84 @@ public class ArmSubsystem extends Subsystem {
       setRightArmEncoder((int)KArmFullUp);
     else if(getRightArmEncoder() >= KArmBottomLimitHuntRange)
       setRightArmEncoder((int)KArmFullDown);
+  }
+
+  public double checkRightArmLimits(double targetSpeed) {
+    if(rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLUP) {
+      if(targetSpeed > 0)
+        targetSpeed = 0;
+      identifyRightLimitandResetEncoder();
+    }
+    if(rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLDOWN) {
+      if(targetSpeed < 0)
+        targetSpeed = 0;
+      identifyRightLimitandResetEncoder();
+    }
+
+    return targetSpeed;
+  }
+
+  public double checkLeftArmLimits(double targetSpeed) {
+    if(leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLUP) {
+      if(targetSpeed > 0)
+        targetSpeed = 0;
+      identifyLeftLimitandResetEncoder();
+    }
+    if(leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLDOWN) {
+      if(targetSpeed < 0)
+        targetSpeed = 0;
+      identifyLeftLimitandResetEncoder();
+    }
+
+    return targetSpeed;
+  }
+
+  public void moveArm(double speed) {
+    ArmLeft.set(ControlMode.PercentOutput, speed);
+    ArmRight.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void moveArmWithJoysticks() {
+    joystickValue = (checkLeftArmLimits(Robot.oi.getRightXbox()) + checkRightArmLimits(Robot.oi.getRightXbox()))/2;
+    
+    if((Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLUP) || (Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLDOWN) || 
+		   (Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLUP) || (Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLDOWN))	
+				  Robot.ARM_SUBSYSTEM.moveArm(joystickValue/2);
+		else
+			    Robot.ARM_SUBSYSTEM.moveArm(joystickValue);
+  }
+
+  private double moveArmWithEncoders(double position) {
+    double error = position - (getRightArmEncoder() + getLeftArmEncoder())/2;
+    double speed = error * KArmSpeed * KP;
+
+    if (speed > KArmSpeed)
+      speed = KArmSpeed;
+    else if (speed < -KArmSpeed)
+      speed = -KArmSpeed;
+
+    moveArm(speed);
+
+    return error;
+  }
+
+  public double moveArmToPosition(ArmPosition position)
+  {
+    switch (position)
+    {
+      case FULLDOWN:
+        return moveArmWithEncoders(KArmFullDown);
+      case LOW:
+        return moveArmWithEncoders(KArmLow);
+      case MIDDLE:
+        return moveArmWithEncoders(KArmMiddle);
+      case HIGH:
+        return moveArmWithEncoders(KArmHigh);
+      case FULLUP:
+        return moveArmWithEncoders(KArmFullUp);
+      default:
+        //Should really throw an exception;
+        return 0;
+    }
   }
 }

@@ -7,15 +7,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class MoveLiftToPosition extends Command {
-	double liftPosition;
+	LiftSubsystem.LiftPosition liftPosition;
 	double error;
 
-	public MoveLiftToPosition(double liftPosition) {
+	private static final double allowableError = 500;
+
+	public MoveLiftToPosition(LiftSubsystem.LiftPosition liftPosition) {
         requires(Robot.LIFT_SUBSYSTEM);
 		this.liftPosition = liftPosition;
 	}
 
-	public MoveLiftToPosition(double liftPosition, boolean runOnce) {
+	public MoveLiftToPosition(LiftSubsystem.LiftPosition liftPosition, boolean runOnce) {
         requires(Robot.LIFT_SUBSYSTEM);
 		this.liftPosition = liftPosition;
 	}
@@ -26,14 +28,14 @@ public class MoveLiftToPosition extends Command {
 
 	@Override
 	protected void execute() {
-		error = Robot.LIFT_SUBSYSTEM.moveLiftWithEncoders(liftPosition);
-		SmartDashboard.putNumber("Lift Encoder", Robot.LIFT_SUBSYSTEM.getLiftEncoder());
+		error = Robot.LIFT_SUBSYSTEM.moveLiftToPosition(liftPosition);
 		SmartDashboard.putNumber("error", error);
+		SmartDashboard.putNumber("Lift Encoder", Robot.LIFT_SUBSYSTEM.getLiftEncoder());
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(error) < 600;
+		return Math.abs(error) < allowableError;
 	}
 
 	@Override

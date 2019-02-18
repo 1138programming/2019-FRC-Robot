@@ -21,6 +21,8 @@ import frc.subsystems.HatchSubsystem;
 import frc.subsystems.Camera;
 import frc.subsystems.PDP;
 
+import frc.commands.Arm.ArmStop;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -42,6 +44,8 @@ public class Robot extends TimedRobot {
   public static PDP pdp;
   public static Camera CAMERA = new Camera();
 
+  private boolean hasBeenReset = false;
+
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -51,7 +55,7 @@ public class Robot extends TimedRobot {
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
-    Robot.LIFT_SUBSYSTEM.resetLiftEncoder();
+    Robot.LIFT_SUBSYSTEM.zeroLiftEncoder();
   }
 
   /**
@@ -114,11 +118,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    LIFT_SUBSYSTEM.resetLiftEncoder();
+    LIFT_SUBSYSTEM.zeroLiftEncoder();
     ARM_SUBSYSTEM.zeroLeftArmEncoder();
     ARM_SUBSYSTEM.zeroRightArmEncoder();
     pdp.voltageSpikeOccured = false;
-    SmartDashboard.putString("Robot Encoders", "NOT ALIGNED");
+    hasBeenReset = false;
+    //SmartDashboard.putString("Robot Encoders", "NOT ALIGNED");
+      
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -126,11 +132,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    Scheduler.getInstance().run();
-    SmartDashboard.putNumber("Lift Encoder", Robot.LIFT_SUBSYSTEM.getLiftEncoder());
-    if(Robot.ARM_SUBSYSTEM.leftLimitClosed() == true && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() == true &&Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) {
+    if(Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) {
       SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED");
     }
+
+    if((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && hasBeenReset == false && oi.getRightXbox() <= 0) {
+      ARM_SUBSYSTEM.moveArm(0);
+    }
+    else if((Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) && hasBeenReset == false) {
+      hasBeenReset = true;
+    }
+    
+    Scheduler.getInstance().run();    
   }
 
   @Override

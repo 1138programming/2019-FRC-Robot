@@ -34,7 +34,7 @@ public class MoveArmToPosition extends Command {
 	protected void execute() {
 		error = Robot.ARM_SUBSYSTEM.moveArmToPosition(armPosition);
 
-		SmartDashboard.putNumber("Allowable Error Arm", allowableError);
+		SmartDashboard.putNumber("Error Arm", error);
 		SmartDashboard.putNumber("Left Arm Encoder Position", Robot.ARM_SUBSYSTEM.getLeftArmEncoder());
 		SmartDashboard.putNumber("Right Arm Encoder Position", Robot.ARM_SUBSYSTEM.getRightArmEncoder());
 	}
