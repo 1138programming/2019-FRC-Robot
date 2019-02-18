@@ -17,6 +17,8 @@ import frc.subsystems.CollectorSubsystem;
 //import frc.subsystems.X_TableSubsystem;
 import frc.subsystems.ClimbSubsystem;
 import frc.subsystems.PneumaticsSubsystem;
+import frc.subsystems.ArmSubsystem.ArmPosition;
+import frc.subsystems.LiftSubsystem.LiftPosition;
 import frc.subsystems.HatchSubsystem;
 import frc.subsystems.Camera;
 import frc.subsystems.PDP;
@@ -132,19 +134,27 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if(Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) {
-      SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED");
+    if (Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) {
+      SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED - READY TO GO");
     }
 
-    if((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 
+    if ((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 
       !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && 
       hasBeenReset == false && oi.getRightXbox() <= 0) {
         ARM_SUBSYSTEM.moveArm(0);
     }
-    else if((Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) && hasBeenReset == false) {
+    else if ((Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) && hasBeenReset == false) {
       hasBeenReset = true;
     }
-    
+
+    if (((Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLUP) || 
+        (Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLUP)) && 
+         ((Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.FULLUP) || 
+         (Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.SHIP) || 
+         (Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.CARGO))) {
+    LIFT_SUBSYSTEM.moveLift(0);
+    }
+
     Scheduler.getInstance().run();    
   }
 

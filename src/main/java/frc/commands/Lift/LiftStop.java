@@ -25,7 +25,7 @@ public class LiftStop extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.LIFT_SUBSYSTEM.moveLift(.05);
+		Robot.LIFT_SUBSYSTEM.moveLift(0);
 	}
 
 	@Override

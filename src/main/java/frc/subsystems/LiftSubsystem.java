@@ -69,7 +69,7 @@ public class LiftSubsystem extends Subsystem {
     setLiftEncoder(0);
   }
 
-  public void setLiftEncoder(LiftPosition position)
+  private void setLiftEncoder(LiftPosition position)
   {
     switch (position)
     {
@@ -108,7 +108,7 @@ public class LiftSubsystem extends Subsystem {
     return !BottomLimit.get();
   }
 
-  public double checkLiftLimits(double targetSpeed) {
+  private double enforceLiftLimits(double targetSpeed) {
     if(topLimitClosed()) {
 			if (targetSpeed > 0) 
 				targetSpeed = 0;
@@ -123,8 +123,23 @@ public class LiftSubsystem extends Subsystem {
     return targetSpeed;
   }
 
-  public void moveLift(double speed) {
+  public void moveLift(double desiredSpeed) {
+    if(desiredSpeed != 0) {
+      desiredSpeed = (enforceLiftLimits(desiredSpeed));
+
+      if(isInHuntRange()) {
+        desiredSpeed = desiredSpeed/2;
+      }
+    }
+    LiftTalon.set(ControlMode.PercentOutput, desiredSpeed + KMotorOffset);
+  }
+
+  public void moveLiftUNSAFELY(double speed) {
     LiftTalon.set(ControlMode.PercentOutput, speed);
+  }
+
+  private boolean isInHuntRange() {
+    return (getLiftPosition() == LiftPosition.FULLUP || getLiftPosition() == LiftPosition.FULLDOWN);
   }
 
   private double moveLiftWithEncoders(double position) {
@@ -135,7 +150,7 @@ public class LiftSubsystem extends Subsystem {
     else if (speed < -KLiftSpeed)
       speed = -KLiftSpeed;
 
-    speed = checkLiftLimits(speed);
+    speed = enforceLiftLimits(speed);
     LiftTalon.set(ControlMode.PercentOutput, speed);
 
     return error;

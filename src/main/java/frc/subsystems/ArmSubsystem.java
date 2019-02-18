@@ -18,46 +18,53 @@ public class ArmSubsystem extends Subsystem {
    * private TalonSRX ArmLeft; private VictorSPX ArmRight;
    */
 
-  //Max speed of arm when controlled by autonomous functions/macros
-  public static final double KArmSpeed = .75; 
+  public static final double KArmSpeed = .75; // Max speed of arm when controlled by autonomous functions/macros=
+  public static final double KArmHuntSpeed = .3; // Speed when approaching a limit (as a percentage)
 
-  public static enum ArmPosition { UNKNOWN, FULLDOWN, LOW, MIDDLE, HIGH, FULLUP }
+  public static enum ArmPosition {
+    UNKNOWN, FULLDOWN, LOW, MIDDLE, HIGH, FULLUP
+  }
 
-  //Encoder positions for arm in relationship to 0 (full up)
-  private static final double KArmFullDown = 1795; //650, 1035, 1650, 1910
+  // Encoder positions for arm in relationship to 0 (full up)
+  private static final double KArmFullDown = 1795; // 650, 1035, 1650, 1910
   private static final double KArmLow = 1525;
   private static final double KArmMiddle = 985;
   private static final double KArmHigh = 445;
   private static final double KArmFullUp = 0;
 
-  private static final double KArmBottomLimitHuntRange = 1575; //??
+  // Encoder position for when the arm should slow down
+  private static final double KArmBottomLimitHuntRange = 1575;
   private static final double KArmTopLimitHuntRange = 300;
-    
-  //PI(D) tuning for arm
+
+  // Encoder position for when the arm is considered at it's location
+  private static final double KArmBottomRange = 1575; // over this number means we are at the bottom
+  private static final double KArmTopRange = 300; // under this number mean we are at the top
+
+  // PI(D) tuning for arm
   private static final double KP = 0.0075;
 
-  //Talon config
+  // Talon config
   private final TalonSRX ArmLeft, ArmRight;
-  private static final int KArmLeft = 4; 
+  private static final int KArmLeft = 4;
   private static final int KArmRight = 5;
 
-  //Limit config
+  // Limit config
   private final DigitalInput LeftLimit, RightLimit;
   private static final int KLeftLimit = 6;
   private static final int KRightLimit = 7;
 
   public ArmSubsystem() {
-    ArmLeft = new TalonSRX(KArmLeft); 
+    ArmLeft = new TalonSRX(KArmLeft);
     ArmRight = new TalonSRX(KArmRight);
 
     LeftLimit = new DigitalInput(KLeftLimit);
     RightLimit = new DigitalInput(KRightLimit);
 
-    //Always configure BOTH talons
+    // Always configure BOTH talons
     ArmLeft.setInverted(true);
     ArmRight.setInverted(false);
 
-    //Configure encoders
+    // Configure encoders
     ArmLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
     zeroLeftArmEncoder();
     ArmRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
@@ -76,8 +83,12 @@ public class ArmSubsystem extends Subsystem {
     return ArmLeft.getSelectedSensorPosition();
   }
 
+  /**
+   * Sets the left arm encoder to the desired value.
+   * @param position - The value we want the encoder to have.
+   */
   public void setLeftArmEncoder(int position) {
-    ArmLeft.getSensorCollection().setQuadraturePosition(position,0);
+    ArmLeft.getSensorCollection().setQuadraturePosition(position, 0);
   }
 
   public void zeroLeftArmEncoder() {
@@ -88,8 +99,12 @@ public class ArmSubsystem extends Subsystem {
     return ArmRight.getSelectedSensorPosition();
   }
 
+  /**
+   * Sets the right arm encoder to the desired value.
+   * @param position - The value we want the encoder to have.
+   */
   public void setRightArmEncoder(int position) {
-    ArmRight.getSensorCollection().setQuadraturePosition(position,0);
+    ArmRight.getSensorCollection().setQuadraturePosition(position, 0);
   }
 
   public void zeroRightArmEncoder() {
@@ -105,48 +120,61 @@ public class ArmSubsystem extends Subsystem {
   }
 
   public ArmPosition getLeftArmPosition() {
-    if(getLeftArmEncoder() <= KArmTopLimitHuntRange)
+    if (getLeftArmEncoder() <= KArmTopRange)
       return ArmPosition.FULLUP;
-    else if(getLeftArmEncoder() >= KArmBottomLimitHuntRange)
+    else if (getLeftArmEncoder() >= KArmBottomRange)
       return ArmPosition.FULLDOWN;
     else
       return ArmPosition.UNKNOWN;
   }
 
   public ArmPosition getRightArmPosition() {
-    if(getRightArmEncoder() <= KArmTopLimitHuntRange)
+    if (getRightArmEncoder() <= KArmTopRange)
       return ArmPosition.FULLUP;
-    else if(getRightArmEncoder() >= KArmBottomLimitHuntRange)
+    else if (getRightArmEncoder() >= KArmBottomRange)
       return ArmPosition.FULLDOWN;
     else
       return ArmPosition.UNKNOWN;
   }
 
-  //Identifies which limit switch has been activated and resets the encoder appropriatly
-  public void identifyLeftLimitandResetEncoder() {
-    if(getLeftArmEncoder() <= KArmTopLimitHuntRange)
-      setLeftArmEncoder((int)KArmFullUp);
-    else if(getLeftArmEncoder() >= KArmBottomLimitHuntRange)
-      setLeftArmEncoder((int)KArmFullDown);
-  }
-  
-  //Identifies which limit switch has been activated and resets the encoder appropriatly
-  public void identifyRightLimitandResetEncoder() {
-    if(getRightArmEncoder() <= KArmTopLimitHuntRange)
-      setRightArmEncoder((int)KArmFullUp);
-    else if(getRightArmEncoder() >= KArmBottomLimitHuntRange)
-      setRightArmEncoder((int)KArmFullDown);
+  // Identifies which limit switch has been activated and resets the encoder
+  // appropriatly
+  private void identifyLeftLimitandResetEncoder() {
+    switch (getLeftArmPosition()) {
+    case FULLUP:
+      setLeftArmEncoder((int) KArmFullUp);
+      break;
+    case FULLDOWN:
+      setLeftArmEncoder((int) KArmFullDown);
+      break;
+    default:
+      break;
+    }
   }
 
-  //FLAG: Refactor eventually
-  public double checkLeftArmLimits(double targetSpeed) {
-    if(leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLUP) {
-      if(targetSpeed > 0)
+  // Identifies which limit switch has been activated and resets the encoder
+  // appropriatly
+  private void identifyRightLimitandResetEncoder() {
+    switch (getRightArmPosition()) {
+    case FULLUP:
+      setRightArmEncoder((int) KArmFullUp);
+      break;
+    case FULLDOWN:
+      setRightArmEncoder((int) KArmFullDown);
+      break;
+    default:
+      break;
+    }
+  }
+
+  private double enforceLeftArmLimits(double targetSpeed) {
+    if (leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLUP) {
+      if (targetSpeed > 0)
         targetSpeed = 0;
       identifyLeftLimitandResetEncoder();
     }
-    if(leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLDOWN) {
-      if(targetSpeed < 0)
+    if (leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLDOWN) {
+      if (targetSpeed < 0)
         targetSpeed = 0;
       identifyLeftLimitandResetEncoder();
     }
@@ -154,15 +182,14 @@ public class ArmSubsystem extends Subsystem {
     return targetSpeed;
   }
 
-  //FLAG: Refactor eventually
-  public double checkRightArmLimits(double targetSpeed) {
-    if(rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLUP) {
-      if(targetSpeed > 0)
+  private double enforceRightArmLimits(double targetSpeed) {
+    if (rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLUP) {
+      if (targetSpeed > 0)
         targetSpeed = 0;
       identifyRightLimitandResetEncoder();
     }
-    if(rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLDOWN) {
-      if(targetSpeed < 0)
+    if (rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLDOWN) {
+      if (targetSpeed < 0)
         targetSpeed = 0;
       identifyRightLimitandResetEncoder();
     }
@@ -170,13 +197,28 @@ public class ArmSubsystem extends Subsystem {
     return targetSpeed;
   }
 
-  public void moveArm(double speed) {
-    ArmLeft.set(ControlMode.PercentOutput, speed);
-    ArmRight.set(ControlMode.PercentOutput, speed);
+  public void moveArm(double desiredSpeed) {
+    if (desiredSpeed != 0)
+    {
+      desiredSpeed = (enforceLeftArmLimits(desiredSpeed) + enforceRightArmLimits(desiredSpeed)) / 2;
+
+      if (isInHuntRange()) {
+        desiredSpeed = desiredSpeed * KArmHuntSpeed;
+      }
+    }
+
+    ArmLeft.set(ControlMode.PercentOutput, desiredSpeed);
+    ArmRight.set(ControlMode.PercentOutput, desiredSpeed);
   }
 
-  private double moveArmWithEncoders(double position) {
-    double error = position - (getRightArmEncoder() + getLeftArmEncoder())/2;
+  private boolean isInHuntRange() {
+    return ((getLeftArmEncoder() >= KArmTopLimitHuntRange) || (getLeftArmEncoder() <= KArmBottomLimitHuntRange)
+        || (getRightArmEncoder() >= KArmTopLimitHuntRange) || (getLeftArmEncoder() <= KArmBottomLimitHuntRange));
+  }
+
+  // Returns how far off we are from the desired position
+  private double moveArmWithEncoders(double positionInTicks) {
+    double error = positionInTicks - (getRightArmEncoder() + getLeftArmEncoder()) / 2;
     double speed = error * KArmSpeed * KP;
 
     if (speed > KArmSpeed)
@@ -189,23 +231,22 @@ public class ArmSubsystem extends Subsystem {
     return error;
   }
 
-  public double moveArmToPosition(ArmPosition position)
-  {
-    switch (position)
-    {
-      case FULLDOWN:
-        return moveArmWithEncoders(KArmFullDown);
-      case LOW:
-        return moveArmWithEncoders(KArmLow);
-      case MIDDLE:
-        return moveArmWithEncoders(KArmMiddle);
-      case HIGH:
-        return moveArmWithEncoders(KArmHigh);
-      case FULLUP:
-        return moveArmWithEncoders(KArmFullUp);
-      default:
-        //Should really throw an exception;
-        return 1/0;
+  // Returns how far off we are from the desired position
+  public double moveArmToPosition(ArmPosition position) {
+    switch (position) {
+    case FULLDOWN:
+      return moveArmWithEncoders(KArmFullDown);
+    case LOW:
+      return moveArmWithEncoders(KArmLow);
+    case MIDDLE:
+      return moveArmWithEncoders(KArmMiddle);
+    case HIGH:
+      return moveArmWithEncoders(KArmHigh);
+    case FULLUP:
+      return moveArmWithEncoders(KArmFullUp);
+    default:
+      // Should really throw an exception;
+      return 1 / 0;
     }
   }
 }

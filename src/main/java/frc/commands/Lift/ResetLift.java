@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 public class ResetLift extends Command {
+
+  private static final double KResetLiftSpeed = .25;
+
   public ResetLift() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -25,7 +28,7 @@ public class ResetLift extends Command {
   @Override
   protected void execute() {
     if(!Robot.LIFT_SUBSYSTEM.bottomLimitClosed())
-    Robot.LIFT_SUBSYSTEM.moveLift(-.25);
+    Robot.LIFT_SUBSYSTEM.moveLift(-KResetLiftSpeed);
   else
     Robot.LIFT_SUBSYSTEM.moveLift(0);
   }

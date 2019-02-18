@@ -27,7 +27,7 @@ public class HoldLiftPosition extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.LIFT_SUBSYSTEM.moveLift(Robot.LIFT_SUBSYSTEM.KMotorOffset);
+    Robot.LIFT_SUBSYSTEM.moveLiftUNSAFELY(Robot.LIFT_SUBSYSTEM.KMotorOffset);
   }
 
   // Make this return true when this Command no longer needs to run execute()
