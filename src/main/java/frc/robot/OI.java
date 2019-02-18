@@ -4,71 +4,52 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.buttons.Trigger;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-
-import frc.commands.Drive.ShiftDrive;
-//import frc.commands.X_Table.X_TableCenter;
-import frc.commands.Arm.ArmWithJoysticks;
-import frc.commands.Hatch.AttainHatch;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.commands.Diagnostic;
 import frc.commands.Carriage.CarriageIntake;
 import frc.commands.Carriage.CarriageOuttake;
-import frc.commands.Climb.ClimbUp;
 import frc.commands.Climb.ClimbDown;
+import frc.commands.Climb.ClimbUp;
 import frc.commands.Collector.CollectorBackwards;
 import frc.commands.Collector.CollectorForward;
-import frc.commands.Diagnostic;
 import frc.commands.Drive.NintendoSwitch;
-import frc.commands.Hatch.ScoreHatch;
+import frc.commands.Drive.ShiftDrive;
 import frc.commands.Hatch.AttainHatch;
-import frc.commands.Lift.MoveLiftToPosition;
-import frc.commands.Arm.MoveArmToPosition;
+import frc.commands.Hatch.ScoreHatch;
 import frc.commands.ScoringCommandGroups.CollectingPosition;
+import frc.commands.ScoringCommandGroups.ResetRobot;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
-import frc.commands.ScoringCommandGroups.SetCargoToDrive;
-import frc.subsystems.ArmSubsystem;
-import frc.subsystems.LiftSubsystem;
 
 public class OI {
   /**
-   * Controller Constants 
-   * public static final int KLogitechDrive = 0;
-   * public static final int KXboxArms = 1;
+   * Controller Constants public static final int KLogitechDrive = 0; public
+   * static final int KXboxArms = 1;
    * 
-   * DeadZone 
-   * public static final double KDeadZone = 0.2; 
+   * DeadZone public static final double KDeadZone = 0.2;
    * 
-   * Logitech Button Constants 
-   * public static final int KButton1 = 1;
-   * public static final int KButton2 = 2;
-   * public static final int KButton3 = 3;
-   * public static final int KButton4 = 4;
-   * public static final int KButton5 = 5;
-   * public static final int KButton6 = 6;
-   * public static final int KButton7 = 7;
-   * public static final int KButton8 = 8;
+   * Logitech Button Constants public static final int KButton1 = 1; public static
+   * final int KButton2 = 2; public static final int KButton3 = 3; public static
+   * final int KButton4 = 4; public static final int KButton5 = 5; public static
+   * final int KButton6 = 6; public static final int KButton7 = 7; public static
+   * final int KButton8 = 8;
    * 
-   * Xbox Button Constants 
-   * public static final int KButtonA = 1;
-   * public static final int KButtonB = 2;
-   * public static final int KButtonX = 3;
-   * public static final int KButtonY = 4;
-   * public static final int KLeftBumper = 5;
-   * public static final int KRightBumper = 6;
-   * public static final int KStartButton = 8;
-   * public static final int KLeftTrigger = 9;
-   * public static final int KRightTrigger = 10;
+   * Xbox Button Constants public static final int KButtonA = 1; public static
+   * final int KButtonB = 2; public static final int KButtonX = 3; public static
+   * final int KButtonY = 4; public static final int KLeftBumper = 5; public
+   * static final int KRightBumper = 6; public static final int KStartButton = 8;
+   * public static final int KLeftTrigger = 9; public static final int
+   * KRightTrigger = 10;
    * 
-   * public Joystick logitech;
-   * public XboxController xbox;
-   * public JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8; // Logitech Button
-   * public JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
+   * public Joystick logitech; public XboxController xbox; public JoystickButton
+   * btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8; // Logitech Button public
+   * JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT;
+   * // Xbox Buttons
    */
-  
+
   //Controller Constants 
   public static final int KLogitechDrive = 0;
   public static final int KXboxArms = 1;
@@ -157,7 +138,7 @@ public class OI {
     CollectingPosition collectingPosition = new CollectingPosition();
     ScoreCargoInCargo scoreCargoInCargo = new ScoreCargoInCargo();
     ScoreCargoInShip scoreCargoInShip = new ScoreCargoInShip();
-    SetCargoToDrive setCargoToDrive = new SetCargoToDrive();
+    ResetRobot setCargoToDrive = new ResetRobot();
 
     //Xbox
     btnLB.whileHeld(new CollectorBackwards()); 
