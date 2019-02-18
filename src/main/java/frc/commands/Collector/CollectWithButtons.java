@@ -31,13 +31,13 @@ public class CollectWithButtons extends Command {
     if(button == Robot.oi.btnX)
     {
       Robot.COLLECTOR_SUBSYSTEM.moveCollector(-Robot.COLLECTOR_SUBSYSTEM.KCollecterSpeed);
-      Robot.CARRIAGE_SUBSYSTEM.moveCarriage(-Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeedIn);
+      Robot.CARRIAGE_SUBSYSTEM.moveCarriage(Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeedIn);
       Robot.LIFT_SUBSYSTEM.moveLift(LiftSubsystem.KMotorOffset);
     }
     else if(button == Robot.oi.btnY)
     {
       Robot.COLLECTOR_SUBSYSTEM.moveCollector(Robot.COLLECTOR_SUBSYSTEM.KCollecterSpeed);
-      Robot.CARRIAGE_SUBSYSTEM.moveCarriage(Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeedOut);
+      Robot.CARRIAGE_SUBSYSTEM.moveCarriage(-Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeedOut);
       Robot.LIFT_SUBSYSTEM.moveLift(LiftSubsystem.KMotorOffset);
     }
   }

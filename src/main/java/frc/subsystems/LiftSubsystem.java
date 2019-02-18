@@ -15,18 +15,18 @@ public class LiftSubsystem extends Subsystem {
    * private TalonSRX liftMotor;
    */
   public static final int KLiftTalon = 7; 
-  public static final double KLiftSpeed = .5; 
+  public static final double KLiftSpeed = .75; 
 
   private DigitalInput topLimit, bottomLimit;
 
   public static final double KLiftFullDown = 0; 
   public static final double KLiftCargo = 24000;
-  public static final double KLiftShip = 12500; //Haven't checked this one yet
+  public static final double KLiftShip = 14950; //Haven't checked this one yet
   public static final int KLiftTopReset = 23500;
   public static final int KLiftBottomReset = 0;
   public static final double KMotorOffset = 0.05;
 
-  private static final double KP = 0.00025;
+  private static final double KP = 0.13;
 
   private TalonSRX liftMotor;
 
@@ -62,7 +62,7 @@ public class LiftSubsystem extends Subsystem {
   public double moveLiftWithEncoders(double position) {
     double error = position - liftMotor.getSensorCollection().getQuadraturePosition();
     SmartDashboard.putNumber("error", error);
-    double speed = error * KLiftSpeed * KP;
+    double speed = error * .001 * KLiftSpeed * KP;
     SmartDashboard.putNumber("speed", speed);
 
     if (speed > KLiftSpeed)

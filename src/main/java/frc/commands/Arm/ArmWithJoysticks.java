@@ -3,8 +3,7 @@ package frc.commands.Arm;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.subsystems.ArmSubsystem;
-import frc.robot.OI;
+import frc.subsystems.ArmSubsystem.ArmPosition;
 
 public class ArmWithJoysticks extends Command
 {
@@ -20,45 +19,34 @@ public class ArmWithJoysticks extends Command
 	protected void execute() {
 		double joystickValue = Robot.oi.getRightXbox();
 
-		if(Robot.ARM_SUBSYSTEM.leftLimitClosed() == true) {
-			if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() <= ArmSubsystem.KArmTopReset) {
+		if(Robot.ARM_SUBSYSTEM.leftLimitClosed()) {
+			if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLUP)
 				joystickValue = 0;
-			}
-			else if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() <= ArmSubsystem.KArmTopReset) {
-			}
-			else if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() >= ArmSubsystem.KArmBottomReset) {
-			}
-			else if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() >= ArmSubsystem.KArmBottomReset) {
+			else if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLDOWN)
 				joystickValue = 0;
-			}
-
-			Robot.ARM_SUBSYSTEM.leftLimitReset();
+			
+			Robot.ARM_SUBSYSTEM.identifyLeftLimitandResetEncoder();
 		} 
 
-		if(Robot.ARM_SUBSYSTEM.rightLimitClosed() == true) {
-			if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getRightArmEncoder() <= ArmSubsystem.KArmTopReset) {
+		if(Robot.ARM_SUBSYSTEM.rightLimitClosed()) {
+			if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLUP)
 				joystickValue = 0;
-			}
-			else if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getRightArmEncoder() <= ArmSubsystem.KArmTopReset) {
-			}
-			else if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getRightArmEncoder() >= ArmSubsystem.KArmBottomReset) {
-			}
-			else if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getRightArmEncoder() >= ArmSubsystem.KArmBottomReset) {
+			else if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLDOWN)
 				joystickValue = 0;
-			}
+			
+			Robot.ARM_SUBSYSTEM.identifyRightLimitandResetEncoder();
+		} 
 
-			Robot.ARM_SUBSYSTEM.rightLimitReset();
-		}
+		if((Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLUP) || (Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLDOWN) || 
+		   (Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLUP) || (Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLDOWN))	
+				Robot.ARM_SUBSYSTEM.moveArm(joystickValue/2);
+		else
+			Robot.ARM_SUBSYSTEM.moveArm(joystickValue);
 
 		SmartDashboard.putNumber("Right Arm Encoder Position", Robot.ARM_SUBSYSTEM.getRightArmEncoder());
 		SmartDashboard.putNumber("Left Arm Encoder Position", Robot.ARM_SUBSYSTEM.getLeftArmEncoder());
-		SmartDashboard.putBoolean("left limit", Robot.ARM_SUBSYSTEM.leftLimitClosed());
-		SmartDashboard.putBoolean("right limit", Robot.ARM_SUBSYSTEM.rightLimitClosed());
-
-		if(Robot.ARM_SUBSYSTEM.getRightArmEncoder() <= ArmSubsystem.KArmTopReset || Robot.ARM_SUBSYSTEM.getRightArmEncoder() >= ArmSubsystem.KArmBottomReset || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() <= ArmSubsystem.KArmTopReset || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() >= ArmSubsystem.KArmBottomReset)
-			Robot.ARM_SUBSYSTEM.moveArm(joystickValue/2);
-		else
-			Robot.ARM_SUBSYSTEM.moveArm(joystickValue);
+		SmartDashboard.putBoolean("Left Limit Closed", Robot.ARM_SUBSYSTEM.leftLimitClosed());
+		SmartDashboard.putBoolean("Right Limit Closed", Robot.ARM_SUBSYSTEM.rightLimitClosed());
 	}
 
 	@Override

@@ -2,51 +2,62 @@ package frc.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Subsystem;
+
+import javax.lang.model.util.ElementScanner6;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.commands.Arm.ArmWithJoysticks;
 import edu.wpi.first.wpilibj.DigitalInput;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import frc.commands.Arm.ArmStop;
-
-
 
 public class ArmSubsystem extends Subsystem {
+
   /**
-   * public static final int KArmLeft = 4;    ArmLeft is Right Arm
-   * public static final int KArmRight = 5;     ArmRight is Left Arm
-   * public static final double KArmSpeed = 1.0; 
+   * public static final int KArmLeft = 4; ArmLeft is Right Arm public static
+   * final int KArmRight = 5; ArmRight is Left Arm public static final double
+   * KArmSpeed = 1.0;
    * 
-   * private TalonSRX ArmLeft;
-   * private VictorSPX ArmRight;
-  */
-  public static final int KArmLeft = 4; 
-  public static final int KArmRight = 5;  
-  public static final double KArmSpeed = .5; 
-  public static final double KArmDeadZone = 1;
+   * private TalonSRX ArmLeft; private VictorSPX ArmRight;
+   */
 
-  public static final double KArmFullDown = 1795; //650, 1035, 1650, 1910
-  public static final double KArmLow = 1525;
-  public static final double KArmMiddle = 985;
-  public static final double KArmHigh = 425;
-  public static final double KArmFullUp = 0; 
-  public static final int KArmTopReset = 500;
-  public static final int KArmBottomReset = 1400;
+  //Max speed of arm when controlled by autonomous functions/macros
+  public static final double KArmSpeed = .75; 
 
-  private static final double KP = 0.008;
+  public static enum ArmPosition { UNKNOWN, FULLDOWN, LOW, MIDDLE, HIGH, FULLUP }
 
-  private TalonSRX ArmLeft;
-  private TalonSRX ArmRight;
+  //Encoder positions for arm in relationship to 0 (full up)
+  private static final double KArmFullDown = 1795; //650, 1035, 1650, 1910
+  private static final double KArmLow = 1525;
+  private static final double KArmMiddle = 985;
+  private static final double KArmHigh = 445;
+  private static final double KArmFullUp = 0;
 
-  private DigitalInput rightLimit, leftLimit;
+  private static final double KArmBottomLimitHuntRange = 1575; //??
+  private static final double KArmTopLimitHuntRange = 300;
+    
+  //PI(D) tuning for arm
+  private static final double KP = 0.0075;
+
+  //Talon and limit config
+  private TalonSRX ArmLeft, ArmRight;
+  private static final int KArmLeft = 4; 
+  private static final int KArmRight = 5;
+
+  private DigitalInput leftLimit, rightLimit;
+  private static final int KLeftLimitInputPin = 6;
+  private static final int KRightLimitInputPin = 7;
 
   public ArmSubsystem() {
     ArmLeft = new TalonSRX(KArmLeft); 
     ArmRight = new TalonSRX(KArmRight);
 
-    //ArmRight.follow(ArmLeft);
+    leftLimit = new DigitalInput(KLeftLimitInputPin);
+    rightLimit = new DigitalInput(KRightLimitInputPin);
+
+    //Always configure BOTH talons
     ArmLeft.setInverted(true);
+    ArmRight.setInverted(false);
 
     ArmLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
     ArmLeft.getSensorCollection().setQuadraturePosition(0, 0);
@@ -54,11 +65,6 @@ public class ArmSubsystem extends Subsystem {
     ArmRight.getSensorCollection().setQuadraturePosition(0, 0);
     ArmRight.setSensorPhase(true);
     ArmLeft.setSensorPhase(true);
-    
-    rightLimit = new DigitalInput(7);
-    leftLimit = new DigitalInput(6);
-
-    SmartDashboard.putBoolean("activated", false);
   }
 
   @Override
@@ -71,8 +77,8 @@ public class ArmSubsystem extends Subsystem {
     ArmRight.set(ControlMode.PercentOutput, speed);
   }
 
-  public double moveArmWithEncoders(double position) {
-    double error = position - getRightArmEncoder();
+  private double moveArmWithEncoders(double position) {
+    double error = position - (getRightArmEncoder() + getLeftArmEncoder())/2;
     double speed = error * KArmSpeed * KP;
 
     if (speed > KArmSpeed)
@@ -80,32 +86,53 @@ public class ArmSubsystem extends Subsystem {
     else if (speed < -KArmSpeed)
       speed = -KArmSpeed;
 
-    ArmLeft.set(ControlMode.PercentOutput, speed);
-    ArmRight.set(ControlMode.PercentOutput, speed);
+    moveArm(speed);
 
     return error;
   }
 
-  public double resetArm() {
-    return moveArmWithEncoders(KArmFullUp);
+  public double moveArmToPosition(ArmPosition position)
+  {
+    switch (position)
+    {
+      case FULLDOWN:
+        return moveArmWithEncoders(KArmFullDown);
+      case LOW:
+        return moveArmWithEncoders(KArmLow);
+      case MIDDLE:
+        return moveArmWithEncoders(KArmMiddle);
+      case HIGH:
+        return moveArmWithEncoders(KArmHigh);
+      case FULLUP:
+        return moveArmWithEncoders(KArmFullUp);
+      default:
+        //Should really throw an exception;
+        return 0;
+    }
   }
 
   public int getRightArmEncoder() {
-    //return liftMotor.getSelectedSensorPosition(0);
     return ArmRight.getSelectedSensorPosition();
   }
 
-  public void resetRightArmEncoder() {
-    ArmRight.getSensorCollection().setQuadraturePosition(0,0);
+  public void setRightArmEncoder(int position) {
+    ArmRight.getSensorCollection().setQuadraturePosition(position,0);
+  }
+
+  public void zeroRightArmEncoder() {
+    setRightArmEncoder(0);
   }
 
   public int getLeftArmEncoder() {
-    //return liftMotor.getSelectedSensorPosition(0);
     return ArmLeft.getSelectedSensorPosition();
   }
 
-  public void resetLeftArmEncoder() {
-    ArmLeft.getSensorCollection().setQuadraturePosition(0,0);
+  public void setLeftArmEncoder(int position) {
+    ArmLeft.getSensorCollection().setQuadraturePosition(position,0);
+  }
+
+  public void zeroLeftArmEncoder() {
+    setLeftArmEncoder(0);
   }
 
   public boolean leftLimitClosed() {
@@ -116,18 +143,43 @@ public class ArmSubsystem extends Subsystem {
     return !rightLimit.get();
   }
 
-  public void rightLimitReset() {
-    if(ArmRight.getSensorCollection().getQuadraturePosition() <= KArmTopReset)
-      ArmRight.getSensorCollection().setQuadraturePosition((int)KArmFullUp, 0);
-    else if(ArmRight.getSensorCollection().getQuadraturePosition() >= KArmBottomReset)
-      ArmRight.getSensorCollection().setQuadraturePosition((int)KArmFullDown, 0);
+  public ArmPosition getLeftArmPosition() {
+    if(getLeftArmEncoder() <= KArmTopLimitHuntRange) {
+      return ArmPosition.FULLUP;
+    }
+
+    if(getLeftArmEncoder() >= KArmBottomLimitHuntRange) {
+      return ArmPosition.FULLDOWN;
+    }
+
+    return ArmPosition.UNKNOWN;
   }
 
-  public void leftLimitReset() {
-    if(ArmLeft.getSensorCollection().getQuadraturePosition() <= KArmTopReset)
-      ArmLeft.getSensorCollection().setQuadraturePosition((int)KArmFullUp, 0);
-    else if(ArmLeft.getSensorCollection().getQuadraturePosition() >= KArmBottomReset)
-      ArmLeft.getSensorCollection().setQuadraturePosition((int)KArmFullDown, 0);
-      SmartDashboard.putBoolean("activated", true);
+  public ArmPosition getRightArmPosition() {
+    if(getRightArmEncoder() <= KArmTopLimitHuntRange) {
+      return ArmPosition.FULLUP;
+    }
+
+    if(getRightArmEncoder() >= KArmBottomLimitHuntRange) {
+      return ArmPosition.FULLDOWN;
+    }
+
+    return ArmPosition.UNKNOWN;
+  }
+
+  //Identifies which limit switch has been activated and resets the encoder appropriatly
+  public void identifyLeftLimitandResetEncoder() {
+    if(getLeftArmEncoder() <= KArmTopLimitHuntRange)
+      setLeftArmEncoder((int)KArmFullUp);
+    else if(getLeftArmEncoder() >= KArmBottomLimitHuntRange)
+      setLeftArmEncoder((int)KArmFullDown);
+  }
+  
+  //Identifies which limit switch has been activated and resets the encoder appropriatly
+  public void identifyRightLimitandResetEncoder() {
+    if(getRightArmEncoder() <= KArmTopLimitHuntRange)
+      setRightArmEncoder((int)KArmFullUp);
+    else if(getRightArmEncoder() >= KArmBottomLimitHuntRange)
+      setRightArmEncoder((int)KArmFullDown);
   }
 }

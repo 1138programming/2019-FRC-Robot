@@ -8,7 +8,7 @@ import frc.subsystems.ArmSubsystem;
 import frc.subsystems.CollectorSubsystem;
 import frc.subsystems.CarriageSubsystem;
 import frc.subsystems.LiftSubsystem;
-
+import frc.subsystems.ArmSubsystem.ArmPosition;
 import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.Lift.MoveLiftToPosition;
 import frc.commands.Collector.CollectUntilBumpSwitch;
@@ -21,8 +21,8 @@ public class CollectingPosition extends CommandGroup {
 		requires(Robot.CARRIAGE_SUBSYSTEM);
 		requires(Robot.LIFT_SUBSYSTEM);
 		
-		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle));
+		addSequential(new MoveArmToPosition(ArmPosition.MIDDLE));
 		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftFullDown));
-		addSequential(new CollectWithButtons(Robot.oi.btnY));
+		addSequential(new CollectWithButtons(Robot.oi.btnX));
 	}
 }

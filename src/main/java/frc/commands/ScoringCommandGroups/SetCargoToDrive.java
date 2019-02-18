@@ -9,13 +9,15 @@ import frc.subsystems.LiftSubsystem;
 
 import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.Lift.MoveLiftToPosition;
+import frc.commands.Lift.ResetLift;
+import frc.commands.Arm.ResetArm;
 
 public class SetCargoToDrive extends CommandGroup {
 	public SetCargoToDrive() {
         requires(Robot.ARM_SUBSYSTEM);
 		requires(Robot.LIFT_SUBSYSTEM);
 		
-		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle));
-		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftFullDown));
+		addSequential(new ResetLift());
+		addSequential(new ResetArm());
 	}
 }
