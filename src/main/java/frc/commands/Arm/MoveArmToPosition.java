@@ -41,7 +41,7 @@ public class MoveArmToPosition extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(error) < allowableError;
+		return (Math.abs(error) < allowableError);
 	}
 
 	@Override

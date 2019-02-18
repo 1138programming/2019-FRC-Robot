@@ -136,8 +136,10 @@ public class Robot extends TimedRobot {
       SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED");
     }
 
-    if((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && hasBeenReset == false && oi.getRightXbox() <= 0) {
-      ARM_SUBSYSTEM.moveArm(0);
+    if((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 
+      !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && 
+      hasBeenReset == false && oi.getRightXbox() <= 0) {
+        ARM_SUBSYSTEM.moveArm(0);
     }
     else if((Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) && hasBeenReset == false) {
       hasBeenReset = true;

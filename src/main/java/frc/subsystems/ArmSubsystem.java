@@ -1,16 +1,12 @@
 package frc.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.command.Subsystem;
-
-import javax.lang.model.util.ElementScanner6;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import frc.commands.Arm.ArmWithJoysticks;
-import frc.robot.Robot;
-import edu.wpi.first.wpilibj.DigitalInput;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.commands.Arm.ArmWithJoysticks;
 
 public class ArmSubsystem extends Subsystem {
 
@@ -40,49 +36,40 @@ public class ArmSubsystem extends Subsystem {
   //PI(D) tuning for arm
   private static final double KP = 0.0075;
 
-  //Talon and limit config
-  private TalonSRX ArmLeft, ArmRight;
+  //Talon config
+  private final TalonSRX ArmLeft, ArmRight;
   private static final int KArmLeft = 4; 
   private static final int KArmRight = 5;
 
-  private DigitalInput leftLimit, rightLimit;
-  private static final int KLeftLimitInputPin = 6;
-  private static final int KRightLimitInputPin = 7;
+  //Limit config
+  private final DigitalInput LeftLimit, RightLimit;
+  private static final int KLeftLimit = 6;
+  private static final int KRightLimit = 7;
 
   public ArmSubsystem() {
     ArmLeft = new TalonSRX(KArmLeft); 
     ArmRight = new TalonSRX(KArmRight);
 
-    leftLimit = new DigitalInput(KLeftLimitInputPin);
-    rightLimit = new DigitalInput(KRightLimitInputPin);
+    LeftLimit = new DigitalInput(KLeftLimit);
+    RightLimit = new DigitalInput(KRightLimit);
 
     //Always configure BOTH talons
     ArmLeft.setInverted(true);
     ArmRight.setInverted(false);
 
+    //Configure encoders
     ArmLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-    ArmLeft.getSensorCollection().setQuadraturePosition(0, 0);
+    zeroLeftArmEncoder();
     ArmRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-    ArmRight.getSensorCollection().setQuadraturePosition(0, 0);
-    ArmRight.setSensorPhase(true);
+    zeroRightArmEncoder();
+
     ArmLeft.setSensorPhase(true);
+    ArmRight.setSensorPhase(true);
   }
 
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new ArmWithJoysticks());
-  }
-
-  public int getRightArmEncoder() {
-    return ArmRight.getSelectedSensorPosition();
-  }
-
-  public void setRightArmEncoder(int position) {
-    ArmRight.getSensorCollection().setQuadraturePosition(position,0);
-  }
-
-  public void zeroRightArmEncoder() {
-    setRightArmEncoder(0);
   }
 
   public int getLeftArmEncoder() {
@@ -97,36 +84,42 @@ public class ArmSubsystem extends Subsystem {
     setLeftArmEncoder(0);
   }
 
+  public int getRightArmEncoder() {
+    return ArmRight.getSelectedSensorPosition();
+  }
+
+  public void setRightArmEncoder(int position) {
+    ArmRight.getSensorCollection().setQuadraturePosition(position,0);
+  }
+
+  public void zeroRightArmEncoder() {
+    setRightArmEncoder(0);
+  }
+
   public boolean leftLimitClosed() {
-    return !leftLimit.get();
+    return !LeftLimit.get();
   }
 
   public boolean rightLimitClosed() {
-    return !rightLimit.get();
+    return !RightLimit.get();
   }
 
   public ArmPosition getLeftArmPosition() {
-    if(getLeftArmEncoder() <= KArmTopLimitHuntRange) {
+    if(getLeftArmEncoder() <= KArmTopLimitHuntRange)
       return ArmPosition.FULLUP;
-    }
-
-    if(getLeftArmEncoder() >= KArmBottomLimitHuntRange) {
+    else if(getLeftArmEncoder() >= KArmBottomLimitHuntRange)
       return ArmPosition.FULLDOWN;
-    }
-
-    return ArmPosition.UNKNOWN;
+    else
+      return ArmPosition.UNKNOWN;
   }
 
   public ArmPosition getRightArmPosition() {
-    if(getRightArmEncoder() <= KArmTopLimitHuntRange) {
+    if(getRightArmEncoder() <= KArmTopLimitHuntRange)
       return ArmPosition.FULLUP;
-    }
-
-    if(getRightArmEncoder() >= KArmBottomLimitHuntRange) {
+    else if(getRightArmEncoder() >= KArmBottomLimitHuntRange)
       return ArmPosition.FULLDOWN;
-    }
-
-    return ArmPosition.UNKNOWN;
+    else
+      return ArmPosition.UNKNOWN;
   }
 
   //Identifies which limit switch has been activated and resets the encoder appropriatly
@@ -145,21 +138,7 @@ public class ArmSubsystem extends Subsystem {
       setRightArmEncoder((int)KArmFullDown);
   }
 
-  public double checkRightArmLimits(double targetSpeed) {
-    if(rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLUP) {
-      if(targetSpeed > 0)
-        targetSpeed = 0;
-      identifyRightLimitandResetEncoder();
-    }
-    if(rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLDOWN) {
-      if(targetSpeed < 0)
-        targetSpeed = 0;
-      identifyRightLimitandResetEncoder();
-    }
-
-    return targetSpeed;
-  }
-
+  //FLAG: Refactor eventually
   public double checkLeftArmLimits(double targetSpeed) {
     if(leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLUP) {
       if(targetSpeed > 0)
@@ -175,19 +154,25 @@ public class ArmSubsystem extends Subsystem {
     return targetSpeed;
   }
 
+  //FLAG: Refactor eventually
+  public double checkRightArmLimits(double targetSpeed) {
+    if(rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLUP) {
+      if(targetSpeed > 0)
+        targetSpeed = 0;
+      identifyRightLimitandResetEncoder();
+    }
+    if(rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLDOWN) {
+      if(targetSpeed < 0)
+        targetSpeed = 0;
+      identifyRightLimitandResetEncoder();
+    }
+
+    return targetSpeed;
+  }
+
   public void moveArm(double speed) {
     ArmLeft.set(ControlMode.PercentOutput, speed);
     ArmRight.set(ControlMode.PercentOutput, speed);
-  }
-
-  public void moveArmWithJoysticks() {
-    joystickValue = (checkLeftArmLimits(Robot.oi.getRightXbox()) + checkRightArmLimits(Robot.oi.getRightXbox()))/2;
-    
-    if((Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLUP) || (Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLDOWN) || 
-		   (Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLUP) || (Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLDOWN))	
-				  Robot.ARM_SUBSYSTEM.moveArm(joystickValue/2);
-		else
-			    Robot.ARM_SUBSYSTEM.moveArm(joystickValue);
   }
 
   private double moveArmWithEncoders(double position) {
@@ -220,7 +205,7 @@ public class ArmSubsystem extends Subsystem {
         return moveArmWithEncoders(KArmFullUp);
       default:
         //Should really throw an exception;
-        return 0;
+        return 1/0;
     }
   }
 }

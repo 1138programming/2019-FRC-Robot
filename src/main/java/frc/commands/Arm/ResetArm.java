@@ -28,7 +28,7 @@ public class ResetArm extends Command {
   @Override
   protected void execute() {
     if(!Robot.ARM_SUBSYSTEM.leftLimitClosed() && !Robot.ARM_SUBSYSTEM.rightLimitClosed())
-      Robot.ARM_SUBSYSTEM.moveArm(-KResetArmSpeed);
+      Robot.ARM_SUBSYSTEM.moveArm(KResetArmSpeed);
     else
       Robot.ARM_SUBSYSTEM.moveArm(0);
   }

@@ -17,22 +17,18 @@ public class DriveWithJoysticks extends Command {
 
   @Override
   protected void execute() {
-    if(PDP.voltageSpikeOccured == false)
+    double leftSpeed = Robot.oi.getLeftAxis();
+    double rightSpeed = Robot.oi.getRightAxis();
+    
+    if(PDP.voltageSpikeOccured)
     {
-      double leftSpeed = Robot.oi.getLeftAxis();
-      double rightSpeed = Robot.oi.getRightAxis();
-      Robot.DRIVE_SUBSYSTEM.baseDrive(leftSpeed, rightSpeed);
-      SmartDashboard.putNumber("Left Logitech Axis", leftSpeed);
-      SmartDashboard.putNumber("Right Logitech Axis", rightSpeed);
+      leftSpeed = leftSpeed * .75;
+      rightSpeed = rightSpeed * .75;
     }
-    else if(PDP.voltageSpikeOccured == true)
-    {
-      double leftSpeed = (Robot.oi.getLeftAxis() * 3)/4;
-      double rightSpeed = (Robot.oi.getRightAxis() * 3)/4;
-      Robot.DRIVE_SUBSYSTEM.baseDrive(leftSpeed, rightSpeed);
-      SmartDashboard.putNumber("Left Logitech Axis", leftSpeed);
-      SmartDashboard.putNumber("Right Logitech Axis", rightSpeed);
-    }
+
+    Robot.DRIVE_SUBSYSTEM.baseDrive(leftSpeed, rightSpeed);
+    SmartDashboard.putNumber("Left Logitech Axis", leftSpeed);
+    SmartDashboard.putNumber("Right Logitech Axis", rightSpeed);
   }
 
   @Override

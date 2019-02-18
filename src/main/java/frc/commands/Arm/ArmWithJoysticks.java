@@ -3,24 +3,28 @@ package frc.commands.Arm;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.subsystems.ArmSubsystem;
 import frc.subsystems.ArmSubsystem.ArmPosition;
 
 public class ArmWithJoysticks extends Command
 {
-	private double joystickValue;
-
 	public ArmWithJoysticks() {
 		requires(Robot.ARM_SUBSYSTEM);
 	}
 
 	@Override
 	protected void initialize() {
+		
 	}
 
 	@Override
 	protected void execute() {
-		Robot.ARM_SUBSYSTEM.moveArmWithJoysticks();
+		double joystickValue = (Robot.ARM_SUBSYSTEM.checkLeftArmLimits(Robot.oi.getRightXbox()) + Robot.ARM_SUBSYSTEM.checkRightArmLimits(Robot.oi.getRightXbox()))/2;
+    
+		if((Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLUP) || (Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLDOWN) || 
+		   (Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLUP) || (Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLDOWN))	
+					  Robot.ARM_SUBSYSTEM.moveArm(joystickValue/2);
+			else
+					Robot.ARM_SUBSYSTEM.moveArm(joystickValue);
 
 		SmartDashboard.putNumber("Right Arm Encoder Position", Robot.ARM_SUBSYSTEM.getRightArmEncoder());
 		SmartDashboard.putNumber("Left Arm Encoder Position", Robot.ARM_SUBSYSTEM.getLeftArmEncoder());

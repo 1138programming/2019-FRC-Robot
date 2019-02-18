@@ -18,8 +18,9 @@ import edu.wpi.first.hal.PDPJNI;
 public class PDP extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private PDPJNI PDP;
+  private final PDPJNI PDP;
   public static boolean voltageSpikeOccured = false;
+  public static final int voltageThreshold = 8;
 
   public PDP() 
   {
@@ -32,7 +33,7 @@ public class PDP extends Subsystem {
   }
 
   public void voltageSpikeRegulation() {
-    if(PDP.getPDPVoltage(0) <= 8)
+    if(PDP.getPDPVoltage(0) <= voltageThreshold)
       voltageSpikeOccured = true;
   }
 }
