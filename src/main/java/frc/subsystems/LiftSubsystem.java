@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Lift.LiftWithJoysticks;
+import frc.robot.Robot;
 
 public class LiftSubsystem extends Subsystem {
   /**
@@ -24,6 +25,7 @@ public class LiftSubsystem extends Subsystem {
   private static final double KLiftFullUp = 23500;
   
   private static final double KLiftTopLimitHuntRange = 23000; //??
+  private static final double KLiftIsAboveArm = 15000; //check
   private static final double KLiftBottomLimitHuntRange = 500;
 
   public static final double KMotorOffset = 0.05;
@@ -134,7 +136,13 @@ public class LiftSubsystem extends Subsystem {
       }
       else
         SmartDashboard.putString("lift", "not hunting");
+
+      if (((Robot.ARM_SUBSYSTEM.getRightArmEncoder() + Robot.ARM_SUBSYSTEM.getLeftArmEncoder())/2 <= Robot.ARM_SUBSYSTEM.KArmIsBelowLift) && 
+          (getLiftEncoder() >= KLiftIsAboveArm)) {
+       desiredSpeed = 0;
+      }
     }
+    
     LiftTalon.set(ControlMode.PercentOutput, desiredSpeed + KMotorOffset);
   }
 

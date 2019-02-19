@@ -8,11 +8,7 @@
 package frc.commands.Lift;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.subsystems.LiftSubsystem;
-import frc.subsystems.LiftSubsystem.LiftPosition;
-import frc.subsystems.ArmSubsystem.ArmPosition;
 
 public class LiftWithJoysticks extends Command {
 	public LiftWithJoysticks() {
@@ -26,15 +22,6 @@ public class LiftWithJoysticks extends Command {
 	@Override
 	protected void execute() {
 		double joystickValue = Robot.oi.getLeftXbox();
-
-		// if (((Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLUP) || 
-        // (Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLUP)) && 
-        //  ((Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.FULLUP) || 
-        //  (Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.SHIP) || 
-		//  (Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.CARGO) || 
-		//  Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.UNKNOWN)) {
-		// 		joystickValue = 0;
-		//  }
 
 		Robot.LIFT_SUBSYSTEM.moveLift(joystickValue);
 	}

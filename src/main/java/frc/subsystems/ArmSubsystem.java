@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Arm.ArmWithJoysticks;
+import frc.robot.Robot;
 
 public class ArmSubsystem extends Subsystem {
 
@@ -20,6 +21,7 @@ public class ArmSubsystem extends Subsystem {
    */
 
   private static final double KArmSpeed = .75; // Max speed of arm when controlled by autonomous functions/macros=
+  public static final double KArmIsBelowLift = 965;
 
   public static enum ArmPosition {
     UNKNOWN, FULLDOWN, LOW, MIDDLE, HIGH, FULLUP
@@ -206,6 +208,17 @@ public class ArmSubsystem extends Subsystem {
 
       if (isInHuntRange()) {
         desiredSpeed = desiredSpeed * KArmHuntSpeed;
+      }
+
+      if ((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 
+        !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && 
+        Robot.armHasBeenReset == false && Robot.oi.getRightXbox() >= 0) {
+          desiredSpeed = 0;
+      }
+      else if ((Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && 
+                Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) && 
+                Robot.armHasBeenReset == false) {
+          Robot.armHasBeenReset = true;
       }
     }
 
