@@ -12,8 +12,7 @@ import frc.robot.Robot;
 
 public class RegulateVoltageSpike extends Command {
   public RegulateVoltageSpike() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    requires(Robot.pdp);
   }
 
   // Called just before this Command runs the first time

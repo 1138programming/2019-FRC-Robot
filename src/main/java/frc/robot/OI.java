@@ -51,40 +51,40 @@ public class OI {
    */
 
   //Controller Constants 
-  public static final int KLogitechDrive = 0;
-  public static final int KXboxArms = 1;
-  public static final int KStick = 2;
+  private static final int KLogitechDrive = 0;
+  private static final int KXboxArms = 1;
+  private static final int KStick = 2;
 
   //DeadZone 
-  public static final double KDeadZone = 0.2; 
+  private static final double KDeadZone = 0.2; 
 
   //Logitech Button Constants 
-  public static final int KButton1 = 1;
-	public static final int KButton2 = 2;
-	public static final int KButton3 = 3;
-	public static final int KButton4 = 4;
-	public static final int KButton5 = 5;
-	public static final int KButton6 = 6;
-	public static final int KButton7 = 7;
-	public static final int KButton8 = 8;
+  private static final int KButton1 = 1;
+	private static final int KButton2 = 2;
+	private static final int KButton3 = 3;
+	private static final int KButton4 = 4;
+	private static final int KButton5 = 5;
+	private static final int KButton6 = 6;
+	private static final int KButton7 = 7;
+	private static final int KButton8 = 8;
 
   //Xbox Button Constants 
-  public static final int KButtonA = 1;
-	public static final int KButtonB = 2;
-	public static final int KButtonX = 3;
-	public static final int KButtonY = 4;
-	public static final int KLeftBumper = 5;
-	public static final int KRightBumper = 6;
-	public static final int KStartButton = 8;
-	public static final int KLeftTrigger = 9;
-  public static final int KRightTrigger = 10;
+  private static final int KButtonA = 1;
+	private static final int KButtonB = 2;
+	private static final int KButtonX = 3;
+	private static final int KButtonY = 4;
+	private static final int KLeftBumper = 5;
+	private static final int KRightBumper = 6;
+	private static final int KStartButton = 8;
+	private static final int KLeftTrigger = 9;
+  private static final int KRightTrigger = 10;
 
   //Stick Button Constants
-  public static final int KBtn2Stick = 2;
-  public static final int KBtn3Stick = 3;
-  public static final int KBtn4Stick = 4;
-  public static final int KBtn5Stick = 5;
-  public static final int KBtn6Stick = 6;
+  private static final int KBtn2Stick = 2;
+  private static final int KBtn3Stick = 3;
+  private static final int KBtn4Stick = 4;
+  private static final int KBtn5Stick = 5;
+  private static final int KBtn6Stick = 6;
 
   public static Joystick logitech, stick;
   public static XboxController xbox;
@@ -184,7 +184,7 @@ public class OI {
 
   public double getRightXbox() {
     if(xbox.getY(Hand.kRight) > KDeadZone || xbox.getY(Hand.kRight) < -KDeadZone) 
-      return -xbox.getY(Hand.kRight);
+      return xbox.getY(Hand.kRight);
     else 
       return 0;
   }

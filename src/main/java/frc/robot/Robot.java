@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.commands.Lift.LiftStop;
 import frc.subsystems.ArmSubsystem;
 import frc.subsystems.ArmSubsystem.ArmPosition;
 import frc.subsystems.Camera;
@@ -40,7 +41,7 @@ public class Robot extends TimedRobot {
   public static PDP pdp;
   public static Camera CAMERA = new Camera();
 
-  private boolean armHasBeenReset = false;
+  public static boolean armHasBeenReset = false;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -133,22 +134,22 @@ public class Robot extends TimedRobot {
       SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED - READY TO GO");
     }
 
-    if ((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 
-      !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && 
-      armHasBeenReset == false && oi.getRightXbox() <= 0) {
-        ARM_SUBSYSTEM.moveArm(0);
-    }
-    else if ((Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) && armHasBeenReset == false) {
-      armHasBeenReset = true;
-    }
+    // if ((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 
+    //   !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && 
+    //   armHasBeenReset == false && oi.getRightXbox() <= 0) {
+    //     ARM_SUBSYSTEM.moveArm(0);
+    // }
+    // else if ((Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) && armHasBeenReset == false) {
+    //   armHasBeenReset = true;
+    // }
 
-    if (((Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLUP) || 
-        (Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLUP)) && 
-         ((Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.FULLUP) || 
-         (Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.SHIP) || 
-         (Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.CARGO))) {
-    LIFT_SUBSYSTEM.moveLift(0);
-    }
+    // if (((Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLUP) || 
+    //     (Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLUP)) && 
+    //      ((Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.FULLUP) || 
+    //      (Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.SHIP) || 
+    //      (Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.CARGO))) {
+    
+    // }
 
     Scheduler.getInstance().run();    
   }

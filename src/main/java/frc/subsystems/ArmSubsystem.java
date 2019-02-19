@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Arm.ArmWithJoysticks;
 
 public class ArmSubsystem extends Subsystem {
@@ -18,8 +19,7 @@ public class ArmSubsystem extends Subsystem {
    * private TalonSRX ArmLeft; private VictorSPX ArmRight;
    */
 
-  public static final double KArmSpeed = .75; // Max speed of arm when controlled by autonomous functions/macros=
-  public static final double KArmHuntSpeed = .3; // Speed when approaching a limit (as a percentage)
+  private static final double KArmSpeed = .75; // Max speed of arm when controlled by autonomous functions/macros=
 
   public static enum ArmPosition {
     UNKNOWN, FULLDOWN, LOW, MIDDLE, HIGH, FULLUP
@@ -33,8 +33,10 @@ public class ArmSubsystem extends Subsystem {
   private static final double KArmFullUp = 0;
 
   // Encoder position for when the arm should slow down
-  private static final double KArmBottomLimitHuntRange = 1575;
-  private static final double KArmTopLimitHuntRange = 300;
+  private static final double KArmBottomLimitHuntRange = 1625;
+  private static final double KArmTopLimitHuntRange = 345;
+  private static final double KArmHuntSpeed = .5; // Speed when approaching a limit (as a percentage)
+
 
   // Encoder position for when the arm is considered at it's location
   private static final double KArmBottomRange = 1575; // over this number means we are at the bottom
@@ -169,12 +171,12 @@ public class ArmSubsystem extends Subsystem {
 
   private double enforceLeftArmLimits(double targetSpeed) {
     if (leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLUP) {
-      if (targetSpeed > 0)
+      if (targetSpeed < 0)
         targetSpeed = 0;
       identifyLeftLimitandResetEncoder();
     }
     if (leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLDOWN) {
-      if (targetSpeed < 0)
+      if (targetSpeed > 0)
         targetSpeed = 0;
       identifyLeftLimitandResetEncoder();
     }
@@ -184,12 +186,12 @@ public class ArmSubsystem extends Subsystem {
 
   private double enforceRightArmLimits(double targetSpeed) {
     if (rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLUP) {
-      if (targetSpeed > 0)
+      if (targetSpeed < 0)
         targetSpeed = 0;
       identifyRightLimitandResetEncoder();
     }
     if (rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLDOWN) {
-      if (targetSpeed < 0)
+      if (targetSpeed > 0)
         targetSpeed = 0;
       identifyRightLimitandResetEncoder();
     }
@@ -212,8 +214,8 @@ public class ArmSubsystem extends Subsystem {
   }
 
   private boolean isInHuntRange() {
-    return ((getLeftArmEncoder() >= KArmTopLimitHuntRange) || (getLeftArmEncoder() <= KArmBottomLimitHuntRange)
-        || (getRightArmEncoder() >= KArmTopLimitHuntRange) || (getLeftArmEncoder() <= KArmBottomLimitHuntRange));
+    return ((getLeftArmEncoder() <= KArmTopLimitHuntRange) || (getLeftArmEncoder() >= KArmBottomLimitHuntRange)
+        || (getRightArmEncoder() <= KArmTopLimitHuntRange) || (getLeftArmEncoder() >= KArmBottomLimitHuntRange));
   }
 
   // Returns how far off we are from the desired position

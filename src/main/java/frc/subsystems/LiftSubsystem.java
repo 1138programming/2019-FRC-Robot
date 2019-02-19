@@ -6,13 +6,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Lift.LiftWithJoysticks;
 
 public class LiftSubsystem extends Subsystem {
   /**
    * public static final int KLiftTalon = 7; private TalonSRX liftMotor;
    */
-  public static final double KLiftSpeed = .75; 
+  public static final double KLiftSpeed = .65; 
 
   public static enum LiftPosition { UNKNOWN, FULLDOWN, CARGO, SHIP, FULLUP }
 
@@ -129,7 +130,10 @@ public class LiftSubsystem extends Subsystem {
 
       if(isInHuntRange()) {
         desiredSpeed = desiredSpeed/2;
+        SmartDashboard.putString("lift", "hunting");
       }
+      else
+        SmartDashboard.putString("lift", "not hunting");
     }
     LiftTalon.set(ControlMode.PercentOutput, desiredSpeed + KMotorOffset);
   }
@@ -139,7 +143,7 @@ public class LiftSubsystem extends Subsystem {
   }
 
   private boolean isInHuntRange() {
-    return (getLiftPosition() == LiftPosition.FULLUP || getLiftPosition() == LiftPosition.FULLDOWN);
+    return ((getLiftEncoder() >= KLiftTopLimitHuntRange) || (getLiftEncoder() <= KLiftBottomLimitHuntRange));
   }
 
   private double moveLiftWithEncoders(double position) {

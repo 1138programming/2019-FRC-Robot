@@ -33,7 +33,7 @@ public class PDP extends Subsystem {
   }
 
   public void voltageSpikeRegulation() {
-    if(PDP.getPDPVoltage(0) <= voltageThreshold)
-      voltageSpikeOccured = true;
+  //   if(PDP.getPDPVoltage(0) <= voltageThreshold)
+  //     voltageSpikeOccured = true;
   }
 }
