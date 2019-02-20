@@ -20,7 +20,7 @@ public class CarriageSubsystem extends Subsystem {
 
   //Victor Config
   private final VictorSPX Carriage; 
-  public static final int KCarriage = 8;
+  private static final int KCarriage = 8;
 
   //Bump Switch config
   private final DigitalInput bumpSwitch;

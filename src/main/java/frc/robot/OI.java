@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.commands.ClimbToTopHab;
 import frc.commands.Diagnostic;
 import frc.commands.Carriage.CarriageIntake;
 import frc.commands.Carriage.CarriageOuttake;
@@ -66,7 +67,9 @@ public class OI {
 	private static final int KButton5 = 5;
 	private static final int KButton6 = 6;
 	private static final int KButton7 = 7;
-	private static final int KButton8 = 8;
+  private static final int KButton8 = 8;
+  private static final int KButton9 = 9;
+  private static final int KButton10 = 10;
 
   //Xbox Button Constants 
   private static final int KButtonA = 1;
@@ -88,7 +91,7 @@ public class OI {
 
   public static Joystick logitech, stick;
   public static XboxController xbox;
-	public static JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8; // Logitech Button
+	public static JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10; // Logitech Button
   public static JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
   public static JoystickButton btn2Stick, btn3Stick, btn4Stick, btn5Stick, btn6Stick; // Stick Buttons
 
@@ -106,7 +109,9 @@ public class OI {
 		btn5 = new JoystickButton(logitech, KButton5);
 		btn6 = new JoystickButton(logitech, KButton6);
 		btn7 = new JoystickButton(logitech, KButton7);
-		btn8 = new JoystickButton(logitech, KButton8);
+    btn8 = new JoystickButton(logitech, KButton8);
+    btn9 = new JoystickButton(logitech, KButton9);
+    btn10 = new JoystickButton(logitech, KButton10);
 
 		//XBox Buttons
 		btnA = new JoystickButton(xbox, KButtonA);
@@ -127,18 +132,19 @@ public class OI {
     btn6Stick = new JoystickButton(stick, KBtn6Stick);
 
     //Button Assigned Commands 
-    //Logitech
-    btn2.whenPressed(new Diagnostic());
-    btn5.whenPressed(new ShiftDrive());
-    btn7.whenPressed(new NintendoSwitch());  //1. Sparks MAX not working right now. 2. Picking up hatches and scoring will be on btns 6 & 8. 3. Triggers on XBox aren't working
-    btn6.whenPressed(new AttainHatch());
-    btn8.whenPressed(new ScoreHatch());
-
     // Create command groups
     CollectingPosition collectingPosition = new CollectingPosition();
     ScoreCargoInCargo scoreCargoInCargo = new ScoreCargoInCargo();
     ScoreCargoInShip scoreCargoInShip = new ScoreCargoInShip();
     ResetRobot resetRobot = new ResetRobot();
+    ClimbToTopHab climbToTopHab = new ClimbToTopHab();
+
+    //Logitech
+    btn3.whenPressed(new Diagnostic());
+    btn5.whenPressed(new ShiftDrive());
+    btn2.whenPressed(new NintendoSwitch());  //1. Sparks MAX not working right now. 2. Picking up hatches and scoring will be on btns 6 & 8. 3. Triggers on XBox aren't working
+    btn6.whenPressed(climbToTopHab);
+    btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
 
     //Xbox
     btnLB.whileHeld(new CollectorBackwards()); 
@@ -159,6 +165,8 @@ public class OI {
     btnStrt.cancelWhenPressed(collectingPosition);
     btnStrt.cancelWhenPressed(scoreCargoInShip);
     btnStrt.cancelWhenPressed(resetRobot);
+
+    btn10.cancelWhenPressed(climbToTopHab);
   }
 
   public double getRightAxis() {

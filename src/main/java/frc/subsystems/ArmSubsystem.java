@@ -3,6 +3,7 @@ package frc.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -39,6 +40,7 @@ public class ArmSubsystem extends Subsystem {
   private static final double KArmTopLimitHuntRange = 345;
   private static final double KArmHuntSpeed = .5; // Speed when approaching a limit (as a percentage)
 
+  public static final double KClimbArmRatioForFull = 0.3239294403;
 
   // Encoder position for when the arm is considered at it's location
   private static final double KArmBottomRange = 1575; // over this number means we are at the bottom
@@ -263,5 +265,11 @@ public class ArmSubsystem extends Subsystem {
       // Should really throw an exception;
       return 1 / 0;
     }
+  }
+
+  public void moveArmWithClimb() {
+    double climbSpeed = KClimbArmRatioForFull;
+
+    moveArm(climbSpeed);
   }
 }

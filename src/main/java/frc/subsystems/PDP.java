@@ -7,6 +7,7 @@
 
 package frc.subsystems;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.commands.RegulateVoltageSpike;
 import edu.wpi.first.hal.PDPJNI;
@@ -18,13 +19,14 @@ import edu.wpi.first.hal.PDPJNI;
 public class PDP extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private final PDPJNI PDP;
+  private static final int KPDP = 0;
+  private final PowerDistributionPanel PDPInstance;
   public static boolean voltageSpikeOccured = false;
-  public static final int voltageThreshold = 8;
+  public static final double voltageThreshold = 8;
 
   public PDP() 
   {
-    PDP = new PDPJNI();
+    PDPInstance = new PowerDistributionPanel(KPDP);
   }
   @Override
   public void initDefaultCommand() {
@@ -33,7 +35,7 @@ public class PDP extends Subsystem {
   }
 
   public void voltageSpikeRegulation() { //ASK PAULINE OR BASI 
-    // if(PDP.getPDPVoltage(0) <= voltageThreshold)
-    //   voltageSpikeOccured = true;
+    if(PDPInstance.getVoltage() <= voltageThreshold)
+      voltageSpikeOccured = true;
   }
 }
