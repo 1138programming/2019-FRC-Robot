@@ -31,7 +31,7 @@ public class ArmSubsystem extends Subsystem {
   private static final double KArmFullDown = 1795; // 650, 1035, 1650, 1910
   private static final double KArmLow = 1525;
   private static final double KArmMiddle = 985;
-  private static final double KArmHigh = 445;
+  private static final double KArmHigh = 475;
   private static final double KArmFullUp = 0;
 
   // Encoder position for when the arm should slow down

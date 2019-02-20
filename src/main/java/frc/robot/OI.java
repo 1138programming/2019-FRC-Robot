@@ -138,7 +138,7 @@ public class OI {
     CollectingPosition collectingPosition = new CollectingPosition();
     ScoreCargoInCargo scoreCargoInCargo = new ScoreCargoInCargo();
     ScoreCargoInShip scoreCargoInShip = new ScoreCargoInShip();
-    ResetRobot setCargoToDrive = new ResetRobot();
+    ResetRobot resetRobot = new ResetRobot();
 
     //Xbox
     btnLB.whileHeld(new CollectorBackwards()); 
@@ -149,16 +149,16 @@ public class OI {
     btnY.whenPressed(scoreCargoInCargo);
 
     //Stick
-    btn3Stick.whenPressed(setCargoToDrive);
+    btn3Stick.whenPressed(resetRobot);
     btn4Stick.whenPressed(new ClimbDown());
-    btn5Stick.whenPressed(new ClimbUp());
-    btn6Stick.whenPressed(scoreCargoInShip);
+    btn5Stick.whenPressed(scoreCargoInShip);
+    btn6Stick.whenPressed(new ClimbUp());
 
     // Cancel command groups
     btnStrt.cancelWhenPressed(scoreCargoInCargo);
     btnStrt.cancelWhenPressed(collectingPosition);
     btnStrt.cancelWhenPressed(scoreCargoInShip);
-    btnStrt.cancelWhenPressed(setCargoToDrive);
+    btnStrt.cancelWhenPressed(resetRobot);
   }
 
   public double getRightAxis() {
