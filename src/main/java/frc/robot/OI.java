@@ -150,9 +150,9 @@ public class OI {
 
     //Stick
     btn3Stick.whenPressed(resetRobot);
-    btn4Stick.whenPressed(new ClimbDown());
+    btn4Stick.whileHeld(new ClimbDown());
     btn5Stick.whenPressed(scoreCargoInShip);
-    btn6Stick.whenPressed(new ClimbUp());
+    btn6Stick.whileHeld(new ClimbUp());
 
     // Cancel command groups
     btnStrt.cancelWhenPressed(scoreCargoInCargo);
