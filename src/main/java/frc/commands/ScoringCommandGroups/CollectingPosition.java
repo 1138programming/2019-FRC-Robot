@@ -23,6 +23,6 @@ public class CollectingPosition extends CommandGroup {
 		
 		addSequential(new MoveArmToPosition(Robot.ARM_SUBSYSTEM.KArmMiddle));
 		addSequential(new MoveLiftToPosition(Robot.LIFT_SUBSYSTEM.KLiftFullDown));
-		addSequential(new CollectWithButtons(Robot.oi.btnY));
+		addSequential(new CollectWithButtons(Robot.oi.btnX));
 	}
 }
