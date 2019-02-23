@@ -80,8 +80,8 @@ public class ArmSubsystem extends Subsystem {
     else if (speed < -KArmSpeed)
       speed = -KArmSpeed;
 
-    ArmLeft.set(ControlMode.PercentOutput, speed);
-    ArmRight.set(ControlMode.PercentOutput, speed);
+    ArmLeft.set(ControlMode.PercentOutput, -speed);
+    ArmRight.set(ControlMode.PercentOutput, -speed);
 
     return error;
   }
