@@ -20,15 +20,15 @@ public class CarriageSubsystem extends Subsystem {
 
   //Victor Config
   private final VictorSPX Carriage; 
-  public static final int KCarriage = 8;
+  private static final int KCarriage = 8;
 
   //Bump Switch config
-  private final DigitalInput bumpSwitch;
+  public final DigitalInput BumpSwitch;
   private static final int KBumpSwitchChannel = 5;
 
   public CarriageSubsystem() {
     Carriage = new VictorSPX(KCarriage);
-    bumpSwitch = new DigitalInput(KBumpSwitchChannel);
+    BumpSwitch = new DigitalInput(KBumpSwitchChannel);
   }
   
   @Override
@@ -41,6 +41,6 @@ public class CarriageSubsystem extends Subsystem {
   }
 
   public boolean bumpSwitchClosed() {
-    return !bumpSwitch.get();
+    return !BumpSwitch.get();
   }
 }
