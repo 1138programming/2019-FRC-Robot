@@ -22,14 +22,14 @@ public class ArmWithJoysticks extends Command
 
 		if(Robot.ARM_SUBSYSTEM.leftLimitClosed() == true) {
 			if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() <= ArmSubsystem.KArmTopReset) {
+				joystickValue = 0;
 			}
 			else if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() <= ArmSubsystem.KArmTopReset) {
-				joystickValue = 0;
 			}
 			else if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() >= ArmSubsystem.KArmBottomReset) {
-				joystickValue = 0;
 			}
 			else if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() >= ArmSubsystem.KArmBottomReset) {
+				joystickValue = 0;
 			}
 
 			Robot.ARM_SUBSYSTEM.leftLimitReset();
@@ -37,14 +37,14 @@ public class ArmWithJoysticks extends Command
 
 		if(Robot.ARM_SUBSYSTEM.rightLimitClosed() == true) {
 			if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getRightArmEncoder() <= ArmSubsystem.KArmTopReset) {
+				joystickValue = 0;
 			}
 			else if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getRightArmEncoder() <= ArmSubsystem.KArmTopReset) {
-				joystickValue = 0;
 			}
 			else if (joystickValue > 0 && Robot.ARM_SUBSYSTEM.getRightArmEncoder() >= ArmSubsystem.KArmBottomReset) {
-				joystickValue = 0;
 			}
 			else if (joystickValue < 0 && Robot.ARM_SUBSYSTEM.getRightArmEncoder() >= ArmSubsystem.KArmBottomReset) {
+				joystickValue = 0;
 			}
 
 			Robot.ARM_SUBSYSTEM.rightLimitReset();

@@ -25,7 +25,7 @@ import frc.commands.Hatch.ScoreHatch;
 import frc.commands.Hatch.AttainHatch;
 import frc.commands.Lift.MoveLiftToPosition;
 import frc.commands.Arm.MoveArmToPosition;
-import frc.commands.ScoringCommandGroups.CollectCargo;
+//import frc.commands.ScoringCommandGroups.CollectCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
 import frc.commands.ScoringCommandGroups.SetCargoToDrive;
@@ -157,14 +157,14 @@ public class OI {
     btnRB.whileHeld(new CollectorForward()); 
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
-    btnX.whenPressed(new CollectCargo()); 
-    btnY.whenPressed(new ScoreCargoInCargo());
+    // btnX.whenPressed(new CollectCargo()); 
+    //btnY.whenPressed(new ScoreCargoInCargo());
 
     //Stick
-    btn3Stick.whenPressed(new SetCargoToDrive());
+    //btn3Stick.whenPressed(new SetCargoToDrive());
     btn4Stick.whenPressed(new ClimbDown());
     btn5Stick.whenPressed(new ClimbUp());
-    btn6Stick.whenPressed(new ScoreCargoInShip());
+    //btn6Stick.whenPressed(new ScoreCargoInShip());
   }
 
   public double getRightAxis() {

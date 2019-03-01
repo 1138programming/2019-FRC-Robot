@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.commands.Lift.LiftStop;
+//import frc.commands.Lift.LiftStop;
 
 public class LiftSubsystem extends Subsystem {
   /** 
