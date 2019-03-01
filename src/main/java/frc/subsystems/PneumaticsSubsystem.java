@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Compressor;
  * An example subsystem.  You can replace me with your own Subsystem.
  */
 public class PneumaticsSubsystem extends Subsystem {
-  	private Compressor pCompressor;
+  	private final Compressor pCompressor;
 
 	public PneumaticsSubsystem()
 	{

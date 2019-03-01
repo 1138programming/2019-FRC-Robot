@@ -7,12 +7,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class MoveArmToPosition extends Command {
-	double armPosition;
-	double error;
+	
+	private ArmSubsystem.ArmPosition armPosition;
+	private double error;
+	private Command commandToCancel;
 
-	public MoveArmToPosition(double armPosition) {
-        requires(Robot.ARM_SUBSYSTEM);
+	private static final double allowableError = 50;
+
+	public MoveArmToPosition(ArmSubsystem.ArmPosition armPosition) {
+		requires(Robot.ARM_SUBSYSTEM);
 		this.armPosition = armPosition;
+		this.commandToCancel = null;
+	}
+
+	public MoveArmToPosition(ArmSubsystem.ArmPosition armPosition, Command commandToCancel) {
+		requires(Robot.ARM_SUBSYSTEM);
+		this.armPosition = armPosition;
+		this.commandToCancel = commandToCancel;
 	}
 
 	@Override
@@ -21,7 +32,8 @@ public class MoveArmToPosition extends Command {
 
 	@Override
 	protected void execute() {
-		error = Robot.ARM_SUBSYSTEM.moveArmWithEncoders(armPosition);
+		error = Robot.ARM_SUBSYSTEM.moveArmToPosition(armPosition);
+
 		SmartDashboard.putNumber("Error Arm", error);
 		SmartDashboard.putNumber("Left Arm Encoder Position", Robot.ARM_SUBSYSTEM.getLeftArmEncoder());
 		SmartDashboard.putNumber("Right Arm Encoder Position", Robot.ARM_SUBSYSTEM.getRightArmEncoder());
@@ -29,12 +41,15 @@ public class MoveArmToPosition extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(error) < 50;
+		return (Math.abs(error) < allowableError);
 	}
 
 	@Override
 	protected void end() {
 		Robot.ARM_SUBSYSTEM.moveArm(0);
+		if (commandToCancel != null) {
+			commandToCancel.cancel();
+		}
 	}
 
 	@Override

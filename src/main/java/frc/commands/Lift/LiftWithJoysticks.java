@@ -8,10 +8,7 @@
 package frc.commands.Lift;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.subsystems.ArmSubsystem;
-import frc.subsystems.LiftSubsystem;
 
 public class LiftWithJoysticks extends Command {
 	public LiftWithJoysticks() {
@@ -24,8 +21,9 @@ public class LiftWithJoysticks extends Command {
 
 	@Override
 	protected void execute() {
-		double joystickValue = Robot.LIFT_SUBSYSTEM.checkLimits(Robot.oi.getLeftXbox());
-		Robot.LIFT_SUBSYSTEM.moveLift(joystickValue + LiftSubsystem.KMotorOffset);
+		double joystickValue = Robot.oi.getLeftXbox();
+
+		Robot.LIFT_SUBSYSTEM.moveLift(joystickValue);
 	}
 
 	@Override

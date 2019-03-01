@@ -1,67 +1,64 @@
 package frc.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.commands.Drive.ArcadeDriveWithJoy;
-import frc.commands.Drive.DriveWithJoysticks;
-import edu.wpi.first.wpilibj.AnalogAccelerometer;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+
+import edu.wpi.first.wpilibj.AnalogAccelerometer;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.commands.Drive.DriveWithJoysticks;
 
 public class DriveSubsystem extends Subsystem {
   /**
-   * public static final int KDriveLeftFrontTalon = 0;
-   * public static final int KDriveRightFrontTalon = 1;  
-   * public static final int KDriveLeftRearTalon = 2; 
+   * public static final int KDriveLeftFrontTalon = 0; public static final int
+   * KDriveRightFrontTalon = 1; public static final int KDriveLeftRearTalon = 2;
    * public static final int KDriveRightRearTalon = 3;
    * 
-   * public static final int KShifterSolenoid1 = 1;
-   * public static final int KShifterSolenoid2 = 2;
+   * public static final int KShifterSolenoid1 = 1; public static final int
+   * KShifterSolenoid2 = 2;
    * 
-   * private TalonSRX driveRightFront;
-   * private TalonSRX driveLeftFront;
-   * private VictorSPX driveRightRear; 
-   * private VictorSPX driveLeftRear;
-   * private DoubleSolenoid shifterSolenoid;
+   * private TalonSRX driveRightFront; private TalonSRX driveLeftFront; private
+   * VictorSPX driveRightRear; private VictorSPX driveLeftRear; private
+   * DoubleSolenoid shifterSolenoid;
    */
+
+  private static Boolean isReversed = false;
+
+  private final TalonSRX driveLeftFront, driveRightFront; 
   public static final int KDriveLeftFrontTalon = 0;
   public static final int KDriveRightFrontTalon = 1;  
-  public static final int KDriveLeftRearTalon = 2; 
-  public static final int KDriveRightRearTalon = 3;
-  public static final int KAccelerometer = 0;
 
+  private final VictorSPX driveLeftRear, driveRightRear; 
+  public static final int KDriveLeftRearVictor = 2; 
+  public static final int KDriveRightRearVictor = 3;
+
+  private final DoubleSolenoid shifterSolenoid;
   public static final int KShifterSolenoid1 = 0;
   public static final int KShifterSolenoid2 = 1;
 
-  public AnalogAccelerometer Accel; 
-  
-  private Boolean isReversed = false;
-
-  private TalonSRX driveRightFront; 
-  private TalonSRX driveLeftFront;
-  private VictorSPX driveRightRear; 
-  private VictorSPX driveLeftRear;
-  private DoubleSolenoid shifterSolenoid;
+  public final AnalogAccelerometer Accel; 
+  public static final int KAccelerometer = 0;
 
   public DriveSubsystem()
   {
-    driveRightFront = new TalonSRX(KDriveRightFrontTalon); 
     driveLeftFront = new TalonSRX(KDriveLeftFrontTalon);
-    driveRightRear = new VictorSPX(KDriveRightRearTalon);
-    driveLeftRear = new VictorSPX(KDriveLeftRearTalon);
+    driveRightFront = new TalonSRX(KDriveRightFrontTalon);
+    driveLeftRear = new VictorSPX(KDriveLeftRearVictor);
+    driveRightRear = new VictorSPX(KDriveRightRearVictor);
 
-    Accel = new AnalogAccelerometer(KAccelerometer);
+    driveLeftRear.follow(driveLeftFront);
+    driveRightRear.follow(driveRightFront);
 
+    driveLeftFront.setInverted(false);
+    driveLeftRear.setInverted(false);
     driveRightFront.setInverted(true);
     driveRightRear.setInverted(true);
 
     shifterSolenoid = new DoubleSolenoid(KShifterSolenoid1, KShifterSolenoid2);
 
-    driveRightRear.follow(driveRightFront);
-    driveLeftRear.follow(driveLeftFront);
+    Accel = new AnalogAccelerometer(KAccelerometer);
   }
 
   @Override
@@ -71,10 +68,8 @@ public class DriveSubsystem extends Subsystem {
 
   public void baseDrive(double leftSpeed, double rightSpeed) {
     if (isReversed) {
-      double tempLeftSpeed = leftSpeed;
-      double tempRightSpeed = rightSpeed;
-      leftSpeed = -tempRightSpeed;
-      rightSpeed = -tempLeftSpeed;
+      leftSpeed = -leftSpeed;
+      rightSpeed = -rightSpeed;
     }
     
     SmartDashboard.putNumber("Left Base Input", leftSpeed);
@@ -84,8 +79,8 @@ public class DriveSubsystem extends Subsystem {
     driveLeftFront.set(ControlMode.PercentOutput, leftSpeed);
   }
 
-  public void switchDriveBase(boolean Switch) {
-      isReversed = Switch;
+  public void switchDriveBase(boolean switchButton) {
+      isReversed = switchButton;
   }
 
 	public void highShiftBase() {
@@ -105,15 +100,7 @@ public class DriveSubsystem extends Subsystem {
 		}
   }
 
-  public void accelDrive () {
-    if (Accel.getAcceleration() < .1)
-    {
-
-    }
-  }
-
-   // Resets both of the base encoders
-	public void resetEncoders()
+	public void zeroEncoders()
 	{
 		driveLeftFront.getSensorCollection().setQuadraturePosition(0, 0);
 		driveRightFront.getSensorCollection().setQuadraturePosition(0, 0);
@@ -134,7 +121,7 @@ public class DriveSubsystem extends Subsystem {
     driveLeftFront.clearStickyFaults(1000);
   }
 
-  // These methods just return the base talons if we need to access them somewhere else
+  // Only used by motion profiling
 	public TalonSRX getBaseLeftFront() {
 		return this.driveLeftFront;
   }

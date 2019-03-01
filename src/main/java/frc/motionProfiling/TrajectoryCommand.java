@@ -47,7 +47,7 @@ public class TrajectoryCommand extends Command
 	@Override
 	protected void initialize()
 	{
-		Robot.DRIVE_SUBSYSTEM.resetEncoders();
+		Robot.DRIVE_SUBSYSTEM.zeroEncoders();
 		trajectoryExecutor = new TrajectoryExecutor(Robot.DRIVE_SUBSYSTEM.getBaseLeftFront(), Robot.DRIVE_SUBSYSTEM.getBaseRightFront(), leftTrajectory, rightTrajectory);
 
 		Robot.DRIVE_SUBSYSTEM.getBaseLeftFront().config_kP(0, kP, Constants.kTimeoutMs);
@@ -60,7 +60,7 @@ public class TrajectoryCommand extends Command
         Robot.DRIVE_SUBSYSTEM.getBaseRightFront().config_kD(0, kD, Constants.kTimeoutMs);
 		Robot.DRIVE_SUBSYSTEM.getBaseRightFront().config_kF(0, kF_right, Constants.kTimeoutMs);
 		
-		Robot.DRIVE_SUBSYSTEM.resetEncoders();
+		Robot.DRIVE_SUBSYSTEM.zeroEncoders();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
