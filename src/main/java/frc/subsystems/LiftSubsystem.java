@@ -137,10 +137,10 @@ public class LiftSubsystem extends Subsystem {
       else
         SmartDashboard.putString("lift", "not hunting");
 
-      if (((Robot.ARM_SUBSYSTEM.getRightArmEncoder() + Robot.ARM_SUBSYSTEM.getLeftArmEncoder())/2 <= Robot.ARM_SUBSYSTEM.KArmIsBelowLift) && 
-          (getLiftEncoder() >= KLiftIsAboveArm)) {
-       desiredSpeed = 0;
-      }
+      // if (((Robot.ARM_SUBSYSTEM.getRightArmEncoder() + Robot.ARM_SUBSYSTEM.getLeftArmEncoder())/2 <= Robot.ARM_SUBSYSTEM.KArmIsBelowLift) && 
+      //     (getLiftEncoder() >= KLiftIsAboveArm)) {
+      //  desiredSpeed = 0;
+      //}
     }
     
     LiftTalon.set(ControlMode.PercentOutput, desiredSpeed + KMotorOffset);

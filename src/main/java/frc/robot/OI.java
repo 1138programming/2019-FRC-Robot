@@ -19,6 +19,9 @@ import frc.commands.Collector.CollectorForward;
 import frc.commands.Drive.NintendoSwitch;
 import frc.commands.Drive.ShiftDrive;
 import frc.commands.Hatch.AttainHatch;
+import frc.commands.Lift.MoveLiftToPosition;
+import frc.commands.Arm.MoveArmToPosition;
+//import frc.commands.ScoringCommandGroups.CollectCargo;
 import frc.commands.Hatch.ScoreHatch;
 import frc.commands.ScoringCommandGroups.CollectingPosition;
 import frc.commands.ScoringCommandGroups.ResetRobot;
@@ -156,9 +159,9 @@ public class OI {
 
     //Stick
     btn3Stick.whenPressed(resetRobot);
-    btn4Stick.whenPressed(new ClimbDown());
+    btn4Stick.whileHeld(new ClimbDown());
     btn5Stick.whenPressed(scoreCargoInShip);
-    btn6Stick.whenPressed(new ClimbUp());
+    btn6Stick.whileHeld(new ClimbUp());
 
     // Cancel command groups
     btnStrt.cancelWhenPressed(scoreCargoInCargo);
@@ -192,7 +195,7 @@ public class OI {
 
   public double getRightXbox() {
     if(xbox.getY(Hand.kRight) > KDeadZone || xbox.getY(Hand.kRight) < -KDeadZone) 
-      return xbox.getY(Hand.kRight);
+      return -xbox.getY(Hand.kRight);
     else 
       return 0;
   }

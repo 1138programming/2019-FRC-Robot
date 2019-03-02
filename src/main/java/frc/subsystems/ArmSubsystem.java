@@ -47,7 +47,7 @@ public class ArmSubsystem extends Subsystem {
   private static final double KArmTopRange = 300; // under this number mean we are at the top
 
   // PI(D) tuning for arm
-  private static final double KP = 0.0075;
+  private static final double KP = 0.0065;
 
   // Talon config
   private final TalonSRX ArmLeft, ArmRight;
@@ -175,12 +175,12 @@ public class ArmSubsystem extends Subsystem {
 
   private double enforceLeftArmLimits(double targetSpeed) {
     if (leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLUP) {
-      if (targetSpeed < 0)
+      if (targetSpeed > 0)
         targetSpeed = 0;
       identifyLeftLimitandResetEncoder();
     }
-    if (leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLDOWN) {
-      if (targetSpeed > 0)
+    else if (leftLimitClosed() && getLeftArmPosition() == ArmPosition.FULLDOWN) {
+      if (targetSpeed < 0)
         targetSpeed = 0;
       identifyLeftLimitandResetEncoder();
     }
@@ -190,12 +190,12 @@ public class ArmSubsystem extends Subsystem {
 
   private double enforceRightArmLimits(double targetSpeed) {
     if (rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLUP) {
-      if (targetSpeed < 0)
+      if (targetSpeed > 0)
         targetSpeed = 0;
       identifyRightLimitandResetEncoder();
     }
-    if (rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLDOWN) {
-      if (targetSpeed > 0)
+    else if (rightLimitClosed() && getRightArmPosition() == ArmPosition.FULLDOWN) {
+      if (targetSpeed < 0)
         targetSpeed = 0;
       identifyRightLimitandResetEncoder();
     }
@@ -214,14 +214,13 @@ public class ArmSubsystem extends Subsystem {
 
       if ((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 
         !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && 
-        Robot.armHasBeenReset == false && Robot.oi.getRightXbox() >= 0) {
+        Robot.armHasBeenReset == false && Robot.oi.getRightXbox() <= 0) {
           desiredSpeed = 0;
       }
       else if ((Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && 
-                Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) && 
-                Robot.armHasBeenReset == false) {
+                Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0)) {
           Robot.armHasBeenReset = true;
-      }
+     }
     }
 
     ArmLeft.set(ControlMode.PercentOutput, desiredSpeed);
@@ -243,7 +242,7 @@ public class ArmSubsystem extends Subsystem {
     else if (speed < -KArmSpeed)
       speed = -KArmSpeed;
 
-    moveArm(speed);
+    moveArm(-speed);
 
     return error;
   }

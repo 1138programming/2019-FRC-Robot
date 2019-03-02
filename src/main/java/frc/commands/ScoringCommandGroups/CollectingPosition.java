@@ -24,12 +24,6 @@ public class CollectingPosition extends CommandGroup {
 		addSequential(new CollectWithButtons(Robot.oi.btnX));
 		SmartDashboard.putBoolean("bumpswitch", Robot.CARRIAGE_SUBSYSTEM.bumpSwitchClosed());
 		SmartDashboard.putNumber("amount cycled entered", c);
-		if(Robot.CARRIAGE_SUBSYSTEM.bumpSwitchClosed()) {
-			addSequential(new MoveArmToPosition(ArmPosition.MIDDLE));
-			addSequential(new MoveLiftToPosition(LiftPosition.CARGO));
-			addSequential(new MoveArmToPosition(ArmPosition.FULLUP));
-			SmartDashboard.putNumber("amount cycled entered", d);
-		}
-		SmartDashboard.putNumber("amount cycled not entered", c);
+		addSequential(new CollectingPositionPostMortem());
 	}
 }
