@@ -48,6 +48,7 @@ public class ArmSubsystem extends Subsystem {
 
   // PI(D) tuning for arm
   private static final double KP = 0.0065;
+  private static final double KPClimb = 0.0045;
 
   // Talon config
   private final TalonSRX ArmLeft, ArmRight;
@@ -267,7 +268,18 @@ public class ArmSubsystem extends Subsystem {
   }
 
   public void moveArmWithClimb() {
-    double climbSpeed = KClimbArmRatioForFull;
+    double[] adjustmentValue = Robot.CLIMB_SUBSYSTEM.getGyroValues();
+    double error = -adjustmentValue[1];
+    double climbSpeed = error * KPClimb * KClimbArmRatioForFull;
+
+    if(climbSpeed > KClimbArmRatioForFull)
+      climbSpeed = KClimbArmRatioForFull;
+    else if(climbSpeed < -KClimbArmRatioForFull)
+      climbSpeed = -KClimbArmRatioForFull;
+
+
+    if(error <= 10 && error >= -10)
+      climbSpeed = 0;
 
     moveArm(climbSpeed);
   }

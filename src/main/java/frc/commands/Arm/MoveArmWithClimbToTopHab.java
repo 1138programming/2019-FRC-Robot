@@ -8,6 +8,7 @@
 package frc.commands.Arm;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 
 public class MoveArmWithClimbToTopHab extends Command {
   public MoveArmWithClimbToTopHab() {
@@ -23,12 +24,13 @@ public class MoveArmWithClimbToTopHab extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.ARM_SUBSYSTEM.moveArmWithClimb();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true

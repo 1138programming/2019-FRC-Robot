@@ -65,4 +65,11 @@ public class ClimbSubsystem extends Subsystem {
     enforceLimits(desiredSpeed);
     ClimbTalon.set(ControlMode.PercentOutput, desiredSpeed);
   }
+
+  public double[] getGyroValues() {
+    double ypr_value[];
+    ypr_value = new double[3];
+    Pigeon.getYawPitchRoll(ypr_value);
+    return ypr_value;
+  }
 }
