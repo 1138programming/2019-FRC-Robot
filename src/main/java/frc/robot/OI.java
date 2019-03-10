@@ -144,7 +144,7 @@ public class OI {
     ResetRobot resetRobot = new ResetRobot();
 
     //Xbox
-    btnLB.whileHeld(new CollectorBackwards()); 
+    btnLB.whileHeld(new CollectorBackwards());
     btnRB.whileHeld(new CollectorForward());
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
@@ -153,9 +153,12 @@ public class OI {
 
     //Stick
     btn3Stick.whenPressed(resetRobot);
-    btn4Stick.whileHeld(new ClimbDown());
+    //btn4Stick.whileHeld(new ClimbDown());
     btn5Stick.whenPressed(scoreCargoInShip);
-    btn6Stick.whileHeld(new ClimbUp());
+    //btn6Stick.whileHeld(new ClimbUp());
+
+    btn1.whileHeld(new ClimbDown());
+    btn3.whileHeld(new ClimbUp());
 
     // Cancel command groups
     btnStrt.cancelWhenPressed(scoreCargoInCargo);
