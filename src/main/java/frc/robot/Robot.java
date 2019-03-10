@@ -10,7 +10,7 @@ import frc.subsystems.ArmSubsystem;
 import frc.subsystems.ArmSubsystem.ArmPosition;
 import frc.subsystems.Camera;
 import frc.subsystems.CarriageSubsystem;
-//import frc.subsystems.X_TableSubsystem;
+import frc.subsystems.XTableSubsystem;
 import frc.subsystems.ClimbSubsystem;
 import frc.subsystems.CollectorSubsystem;
 import frc.subsystems.DriveSubsystem;
@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   public static LiftSubsystem LIFT_SUBSYSTEM = new LiftSubsystem();
   public static CollectorSubsystem COLLECTOR_SUBSYSTEM = new CollectorSubsystem();
   public static ClimbSubsystem CLIMB_SUBSYSTEM = new ClimbSubsystem();
-  // public static X_TableSubsystem X_TABLE_SUBSYSTEM = new X_TableSubsystem();
+  public static XTableSubsystem X_TABLE_SUBSYSTEM = new XTableSubsystem();
   public static PneumaticsSubsystem PNEMATICSSUBSYSTEM = new PneumaticsSubsystem();
   public static HatchSubsystem HATCH_SUBSYSTEM = new HatchSubsystem(); 
   public static OI oi;

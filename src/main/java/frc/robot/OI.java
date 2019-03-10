@@ -27,6 +27,7 @@ import frc.commands.ScoringCommandGroups.CollectingPosition;
 import frc.commands.ScoringCommandGroups.ResetRobot;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
+import frc.commands.X_Table.X_TableLeft;
 
 public class OI {
   /**
@@ -143,11 +144,12 @@ public class OI {
     ClimbToTopHab climbToTopHab = new ClimbToTopHab();
 
     //Logitech
-    btn3.whenPressed(new Diagnostic());
+    //btn3.whenPressed(new Diagnostic());
     btn5.whenPressed(new ShiftDrive());
     btn2.whenPressed(new NintendoSwitch());  //1. Sparks MAX not working right now. 2. Picking up hatches and scoring will be on btns 6 & 8. 3. Triggers on XBox aren't working
     btn6.whenPressed(climbToTopHab);
     btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
+    btn9.whileHeld(new X_TableLeft());
 
     //Xbox
     btnLB.whileHeld(new CollectorBackwards());

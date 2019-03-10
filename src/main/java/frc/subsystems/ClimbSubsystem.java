@@ -62,7 +62,7 @@ public class ClimbSubsystem extends Subsystem {
 
   public void moveClimb(double speed) {
     double desiredSpeed = speed;
-    enforceLimits(desiredSpeed);
+    //enforceLimits(desiredSpeed);
     ClimbTalon.set(ControlMode.PercentOutput, desiredSpeed);
   }
 
