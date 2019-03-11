@@ -92,12 +92,13 @@ public class OI {
   private static final int KBtn4Stick = 4;
   private static final int KBtn5Stick = 5;
   private static final int KBtn6Stick = 6;
+  private static final int KBtn9Stick = 9;
 
   public static Joystick logitech, stick;
   public static XboxController xbox;
 	public static JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10; // Logitech Button
   public static JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
-  public static JoystickButton btn2Stick, btn3Stick, btn4Stick, btn5Stick, btn6Stick; // Stick Buttons
+  public static JoystickButton btn2Stick, btn3Stick, btn4Stick, btn5Stick, btn6Stick, btn9Stick; // Stick Buttons
 
   public OI() {
     //Controllers 
@@ -134,6 +135,7 @@ public class OI {
     btn4Stick = new JoystickButton(stick, KBtn4Stick);
     btn5Stick = new JoystickButton(stick, KBtn5Stick);
     btn6Stick = new JoystickButton(stick, KBtn6Stick);
+    btn9Stick = new JoystickButton(stick, KBtn9Stick);
 
     //Button Assigned Commands 
     // Create command groups
@@ -150,6 +152,7 @@ public class OI {
     btn6.whenPressed(climbToTopHab);
     btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
     btn9.whileHeld(new X_TableLeft());
+    btn10.whileHeld(new ClimbToTopHab());
 
     //Xbox
     btnLB.whileHeld(new CollectorBackwards());
@@ -161,9 +164,11 @@ public class OI {
 
     //Stick
     btn3Stick.whenPressed(resetRobot);
-    //btn4Stick.whileHeld(new ClimbDown());
+    btn4Stick.whileHeld(new ClimbDown());
     btn5Stick.whenPressed(scoreCargoInShip);
-    //btn6Stick.whileHeld(new ClimbUp());
+    btn6Stick.whileHeld(new ClimbUp());
+    btn9Stick.whileHeld(new ClimbToTopHab());
+
 
     btn1.whileHeld(new ClimbDown());
     btn3.whileHeld(new ClimbUp());

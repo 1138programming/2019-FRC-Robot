@@ -27,7 +27,7 @@ public class ClimbSubsystem extends Subsystem {
 
    // Pigeon IMU config
    public final PigeonIMU Pigeon;
-   private static final int KPigeon = 6;
+   private static final int KPigeon = 12;
 
   public ClimbSubsystem() {
     ClimbTalon = new TalonSRX(KClimbTalon);
