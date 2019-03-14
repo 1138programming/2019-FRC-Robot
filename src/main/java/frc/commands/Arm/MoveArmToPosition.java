@@ -55,4 +55,8 @@ public class MoveArmToPosition extends Command {
 	@Override
 	protected void interrupted() {
 	}
+
+	public void removeRequirements() {
+		this.clearRequirements();
+	}
 }

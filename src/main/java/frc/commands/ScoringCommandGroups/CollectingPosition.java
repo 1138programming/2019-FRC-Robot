@@ -14,10 +14,10 @@ public class CollectingPosition extends CommandGroup {
 	int d = 1;
 
 	public CollectingPosition() {
-		requires(Robot.ARM_SUBSYSTEM);
-		requires(Robot.COLLECTOR_SUBSYSTEM);
-		requires(Robot.CARRIAGE_SUBSYSTEM);
-		requires(Robot.LIFT_SUBSYSTEM);
+		// requires(Robot.ARM_SUBSYSTEM);
+		// requires(Robot.COLLECTOR_SUBSYSTEM);
+		// requires(Robot.CARRIAGE_SUBSYSTEM);
+		// requires(Robot.LIFT_SUBSYSTEM);
 
 		addSequential(new MoveArmToPosition(ArmPosition.MIDDLE));
 		addSequential(new MoveLiftToPosition(LiftPosition.FULLDOWN));

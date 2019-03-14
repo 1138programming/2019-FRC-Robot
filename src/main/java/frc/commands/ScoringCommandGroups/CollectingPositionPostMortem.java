@@ -25,9 +25,16 @@ public class CollectingPositionPostMortem extends Command {
   boolean canRun = false;
 
   public CollectingPositionPostMortem() {
+    requires(Robot.ARM_SUBSYSTEM);
+    requires(Robot.LIFT_SUBSYSTEM);
+
     moveArmToMiddle = new MoveArmToPosition(ArmPosition.MIDDLE);
     moveLiftToCargoPos = new MoveLiftToPosition(LiftPosition.CARGO);
     moveArmFullUp = new MoveArmToPosition(ArmPosition.FULLUP);
+
+    moveArmToMiddle.removeRequirements();
+    moveLiftToCargoPos.removeRequirements();
+    moveArmFullUp.removeRequirements();
   }
 
   @Override
@@ -39,7 +46,9 @@ public class CollectingPositionPostMortem extends Command {
 
   @Override
   protected void execute() {
-    if (!canRun) return;
+    if (!canRun) 
+      return;
+    
     switch (stage) {
       case 0:
         moveArmToMiddle.start();
@@ -67,7 +76,7 @@ public class CollectingPositionPostMortem extends Command {
 
   @Override
   protected boolean isFinished() {
-    return !canRun || (stage == 4); // If we can't run, we're finished
+    return !canRun || (stage >= 4); // If we can't run, we're finished
   }
 
   @Override

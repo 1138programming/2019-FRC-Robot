@@ -46,4 +46,8 @@ public class MoveLiftToPosition extends Command {
 	@Override
 	protected void interrupted() {
 	}
+
+	public void removeRequirements() {
+		this.clearRequirements();
+	}
 }

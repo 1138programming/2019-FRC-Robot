@@ -267,7 +267,7 @@ public class ArmSubsystem extends Subsystem {
     }
   }
 
-  public void moveArmWithClimb() {
+  public double moveArmWithClimb() {
     double[] adjustmentValue = Robot.CLIMB_SUBSYSTEM.getGyroValues();
     double error = -adjustmentValue[0];
     SmartDashboard.putNumber("Yaw", adjustmentValue[0]);
@@ -275,15 +275,17 @@ public class ArmSubsystem extends Subsystem {
     SmartDashboard.putNumber("Roll", adjustmentValue[2]);
     double climbSpeed = error * KPClimb * KClimbArmRatioForFull;
 
-    if(climbSpeed > KClimbArmRatioForFull)
+    if (climbSpeed > KClimbArmRatioForFull)
       climbSpeed = KClimbArmRatioForFull;
-    else if(climbSpeed < -KClimbArmRatioForFull)
+    else if (climbSpeed < -KClimbArmRatioForFull)
       climbSpeed = -KClimbArmRatioForFull;
 
 
-    if(error <= 5 && error >= -5)
+    if (error <= 5 && error >= -5)
       climbSpeed = 0;
 
     moveArm(climbSpeed);
+
+    return error;
   }
 }

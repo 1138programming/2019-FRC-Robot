@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 public class MoveArmWithClimbToTopHab extends Command {
+  double error;
   public MoveArmWithClimbToTopHab() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    requires(Robot.ARM_SUBSYSTEM);
   }
 
   // Called just before this Command runs the first time
@@ -24,7 +24,7 @@ public class MoveArmWithClimbToTopHab extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.ARM_SUBSYSTEM.moveArmWithClimb();
+    error = Robot.ARM_SUBSYSTEM.moveArmWithClimb();
   }
 
   // Make this return true when this Command no longer needs to run execute()

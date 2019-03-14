@@ -1,0 +1,240 @@
+[33mcommit 5d1b355396689872fffd7ff780d643a71ce4b19b[m[33m ([m[1;36mHEAD -> [m[1;32mClimb[m[33m, [m[1;31morigin/Climb[m[33m)[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Mar 9 18:43:59 2019 -0800
+
+    fixing climb and adding hatch servo
+
+[33mcommit c596d90ecb9533b10786269d42d6bc1b79861e40[m
+Merge: a6983f1 d29002f
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Mar 9 17:12:47 2019 -0800
+
+    Merge branch 'Refactored_2019_FRC_Robot' into Climb
+
+[33mcommit d29002ff6426c4556b2505baf3f2e2ea45aed8bd[m[33m ([m[1;31morigin/Refactored_2019_FRC_Robot[m[33m, [m[1;32mRefactored_2019_FRC_Robot[m[33m)[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Mar 9 17:12:24 2019 -0800
+
+    button changes for climb
+
+[33mcommit a6983f163558ea5d71a6ffb554fb9f050494228e[m
+Author: Connor R. Nicholls <crnicholls20@gmail.com>
+Date:   Sat Mar 2 11:13:51 2019 -0800
+
+    this should make the climb work, but we still need to decide on the exit condition for the top hab
+
+[33mcommit c882137dbc30c19b0d9b2d59f65d71a4df5953f3[m
+Merge: 9cce836 ea1a3a8
+Author: Connor R. Nicholls <crnicholls20@gmail.com>
+Date:   Sat Mar 2 10:48:29 2019 -0800
+
+    Merge branch 'Refactored_2019_FRC_Robot' into Climb
+
+[33mcommit ea1a3a8981de568f4ef989f76529829045aec64f[m
+Merge: a055666 8f32603
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Thu Feb 28 17:52:45 2019 -0800
+
+    fixing bump switches
+
+[33mcommit a0556669587e8c4cff55e7dbaeffccd4d81a79c0[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Thu Feb 28 17:46:48 2019 -0800
+
+    fixing bump switches
+
+[33mcommit 8f32603dc02bbcf93d379ce1216f884a7b6b1108[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Fri Feb 22 20:11:46 2019 -0800
+
+    updates, lets figure out the final bugs
+
+[33mcommit 9280d0c9af47e0c33dd90b45dc0ac9febac60d5c[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Fri Feb 22 17:22:44 2019 -0800
+
+    tempt changes
+
+[33mcommit 638ff03b293d36f5f5c746d9bca2177231e21cba[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Tue Feb 19 20:58:35 2019 -0800
+
+    this literally didn't work for the arm and the bottom lift hunt didn't work so no testing on macros either. plz fix for test bot. also i didn't get to fix bc we had like 6 minutes to test
+
+[33mcommit 9cce8364fc4b8b251f32f159d541aeeb09ad5cc2[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Tue Feb 19 18:07:25 2019 -0800
+
+    more climb work + driver's meeting
+
+[33mcommit f5d78c66f8181749134571086ecbc8ab7e1f0d4b[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Tue Feb 19 16:20:28 2019 -0800
+
+    some preliminary oi changes and such
+
+[33mcommit 1662f9af6fa042fcc0aefca564801ad42521fe50[m
+Author: Connor R. Nicholls <crnicholls20@gmail.com>
+Date:   Tue Feb 19 10:40:07 2019 -0800
+
+    finished refactoring broken code, basi or pauline needs to check, also bump switch should logically work so prob a hardware problem
+
+[33mcommit 323fddf6795f47684c6ce8329ff6f075fdaeabf4[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Mon Feb 18 20:18:25 2019 -0800
+
+    still needs to be tested this is to be changed
+
+[33mcommit 135fae88edbf06a42cb829cb5022d219a38d0bbe[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Mon Feb 18 16:13:26 2019 -0800
+
+    Revert "please revert this after branching"
+    
+    This reverts commit c01cb2f45c89b28e266f6a726ef612808b9cb306.
+
+[33mcommit c01cb2f45c89b28e266f6a726ef612808b9cb306[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Mon Feb 18 16:10:38 2019 -0800
+
+    please revert this after branching
+
+[33mcommit c5e0670b40e2ca924251eca3af569807ad53912d[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Mon Feb 18 15:52:35 2019 -0800
+
+    lol forgot to instantiate pdp
+
+[33mcommit cb4244147e327d538a8375912accedfa64b8aa54[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Mon Feb 18 15:39:27 2019 -0800
+
+    actually finishing refactoring with basi, time for pauline's code review, also forking for climb stuff
+
+[33mcommit 071d60ab6c8c946c81a12aa2a915947ab958201f[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Mon Feb 18 13:17:00 2019 -0800
+
+    finished refactoring with Basi and added bump switch
+
+[33mcommit 8039a29c0c263e6d9cd7983440b48e45d3e48059[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sun Feb 17 19:31:23 2019 -0800
+
+    finished refactoring the lift and the arm, ready to be checked by Basi
+
+[33mcommit f4fb894a4a9af2503eec0279ed58c1d36352146a[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sun Feb 17 16:53:23 2019 -0800
+
+    Refactoring the arm subsystem with Basi, will refactor lift next
+
+[33mcommit a5d80dcac516883988b8cb6884e5f22dafd9e64e[m
+Merge: ddc90a2 ee9c9e1
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sun Feb 17 08:24:14 2019 -0800
+
+    Merge branch 'Trigger' into Refactored_2019_FRC_Robot
+
+[33mcommit ee9c9e18a6f69903f13f2c36872e7cb5237469dd[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sun Feb 17 07:52:02 2019 -0800
+
+    forgot to reset the variable
+
+[33mcommit 22c54d0b1e62f3f8fff6029cffc41efd4b3973f0[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sun Feb 17 07:16:22 2019 -0800
+
+    fixing voltage regulation and cleaning by creating a pdp subsystem
+
+[33mcommit ddc90a2fd591cf67c1151b6a25d8ffc4d694d956[m[33m ([m[1;31morigin/Working_Basic[m[33m)[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Feb 16 22:57:53 2019 -0800
+
+    forgot to add macro change to buttons, fixed
+
+[33mcommit 183c14664fead0f38e78273474aa269598e9621d[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Feb 16 22:03:59 2019 -0800
+
+    final prep before competition, needs to be tested, once tested merge to refactored
+
+[33mcommit 0a51ec3d7e997c7a6a0352febff699b98fca1278[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Feb 16 21:53:37 2019 -0800
+
+    intermediary commits bc i want to merge refactored and master
+
+[33mcommit 6a4868fda02dfc3d3aa4520d97f1f866661ada0b[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Feb 16 21:32:20 2019 -0800
+
+    finishing the robot for the scrimmage
+
+[33mcommit 1e5799792b1bb6bffc12d403e12a334aa01eb245[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Feb 16 16:47:27 2019 -0800
+
+    Made the lift hold its position
+
+[33mcommit 1ce918bc6d6cb615507c244fd35569c8ea9f8dc0[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Feb 16 15:09:41 2019 -0800
+
+    Implemented a button to cancel command groups
+
+[33mcommit 25567ef77664415bfe39a2d793b02323d1ad7e30[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Feb 16 14:49:43 2019 -0800
+
+    New command groups are done
+
+[33mcommit eff9bd0e294af692a1f83f5bd26cbdd3af7c70b4[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Sat Feb 16 14:05:21 2019 -0800
+
+    Started changing command groups
+
+[33mcommit 2188876e0d3084ffbc5853fc373c1a7257cc760d[m
+Author: Connor R. Nicholls <crnicholls20@gmail.com>
+Date:   Fri Feb 15 22:37:06 2019 -0800
+
+    fixing magic numbers and some oi changes
+
+[33mcommit f8a1db92cb3048022a18606cbedb349c55001437[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Fri Feb 15 20:39:51 2019 -0800
+
+    arm limits and encoders
+
+[33mcommit f896565318f83cfc898b26cef081e8bd0852814c[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Fri Feb 15 19:24:16 2019 -0800
+
+    fixing encoders and limits
+
+[33mcommit e45a87ec794b896bbee351ea65fbe76199189de6[m[33m ([m[1;31morigin/PIDSubsystems[m[33m)[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Fri Feb 15 17:00:31 2019 -0800
+
+    Encoders work now
+
+[33mcommit b226d9ec9e9917e118548d708e678ea18b009595[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Fri Feb 15 15:07:12 2019 -0800
+
+    might have to revert this one, temp
+
+[33mcommit 18b4cc24343f272b29e6994dce1c5e8b688b2ebf[m
+Author: Eagle Engineering <eeuser@chaminet.net>
+Date:   Thu Feb 14 19:28:34 2019 -0800
+
+    Uncommented command groups
+
+[33mcommit c6781764d7cb113190d9fe24ed55eb9519a87e91[m
+Author: Connor R. Nicholls <crnicholls20@gmail.com>
+Date:   Thu Feb 14 19:18:28 2019 -0800
+
+    Added bump switch to lift
+

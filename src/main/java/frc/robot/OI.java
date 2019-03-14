@@ -138,7 +138,7 @@ public class OI {
     btn9Stick = new JoystickButton(stick, KBtn9Stick);
 
     //Button Assigned Commands 
-    // Create command groups
+    // Create command groups. We do it this way so we can interrupt it with the Trigger class.
     CollectingPosition collectingPosition = new CollectingPosition();
     ScoreCargoInCargo scoreCargoInCargo = new ScoreCargoInCargo();
     ScoreCargoInShip scoreCargoInShip = new ScoreCargoInShip();
@@ -147,12 +147,15 @@ public class OI {
 
     //Logitech
     //btn3.whenPressed(new Diagnostic());
+    
+    btn1.whileHeld(new ClimbDown());
+    //btn2.whenPressed(new NintendoSwitch());
+    btn3.whileHeld(new ClimbUp());
     btn5.whenPressed(new ShiftDrive());
-    btn2.whenPressed(new NintendoSwitch());  //1. Sparks MAX not working right now. 2. Picking up hatches and scoring will be on btns 6 & 8. 3. Triggers on XBox aren't working
-    btn6.whenPressed(climbToTopHab);
+    //btn6.whenPressed(climbToTopHab);
     btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
     btn9.whileHeld(new X_TableLeft());
-    btn10.whileHeld(new ClimbToTopHab());
+    btn10.whileHeld(climbToTopHab);
 
     //Xbox
     btnLB.whileHeld(new CollectorBackwards());
@@ -169,17 +172,13 @@ public class OI {
     btn6Stick.whileHeld(new ClimbUp());
     btn9Stick.whileHeld(new ClimbToTopHab());
 
-
-    btn1.whileHeld(new ClimbDown());
-    btn3.whileHeld(new ClimbUp());
-
     // Cancel command groups
     btnStrt.cancelWhenPressed(scoreCargoInCargo);
     btnStrt.cancelWhenPressed(collectingPosition);
     btnStrt.cancelWhenPressed(scoreCargoInShip);
     btnStrt.cancelWhenPressed(resetRobot);
 
-    btn10.cancelWhenPressed(climbToTopHab);
+    btnStrt.cancelWhenPressed(climbToTopHab);
   }
 
   public double getRightAxis() {
