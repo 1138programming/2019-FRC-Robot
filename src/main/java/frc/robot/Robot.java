@@ -41,8 +41,6 @@ public class Robot extends TimedRobot {
   public static PDP pdp;
   public static Camera CAMERA = new Camera();
 
-  public static boolean armHasBeenReset = false;
-
   public static final boolean useDualArmPID = false;
 
   Command m_autonomousCommand;
