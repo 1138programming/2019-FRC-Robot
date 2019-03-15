@@ -24,9 +24,9 @@ public class LiftSubsystem extends Subsystem {
   private static final double KLiftCargo = 23500;
   private static final double KLiftFullUp = 23500;
   
-  private static final double KLiftTopLimitHuntRange = 23000; //??
+  private static final double KLiftTopLimitHuntRange = 22000; //??
   private static final double KLiftIsAboveArm = 15000; //check
-  private static final double KLiftBottomLimitHuntRange = 500;
+  private static final double KLiftBottomLimitHuntRange = 600;
 
   public static final double KMotorOffset = 0.05;
 
@@ -162,8 +162,9 @@ public class LiftSubsystem extends Subsystem {
     else if (speed < -KLiftSpeed)
       speed = -KLiftSpeed;
 
-    speed = enforceLiftLimits(speed);
-    LiftTalon.set(ControlMode.PercentOutput, speed);
+    //speed = enforceLiftLimits(speed);
+    //LiftTalon.set(ControlMode.PercentOutput, speed);
+    moveLift(speed);
 
     return error;
   }

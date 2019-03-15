@@ -40,7 +40,7 @@ public class CollectingPositionPostMortem extends Command {
   @Override
   protected void initialize() {
     stage = 0;
-    canRun = Robot.CARRIAGE_SUBSYSTEM.BumpSwitch.get();
+    canRun = !Robot.CARRIAGE_SUBSYSTEM.BumpSwitch.get();
     SmartDashboard.putNumber("postmortem stage", stage);
   }
 

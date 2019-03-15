@@ -41,7 +41,12 @@ public class MoveArmToPosition extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return (Math.abs(error) < allowableError);
+		// if (Robot.ARM_SUBSYSTEM.armInPosition == 0)
+			return Math.abs(error) <= allowableError;
+		// else if (Robot.ARM_SUBSYSTEM.armInPosition == 1)
+		// 	return Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.rightLimitClosed();
+		// else 
+		// 	return
 	}
 
 	@Override

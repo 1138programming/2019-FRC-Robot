@@ -28,6 +28,8 @@ import frc.commands.ScoringCommandGroups.ResetRobot;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
 import frc.commands.X_Table.X_TableLeft;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class OI {
   /**
@@ -74,6 +76,8 @@ public class OI {
   private static final int KButton8 = 8;
   private static final int KButton9 = 9;
   private static final int KButton10 = 10;
+  private static final int KLeftYAxis = 5;
+  private static final int KRightYAxis = 1;
 
   //Xbox Button Constants 
   private static final int KButtonA = 1;
@@ -103,6 +107,9 @@ public class OI {
   public OI() {
     //Controllers 
     logitech = new Joystick(KLogitechDrive);
+
+    SmartDashboard.putNumber("Throttle channel is: ", logitech.getThrottleChannel());
+
     xbox = new XboxController(KXboxArms);
     stick = new Joystick(KStick);
 
@@ -182,10 +189,17 @@ public class OI {
   }
 
   public double getRightAxis() {
-    if(logitech.getThrottle() > KDeadZone || logitech.getThrottle() < -KDeadZone)
-      return logitech.getThrottle(); 
-    else 
-      return 0; 
+    // if(logitech.getThrottle() > KDeadZone || logitech.getThrottle() < -KDeadZone) {
+    //   return logitech.getThrottle(); 
+    // else 
+    //   return 0; 
+    //double Y = logitech.getY(Hand.kRight);
+    double Y = logitech.getRawAxis(KLeftYAxis);
+    SmartDashboard.putNumber("Here's a thingy!", Y);
+    if (Y > KDeadZone || Y < -KDeadZone)
+      return Y;
+    else
+      return 0;
   }
 
   public double getArcadeRightAxis() {
@@ -196,15 +210,18 @@ public class OI {
   }
 
   public double getLeftAxis() {
-    if(logitech.getY() > KDeadZone || logitech.getY() < -KDeadZone)
-      return logitech.getY(); 
+    //double Y = logitech.getY(Hand.kLeft);
+    double Y = logitech.getRawAxis(KRightYAxis);
+    SmartDashboard.putNumber("Here's a left thingy!", Y);
+    if(Y > KDeadZone || Y < -KDeadZone)
+      return Y;
     else 
       return 0; 
   }
 
   public double getRightXbox() {
     if(xbox.getY(Hand.kRight) > KDeadZone || xbox.getY(Hand.kRight) < -KDeadZone) 
-      return -xbox.getY(Hand.kRight);
+      return xbox.getY(Hand.kRight);
     else 
       return 0;
   }

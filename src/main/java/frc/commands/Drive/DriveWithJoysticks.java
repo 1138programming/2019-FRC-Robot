@@ -19,6 +19,8 @@ public class DriveWithJoysticks extends Command {
   protected void execute() {
     double leftSpeed = Robot.oi.getLeftAxis();
     double rightSpeed = Robot.oi.getRightAxis();
+
+    //SmartDashboard.putNumber("Right axis", rightSpeed);
     
     if(PDP.voltageSpikeOccured)
     {
