@@ -49,7 +49,7 @@ public class ArmSubsystem extends Subsystem {
   private static final double KArmTopRange = 300; // under this number mean we are at the top
 
   // PI(D) tuning for arm
-  private static final double KP = 0.0085;
+  private static final double KP = 0.005;
   private static final double KPClimb = 0.0045;
 
   // Talon config
@@ -188,21 +188,26 @@ public class ArmSubsystem extends Subsystem {
       identifyLeftLimitandResetEncoder();
     }*/
 
+    double leftPos = getLeftArmEncoder();
+
     if (leftLimitClosed()) {
-      double leftPos = getLeftArmEncoder();
-      double fullUpError = Math.abs(KArmFullUp - leftPos);
-      double fullDownError = Math.abs(KArmFullDown - leftPos);
-      boolean closerToUp = fullUpError < fullDownError;
+      double fullUpDist = Math.abs(leftPos - KArmFullUp);
+      double fullDownDist = Math.abs(KArmFullDown - leftPos);
+      boolean closerToUp = fullUpDist < fullDownDist;
 
       if (closerToUp) {
         setLeftArmEncoder((int)KArmFullUp);
         if (targetSpeed < 0)
           targetSpeed = 0;
-      } else {
+      } 
+      else {
         setLeftArmEncoder((int)KArmFullDown);
         if (targetSpeed > 0)
           targetSpeed = 0;
       }
+    // } else if (leftPos < 0) {
+    //   if (targetSpeed < 0)
+    //       targetSpeed = 0;
     }
 
     return targetSpeed;
@@ -220,11 +225,12 @@ public class ArmSubsystem extends Subsystem {
       identifyRightLimitandResetEncoder();
     }*/
 
+    double rightPos = getRightArmEncoder();
+
     if (rightLimitClosed()) {
-      double rightPos = getRightArmEncoder();
-      double fullUpError = Math.abs(KArmFullUp - rightPos);
-      double fullDownError = Math.abs(KArmFullDown - rightPos);
-      boolean closerToUp = fullUpError < fullDownError;
+      double fullUpDist = Math.abs(rightPos - KArmFullUp); //500
+      double fullDownDist = Math.abs(KArmFullDown - rightPos); //2295
+      boolean closerToUp = fullUpDist < fullDownDist;
 
       if (closerToUp) {
         setRightArmEncoder((int)KArmFullUp);
@@ -235,27 +241,32 @@ public class ArmSubsystem extends Subsystem {
         if (targetSpeed > 0)
           targetSpeed = 0;
       }
+    // } else if (rightPos < 0) {
+    //   if (targetSpeed < 0)
+    //       targetSpeed = 0;
+    // }
     }
-
     return targetSpeed;
   }
 
   public void moveArm(double desiredSpeed) {
     if (desiredSpeed != 0)
     {
+      // What if one of the enforceArmLimits returns zero? E.g. one of them has reached zero
+      // It'd still run, right?
       desiredSpeed = (enforceLeftArmLimits(desiredSpeed) + enforceRightArmLimits(desiredSpeed)) / 2;
 
       if (isInHuntRange()) {
         desiredSpeed = desiredSpeed * KArmHuntSpeed;
       }
 
-      if ((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 
-        !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && 
+      if ((!leftLimitClosed() || getLeftArmEncoder() != 0 || 
+        !rightLimitClosed() || getRightArmEncoder() != 0) && 
         Robot.armHasBeenReset == false && Robot.oi.getRightXbox() >= 0) {
           desiredSpeed = 0;
       }
-      else if ((Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && 
-                Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0)) {
+      else if ((leftLimitClosed() && getLeftArmEncoder() == 0 && 
+                rightLimitClosed() && getRightArmEncoder() == 0)) {
           Robot.armHasBeenReset = true;
      }
     }
@@ -270,39 +281,57 @@ public class ArmSubsystem extends Subsystem {
   }
 
   // Returns how far off we are from the desired position
-  // private double moveArmWithEncoders(double positionInTicks) {
-  //   double error = positionInTicks - (getRightArmEncoder() + getLeftArmEncoder()) / 2;
-  //   double speed = error * KP //Speed * KP;
+  private double moveArmWithEncoders(double positionInTicks) {
+    double error = positionInTicks - (getRightArmEncoder() + getLeftArmEncoder()) / 2;
+    double speed = error * KP; //Speed * KP;
 
-  //   if (speed > KArmSpeed)
-  //     speed = KArmSpeed;
-  //   else if (speed < -KArmSpeed)
-  //     speed = -KArmSpeed;
+    if (speed > KArmSpeed)
+      speed = KArmSpeed;
+    else if (speed < -KArmSpeed)
+      speed = -KArmSpeed;
 
-  //   if (leftLimitClosed() || rightLimitClosed())
-  //     speed = 0;
+    // if (leftLimitClosed() || rightLimitClosed())
+    //   speed = 0;
 
-  //   moveArm(speed);
+    moveArm(speed);
 
-  //   return error;
-  // }
+    return error;
+  }
 
   // Returns how far off we are from the desired position
   public double moveArmToPosition(ArmPosition position) {
-    switch (position) {
-    case FULLDOWN:
-      return combinedControl(KArmFullDown);
-    case LOW:
-      return combinedControl(KArmLow);
-    case MIDDLE:
-      return combinedControl(KArmMiddle);
-    case HIGH:
-      return combinedControl(KArmHigh);
-    case FULLUP:
-      return combinedControl(KArmFullUp);
-    default:
-      // Should really throw an exception;
-      return 1 / 0;
+    if (Robot.useDualArmPID) {
+      switch (position) {
+      case FULLDOWN:
+        return combinedControl(KArmFullDown);
+      case LOW:
+        return combinedControl(KArmLow);
+      case MIDDLE:
+        return combinedControl(KArmMiddle);
+      case HIGH:
+        return combinedControl(KArmHigh);
+      case FULLUP:
+        return combinedControl(KArmFullUp);
+      default:
+        // Should really throw an exception;
+        return 1 / 0;
+      }
+    } else {
+      switch (position) {
+        case FULLDOWN:
+          return moveArmWithEncoders(KArmFullDown);
+        case LOW:
+          return moveArmWithEncoders(KArmLow);
+        case MIDDLE:
+          return moveArmWithEncoders(KArmMiddle);
+        case HIGH:
+          return moveArmWithEncoders(KArmHigh);
+        case FULLUP:
+          return moveArmWithEncoders(KArmFullUp);
+        default:
+          // Should really throw an exception;
+          return 1 / 0;
+        }
     }
   }
 
@@ -328,28 +357,52 @@ public class ArmSubsystem extends Subsystem {
     return error;
   }
 
+  private boolean inStartingPosition() {
+    return leftLimitClosed() && rightLimitClosed() && (getLeftArmEncoder() == 0) && (getRightArmEncoder() == 0);
+  }
+
   private double combinedControl(double tPos) {
-    double KPvel = 0.0001, KPpos = 0.0001;
+    if (!inStartingPosition() && !Robot.armHasBeenReset)
+      return 0;
+
+    double KPvel = 0.0043, KPpos = 0;
     double rightPos = getRightArmEncoder(), leftPos = getLeftArmEncoder();
 
     // Regular PID control for initial speeds
     double leftError = tPos - leftPos, rightError = tPos - rightPos;
-    double leftSpeed = KPpos * leftError, rightSpeed = KPpos * rightError;
+    double leftSpeed = KPvel * leftError, rightSpeed = KPvel * rightError;
 
     // Add or subtract difference petween positions to correct for differing speeds
-    leftSpeed = enforceLeftArmLimits(leftSpeed + KPvel * (rightPos - leftPos));
-    rightSpeed = enforceRightArmLimits(rightSpeed + KPvel * (leftPos - rightPos));
+    leftSpeed += KPpos * (rightPos - leftPos);
+    rightSpeed += KPpos * (leftPos - rightPos);
 
-    if ((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 
-         !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && 
-          Robot.armHasBeenReset == false) {
-            leftSpeed = 0; 
-            rightSpeed = 0;
-      }
+    // Lowers speed if the arm is close to the limits
+    if (isInHuntRange()) {
+      leftSpeed *= KArmHuntSpeed;
+      rightSpeed *= KArmHuntSpeed;
+    }
+
+    // Makes sure the speed
+    leftSpeed = enforceLeftArmLimits(leftSpeed);
+    rightSpeed = enforceRightArmLimits(rightSpeed);
+
+    // Confines to range of -1 to 1
+    if (leftSpeed > KArmSpeed)
+      leftSpeed = KArmSpeed;
+    else if (leftSpeed < -KArmSpeed)
+      leftSpeed = -KArmSpeed;
+
+    if (rightSpeed > KArmSpeed)
+      rightSpeed = KArmSpeed;
+    else if (rightSpeed < -KArmSpeed)
+      rightSpeed = -KArmSpeed;
 
     ArmLeft.set(ControlMode.PercentOutput, leftSpeed);
     ArmRight.set(ControlMode.PercentOutput, rightSpeed);
 
-    return Math.abs(leftError) > Math.abs(rightError) ? leftError : rightError;
+    if (Math.abs(leftError) > Math.abs(rightError))
+      return leftError;
+    else
+      return rightError;
   }
 }

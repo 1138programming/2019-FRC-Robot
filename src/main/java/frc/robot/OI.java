@@ -16,6 +16,7 @@ import frc.commands.Climb.ClimbDown;
 import frc.commands.Climb.ClimbUp;
 import frc.commands.Collector.CollectorBackwards;
 import frc.commands.Collector.CollectorForward;
+import frc.commands.Drive.DriveBaseOffPlatform;
 import frc.commands.Drive.NintendoSwitch;
 import frc.commands.Drive.ShiftDrive;
 import frc.commands.Hatch.AttainHatch;
@@ -151,6 +152,7 @@ public class OI {
     ScoreCargoInShip scoreCargoInShip = new ScoreCargoInShip();
     ResetRobot resetRobot = new ResetRobot();
     ClimbToTopHab climbToTopHab = new ClimbToTopHab();
+    DriveBaseOffPlatform driveBaseOffPlatform = new DriveBaseOffPlatform();
 
     //Logitech
     //btn3.whenPressed(new Diagnostic());
@@ -159,8 +161,9 @@ public class OI {
     //btn2.whenPressed(new NintendoSwitch());
     btn3.whileHeld(new ClimbUp());
     btn5.whenPressed(new ShiftDrive());
-    //btn6.whenPressed(climbToTopHab);
-    btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
+    //btn6.whenPressed(climbToTopHab); 
+    btn6.whileHeld(driveBaseOffPlatform);
+    // btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
     btn9.whileHeld(new X_TableLeft());
     btn10.whileHeld(climbToTopHab);
 

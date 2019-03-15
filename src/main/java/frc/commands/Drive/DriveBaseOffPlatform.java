@@ -5,18 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.commands.Lift;
+package frc.commands.Drive;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.subsystems.LiftSubsystem;
 
-public class HoldLiftPosition extends Command {
-  public HoldLiftPosition() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Robot.LIFT_SUBSYSTEM);
+public class DriveBaseOffPlatform extends Command {  
+  public DriveBaseOffPlatform() {
+    requires(Robot.DRIVE_SUBSYSTEM);
   }
 
   // Called just before this Command runs the first time
@@ -27,12 +24,13 @@ public class HoldLiftPosition extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.LIFT_SUBSYSTEM.moveLiftUNSAFELY(Robot.LIFT_SUBSYSTEM.KMotorOffset);
+    Robot.DRIVE_SUBSYSTEM.driveBaseInSandstorm();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    //return Math.abs(error) <= allowableError;
     return true;
   }
 

@@ -21,11 +21,11 @@ public class ScoreCargoInCargo extends CommandGroup {
         requires(Robot.CARRIAGE_SUBSYSTEM);
 		requires(Robot.LIFT_SUBSYSTEM);
 
-		HoldLiftPosition holdLiftPosition = new HoldLiftPosition();
+		// HoldLiftPosition holdLiftPosition = new HoldLiftPosition();
 
 		addSequential(new MoveArmToPosition(ArmPosition.MIDDLE));
 		addSequential(new MoveLiftToPosition(LiftPosition.CARGO));
 		addSequential(new MoveArmToPosition(ArmPosition.FULLUP));
-		addParallel(holdLiftPosition);
+		// addParallel(holdLiftPosition);
 	}
 }

@@ -43,6 +43,8 @@ public class Robot extends TimedRobot {
 
   public static boolean armHasBeenReset = false;
 
+  public static final boolean useDualArmPID = false;
+
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -132,6 +134,11 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     if (Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) {
       SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED - READY TO GO");
+    double[] yawpitchroll = new double[3];
+    Robot.CLIMB_SUBSYSTEM.Pigeon.getYawPitchRoll(yawpitchroll);
+    SmartDashboard.putNumber("yaw", yawpitchroll[0]);
+    SmartDashboard.putNumber("pitch", yawpitchroll[1]);
+    SmartDashboard.putNumber("roll", yawpitchroll[2]);
     }
 
     // if ((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 

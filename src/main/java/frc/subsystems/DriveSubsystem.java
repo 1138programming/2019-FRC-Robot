@@ -1,6 +1,7 @@
 package frc.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -41,6 +42,9 @@ public class DriveSubsystem extends Subsystem {
   public final AnalogAccelerometer Accel; 
   public static final int KAccelerometer = 0;
 
+  public static final double KDriveSpeed = .75;
+  public static final double KP = .001;
+
   public DriveSubsystem()
   {
     driveLeftFront = new TalonSRX(KDriveLeftFrontTalon);
@@ -55,6 +59,11 @@ public class DriveSubsystem extends Subsystem {
     driveLeftRear.setInverted(false);
     driveRightFront.setInverted(true);
     driveRightRear.setInverted(true);
+
+    // driveLeftFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    // driveLeftFront.setSelectedSensorPosition(0);
+    // driveRightFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    // driveRightFront.setSelectedSensorPosition(0);
 
     shifterSolenoid = new DoubleSolenoid(KShifterSolenoid1, KShifterSolenoid2);
 
@@ -77,6 +86,32 @@ public class DriveSubsystem extends Subsystem {
     
     driveRightFront.set(ControlMode.PercentOutput, rightSpeed);
     driveLeftFront.set(ControlMode.PercentOutput, leftSpeed);
+  }
+
+  // public double driveBaseToPosition(double position)
+  // {
+  //   double error = position - (getRightFrontEncoder() - getLeftFrontEncoder())/2;
+  //   double speed = KDriveSpeed * error * KP;
+
+  //   if (speed > KDriveSpeed)
+  //     speed = KDriveSpeed;
+  //   else if (speed < -KDriveSpeed)
+  //     speed = -KDriveSpeed;
+    
+  //   baseDrive(speed, speed);
+
+  //   return error;
+  // }
+
+  public void driveBaseInSandstorm()
+  {
+    double speed;
+    if (isReversed)
+       speed = -KDriveSpeed;
+    else
+        speed = KDriveSpeed;
+
+    baseDrive(KDriveSpeed, KDriveSpeed);
   }
 
   public void switchDriveBase(boolean switchButton) {
@@ -128,5 +163,13 @@ public class DriveSubsystem extends Subsystem {
   
 	public TalonSRX getBaseRightFront() {
 		return this.driveRightFront;
+  }
+
+  public double getLeftFrontEncoder() {
+    return driveLeftFront.getSelectedSensorPosition();
+  }
+
+  public double getRightFrontEncoder() {
+    return driveRightFront.getSelectedSensorPosition();
   }
 }

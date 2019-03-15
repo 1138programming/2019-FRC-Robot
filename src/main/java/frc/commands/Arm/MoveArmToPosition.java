@@ -32,6 +32,12 @@ public class MoveArmToPosition extends Command {
 
 	@Override
 	protected void execute() {
+		// if (Robot.useDualArmPID) {
+		// 	error = Robot.ARM_SUBSYSTEM.moveArmToPosition(armPosition);
+		// } else {
+		// 	error = Robot.ARM_SUBSYSTEM.moveArmToPosition(armPosition);
+		// }
+
 		error = Robot.ARM_SUBSYSTEM.moveArmToPosition(armPosition);
 
 		SmartDashboard.putNumber("Error Arm", error);

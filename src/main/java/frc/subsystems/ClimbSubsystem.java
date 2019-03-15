@@ -51,14 +51,14 @@ public class ClimbSubsystem extends Subsystem {
     return !BottomClimbLimit.get();
   }
 
-  private double enforceLimits(double desiredSpeed) {
-    if(topLimitClosed() && desiredSpeed > 0) 
-      desiredSpeed = 0;
-    else if(bottomLimitClosed() && desiredSpeed < 0) 
-      desiredSpeed = 0;
+  // private double enforceLimits(double desiredSpeed) {
+  //   if(topLimitClosed() && desiredSpeed > 0) 
+  //     desiredSpeed = 0;
+  //   else if(bottomLimitClosed() && desiredSpeed < 0) 
+  //     desiredSpeed = 0;
 
-    return desiredSpeed;
-  }
+  //   return desiredSpeed;
+  // }
 
   public void moveClimb(double speed) {
     double desiredSpeed = speed;
