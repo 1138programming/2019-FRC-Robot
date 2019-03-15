@@ -205,9 +205,9 @@ public class ArmSubsystem extends Subsystem {
         if (targetSpeed > 0)
           targetSpeed = 0;
       }
-    // } else if (leftPos < 0) {
-    //   if (targetSpeed < 0)
-    //       targetSpeed = 0;
+    } else if (leftPos < 0) {
+        if (targetSpeed < 0)
+            targetSpeed = 0;
     }
 
     return targetSpeed;
@@ -241,11 +241,11 @@ public class ArmSubsystem extends Subsystem {
         if (targetSpeed > 0)
           targetSpeed = 0;
       }
-    // } else if (rightPos < 0) {
-    //   if (targetSpeed < 0)
-    //       targetSpeed = 0;
-    // }
+    } else if (rightPos < 0) {
+      if (targetSpeed < 0)
+          targetSpeed = 0;
     }
+    
     return targetSpeed;
   }
 
