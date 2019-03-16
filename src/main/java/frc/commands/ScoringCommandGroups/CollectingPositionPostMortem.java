@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.Lift.MoveLiftToPosition;
 import frc.robot.Robot;
-import frc.subsystems.ArmSubsystem.ArmPosition;
+import frc.subsystems.ArmSubsystem;
 import frc.subsystems.LiftSubsystem.LiftPosition;
 
 public class CollectingPositionPostMortem extends Command {
@@ -27,10 +27,10 @@ public class CollectingPositionPostMortem extends Command {
   public CollectingPositionPostMortem() {
     requires(Robot.ARM_SUBSYSTEM);
     requires(Robot.LIFT_SUBSYSTEM);
-
-    moveArmToMiddle = new MoveArmToPosition(ArmPosition.MIDDLE);
+    
+    moveArmToMiddle = new MoveArmToPosition(ArmSubsystem.KArmMiddle);
     moveLiftToCargoPos = new MoveLiftToPosition(LiftPosition.CARGO);
-    moveArmFullUp = new MoveArmToPosition(ArmPosition.FULLUP);
+    moveArmFullUp = new MoveArmToPosition(ArmSubsystem.KArmFullUp);
 
     moveArmToMiddle.removeRequirements();
     moveLiftToCargoPos.removeRequirements();

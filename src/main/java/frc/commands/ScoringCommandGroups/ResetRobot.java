@@ -1,9 +1,10 @@
 package frc.commands.ScoringCommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.commands.Arm.ResetArm;
+import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.Lift.ResetLift;
 import frc.robot.Robot;
+import frc.subsystems.ArmSubsystem;
 
 public class ResetRobot extends CommandGroup {
 	public ResetRobot() {
@@ -11,6 +12,6 @@ public class ResetRobot extends CommandGroup {
 		requires(Robot.LIFT_SUBSYSTEM);
 
 		addSequential(new ResetLift());
-		addSequential(new ResetArm());
+		addSequential(new MoveArmToPosition(ArmSubsystem.KArmFullDown));
 	}
 }

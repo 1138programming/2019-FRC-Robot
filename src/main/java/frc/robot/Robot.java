@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Lift.LiftStop;
 import frc.subsystems.ArmSubsystem;
-import frc.subsystems.ArmSubsystem.ArmPosition;
 import frc.subsystems.Camera;
 import frc.subsystems.CarriageSubsystem;
 import frc.subsystems.XTableSubsystem;
@@ -117,10 +116,10 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     LIFT_SUBSYSTEM.zeroLiftEncoder();
-    ARM_SUBSYSTEM.zeroLeftArmEncoder();
-    ARM_SUBSYSTEM.zeroRightArmEncoder();
+    ARM_SUBSYSTEM.setLeftArmEncoder(0);
+    ARM_SUBSYSTEM.setRightArmEncoder(0);
     pdp.voltageSpikeOccured = false;
-    armHasBeenReset = false;
+    ARM_SUBSYSTEM.lock();
     //SmartDashboard.putString("Robot Encoders", "NOT ALIGNED");
       
     if (m_autonomousCommand != null) {
@@ -130,7 +129,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) {
+    if (Robot.ARM_SUBSYSTEM.getLeftLimit() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.getRightLimit() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) {
       SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED - READY TO GO");
     double[] yawpitchroll = new double[3];
     Robot.CLIMB_SUBSYSTEM.Pigeon.getYawPitchRoll(yawpitchroll);
