@@ -162,33 +162,33 @@ public class OI {
     btn3.whileHeld(new ClimbUp());
     btn5.whenPressed(new ShiftDrive());
     //btn6.whenPressed(climbToTopHab); 
-    btn6.whileHeld(driveBaseOffPlatform);
+    // btn6.whileHeld(driveBaseOffPlatform);
     // btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
-    btn9.whileHeld(new X_TableLeft());
-    btn10.whileHeld(climbToTopHab);
+    // btn9.whileHeld(new X_TableLeft());
+    // btn10.whileHeld(climbToTopHab);
 
     //Xbox
     btnLB.whileHeld(new CollectorBackwards());
     btnRB.whileHeld(new CollectorForward());
     btnA.whileHeld(new CarriageIntake());
     btnB.whileHeld(new CarriageOuttake());
-    btnX.whenPressed(collectingPosition);
-    btnY.whenPressed(scoreCargoInCargo);
+    // btnX.whenPressed(collectingPosition);
+    // btnY.whenPressed(scoreCargoInCargo);
 
     //Stick
-    btn3Stick.whenPressed(resetRobot);
+    // btn3Stick.whenPressed(resetRobot);
     btn4Stick.whileHeld(new ClimbDown());
-    btn5Stick.whenPressed(scoreCargoInShip);
+    // btn5Stick.whenPressed(scoreCargoInShip);
     btn6Stick.whileHeld(new ClimbUp());
-    btn9Stick.whileHeld(new ClimbToTopHab());
+    // btn9Stick.whileHeld(new ClimbToTopHab());
 
     // Cancel command groups
-    btnStrt.cancelWhenPressed(scoreCargoInCargo);
-    btnStrt.cancelWhenPressed(collectingPosition);
-    btnStrt.cancelWhenPressed(scoreCargoInShip);
-    btnStrt.cancelWhenPressed(resetRobot);
+    // btnStrt.cancelWhenPressed(scoreCargoInCargo);
+    // btnStrt.cancelWhenPressed(collectingPosition);
+    // btnStrt.cancelWhenPressed(scoreCargoInShip);
+    // btnStrt.cancelWhenPressed(resetRobot);
 
-    btnStrt.cancelWhenPressed(climbToTopHab);
+    // btnStrt.cancelWhenPressed(climbToTopHab);
   }
 
   public double getRightAxis() {

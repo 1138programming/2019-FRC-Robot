@@ -256,21 +256,21 @@ public class ArmSubsystem extends Subsystem {
     {
       // What if one of the enforceArmLimits returns zero? E.g. one of them has reached zero
       // It'd still run, right?
-      desiredSpeed = (enforceLeftArmLimits(desiredSpeed) + enforceRightArmLimits(desiredSpeed)) / 2;
+      // desiredSpeed = (enforceLeftArmLimits(desiredSpeed) + enforceRightArmLimits(desiredSpeed)) / 2;
 
       if (isInHuntRange()) {
         desiredSpeed = desiredSpeed * KArmHuntSpeed;
       }
 
-      if ((!leftLimitClosed() || getLeftArmEncoder() != 0 || 
-        !rightLimitClosed() || getRightArmEncoder() != 0) && 
-        Robot.armHasBeenReset == false && Robot.oi.getRightXbox() >= 0) {
-          desiredSpeed = 0;
-      }
-      else if ((leftLimitClosed() && getLeftArmEncoder() == 0 && 
-                rightLimitClosed() && getRightArmEncoder() == 0)) {
-          Robot.armHasBeenReset = true;
-     }
+    //   if ((!leftLimitClosed() || getLeftArmEncoder() != 0 || 
+    //     !rightLimitClosed() || getRightArmEncoder() != 0) && 
+    //     Robot.armHasBeenReset == false && Robot.oi.getRightXbox() >= 0) {
+    //       desiredSpeed = 0;
+    //   }
+    //   else if ((leftLimitClosed() && getLeftArmEncoder() == 0 && 
+    //             rightLimitClosed() && getRightArmEncoder() == 0)) {
+    //       Robot.armHasBeenReset = true;
+    //  }
     }
 
     ArmLeft.set(ControlMode.PercentOutput, desiredSpeed);
@@ -385,8 +385,8 @@ public class ArmSubsystem extends Subsystem {
     }
 
     // Makes sure the speed
-    leftSpeed = enforceLeftArmLimits(leftSpeed);
-    rightSpeed = enforceRightArmLimits(rightSpeed);
+    // leftSpeed = enforceLeftArmLimits(leftSpeed);
+    // rightSpeed = enforceRightArmLimits(rightSpeed);
 
     // Confines to range of -1 to 1
     if (leftSpeed > KArmSpeed)
