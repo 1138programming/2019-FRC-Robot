@@ -46,7 +46,7 @@ public class MoveArmToPosition extends Command {
 
 	@Override
 	protected void end() {
-		Robot.ARM_SUBSYSTEM.moveArm(0);
+		Robot.ARM_SUBSYSTEM.moveArm(0, 0);
 		if (commandToCancel != null) {
 			commandToCancel.cancel();
 		}

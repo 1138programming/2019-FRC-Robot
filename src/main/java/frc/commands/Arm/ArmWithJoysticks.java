@@ -19,7 +19,7 @@ public class ArmWithJoysticks extends Command
 	protected void execute() {
 		double joystickValue = Robot.oi.getRightXbox();
 
-		Robot.ARM_SUBSYSTEM.moveArm(joystickValue);
+		Robot.ARM_SUBSYSTEM.moveArm(joystickValue, joystickValue);
 
 		SmartDashboard.putNumber("Right Arm Encoder Position", Robot.ARM_SUBSYSTEM.getRightArmEncoder());
 		SmartDashboard.putNumber("Left Arm Encoder Position", Robot.ARM_SUBSYSTEM.getLeftArmEncoder());

@@ -14,7 +14,7 @@ public class ArmStop extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.ARM_SUBSYSTEM.moveArm(0);
+		Robot.ARM_SUBSYSTEM.moveArm(0, 0);
 	}
 
 	@Override

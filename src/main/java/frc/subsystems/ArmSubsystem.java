@@ -14,20 +14,11 @@ import frc.commands.Arm.ArmWithJoysticks;
 import frc.robot.Robot;
 
 public class ArmSubsystem extends Subsystem {
-
-  /**
-   * public static final int KArmLeft = 4; ArmLeft is Right Arm public static
-   * final int KArmRight = 5; ArmRight is Left Arm public static final double
-   * KArmSpeed = 1.0;
-   * 
-   * private TalonSRX ArmLeft; private VictorSPX ArmRight;
-   */
-
   private static final double KArmSpeed = .75; // Max speed of arm when controlled by autonomous functions/macros=
   public static final double KArmIsBelowLift = 965;
 
   // Encoder positions for arm in relationship to 0 (full up)
-  public static final int KArmFullDown = 1795; // 650, 1035, 1650, 1910
+  public static final int KArmFullDown = 1795;
   public static final int KArmLow = 1525;
   public static final int KArmMiddle = 900;
   public static final int KArmHigh = 475;
@@ -207,7 +198,8 @@ public class ArmSubsystem extends Subsystem {
 
         // Records that the up limit switch has been passed
         pastUpLimit = true;
-      } else {
+      } 
+      else {
         // Resets the given side's encoder to the down limit
         if (left)
           setLeftArmEncoder(KArmFullDown);
@@ -221,7 +213,8 @@ public class ArmSubsystem extends Subsystem {
         // Records that the down limit switch has been passed
         pastDownLimit = true;
       }
-    } else {
+    } 
+    else {
       double KMidpoint = 100; // When the difference between the arm's position and the limit position is equal to this midpoint, speed will be 50%
 
       // Moves arm back down if the up limit has been passed
@@ -254,24 +247,29 @@ public class ArmSubsystem extends Subsystem {
     return speed;
   }
 
-  /**
-   * Moves both sides of the arm with one speed. Used with joysticks
-   * @param speed - Speed to use for both sides of the arm
-   */
-  public void moveArm(double speed) {
-    move(correctSpeed(speed, true), correctSpeed(speed, false));
+  // /**
+  //  * Moves both sides of the arm with one speed. Used with joysticks
+  //  * @param speed - Speed to use for both sides of the arm
+  //  */
+  // public void moveArmForJoysticks(double speed) {
+  //   // If the arm is in its starting position, it has been reset
+  //   if (!armHasBeenReset && inStartPos())
+  //     armHasBeenReset = true;
 
-    // If the arm is in its starting position, it has been reset
-    if (!armHasBeenReset && inStartPos())
-      armHasBeenReset = true;
-  }
+  //   move(correctSpeed(speed, true), correctSpeed(speed, false));
+  // }
 
   /**
    * Moves each side of the arm with separate speeds
-   * @param speeds - The speeds to drive each side of the arm at
+   * @param leftSpeed - The speed to drive the left side of the arm at
+   * @param rightSpeed - The speed to drive the right side of the arm at
    */
-  public void moveArm(double[] speeds) {
-    move(correctSpeed(speeds[0], true), correctSpeed(speeds[1], false));
+  public void moveArm(double leftSpeed, double rightSpeed) {
+    // If the arm is in its starting position, it has been reset
+    if (!armHasBeenReset && inStartPos())
+      armHasBeenReset = true;
+        
+    move(correctSpeed(leftSpeed, true), correctSpeed(rightSpeed, false));
   }
 
   /**
@@ -289,7 +287,8 @@ public class ArmSubsystem extends Subsystem {
     int leftError = target - getLeftArmEncoder();
     int rightError = target - getRightArmEncoder();
 
-    moveArm(controlVel(new double[]{KPpos * leftError, KPpos * rightError}));
+    double[] speeds = controlVel(new double[]{KPpos * leftError, KPpos * rightError});
+    moveArm(speeds[0], speeds[1]);
 
     if (Math.abs(leftError) > Math.abs(rightError))
       return Math.abs(leftError);
