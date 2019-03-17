@@ -25,7 +25,7 @@ public class ArmSubsystem extends Subsystem {
   public static final int KArmFullUp = 0;
 
   // Encoder position for when the arm should slow down
-  private static final int KBottomHuntRange = 1625;
+  private static final int KBottomHuntRange = 170;
   private static final int KTopHuntRange = 400;
 
   public static final double KClimbArmRatioForFull = 0.3239294403;
@@ -167,10 +167,10 @@ public class ArmSubsystem extends Subsystem {
 
     // If the position of the given side is within the hunt range (a.k.a. close to the limit switch)
     // then the speed will be slowed proportionally to how close it is to the limit.
-    if (pos > KBottomHuntRange)
-      newSpeed *= (KArmFullDown - pos) / (KArmFullDown - KBottomHuntRange);
-    if (pos < KTopHuntRange)
-      newSpeed *= (pos - KArmFullUp) / (KTopHuntRange - KArmFullUp);
+    if (pos > (KArmFullDown - KBottomHuntRange))
+      newSpeed *= (KArmFullDown - pos) / (KBottomHuntRange);
+    if (pos < (KArmFullUp + KTopHuntRange))
+      newSpeed *= (pos - KArmFullUp) / (KTopHuntRange);
 
     // Gets the state of the arm's limit switch based on which side has been chosen
     if (left) {
