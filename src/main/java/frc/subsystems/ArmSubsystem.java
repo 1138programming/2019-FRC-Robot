@@ -18,11 +18,11 @@ public class ArmSubsystem extends Subsystem {
   public static final double KArmIsBelowLift = 965;
 
   // Encoder positions for arm in relationship to 0 (full up)
-  public static final int KArmFullDown = 1795;
+  public static final int KArmFullDown = 1795; // Value of the encoder at the bottom limit
   public static final int KArmLow = 1525;
   public static final int KArmMiddle = 900;
   public static final int KArmHigh = 475;
-  public static final int KArmFullUp = 0;
+  public static final int KArmFullUp = 0; // Value of the encoder at the top limit
 
   // Encoder position for when the arm should slow down
   private static final int KBottomHuntRange = 170;
@@ -67,7 +67,7 @@ public class ArmSubsystem extends Subsystem {
     setRightArmEncoder(0);
 
     ArmLeft.setSensorPhase(true);
-    ArmRight.setSensorPhase(true);
+    ArmRight.setSensorPhase(true); //false on practice, true on comp
   }
 
   @Override
@@ -79,14 +79,16 @@ public class ArmSubsystem extends Subsystem {
    * @return - The value of the left arm encoder
    */
   public int getLeftArmEncoder() {
-    return ArmLeft.getSensorCollection().getQuadraturePosition();
+    //return ArmLeft.getSensorCollection().getQuadraturePosition();
+    return ArmLeft.getSelectedSensorPosition();
   }
 
   /**
    * @return - The velocity of the left arm motor
    */
   public int getLeftVelocity() {
-    return ArmLeft.getSensorCollection().getQuadratureVelocity();
+    //return ArmLeft.getSensorCollection().getQuadratureVelocity();
+    return ArmLeft.getSelectedSensorVelocity();
   }
 
   /**
@@ -94,21 +96,24 @@ public class ArmSubsystem extends Subsystem {
    * @param position - The value we want the encoder to have.
    */
   public void setLeftArmEncoder(int position) {
-    ArmLeft.getSensorCollection().setQuadraturePosition(position, 0);
+    //ArmLeft.getSensorCollection().setQuadraturePosition(position, 0);
+    ArmLeft.setSelectedSensorPosition(position);
   }
 
   /**
    * @return - The value of the right arm encoder
    */
   public int getRightArmEncoder() {
-    return ArmRight.getSensorCollection().getQuadraturePosition();
+    //return ArmRight.getSensorCollection().getQuadraturePosition();
+    return ArmRight.getSelectedSensorPosition();
   }
 
   /**
    * @return - The velocity of the right arm motor
    */
   public int getRightVelocity() {
-    return ArmRight.getSensorCollection().getQuadratureVelocity();
+    //return ArmRight.getSensorCollection().getQuadratureVelocity();
+    return ArmRight.getSelectedSensorVelocity();
   }
 
   /**
@@ -116,7 +121,8 @@ public class ArmSubsystem extends Subsystem {
    * @param position - The value we want the encoder to have.
    */
   public void setRightArmEncoder(int position) {
-    ArmRight.getSensorCollection().setQuadraturePosition(position, 0);
+    //ArmRight.getSensorCollection().setQuadraturePosition(position, 0);
+    ArmRight.setSelectedSensorPosition(position);
   }
 
   /**
@@ -167,10 +173,10 @@ public class ArmSubsystem extends Subsystem {
 
     // If the position of the given side is within the hunt range (a.k.a. close to the limit switch)
     // then the speed will be slowed proportionally to how close it is to the limit.
-    if (pos > (KArmFullDown - KBottomHuntRange))
-      newSpeed *= (KArmFullDown - pos) / (KBottomHuntRange);
-    if (pos < (KArmFullUp + KTopHuntRange))
-      newSpeed *= (pos - KArmFullUp) / (KTopHuntRange);
+    if (pos > (KArmFullDown - KBottomHuntRange) && speed > 0)
+      newSpeed *= (KArmFullDown - pos) / (4 * KBottomHuntRange) + 0.25;
+    if (pos < (KArmFullUp + KTopHuntRange) && speed < 0)
+      newSpeed *= (pos - KArmFullUp) / (4 * KTopHuntRange) + 0.25;
 
     // Gets the state of the arm's limit switch based on which side has been chosen
     if (left) {
@@ -201,10 +207,10 @@ public class ArmSubsystem extends Subsystem {
       } 
       else {
         // Resets the given side's encoder to the down limit
-        if (left)
-          setLeftArmEncoder(KArmFullDown);
-        else
-          setRightArmEncoder(KArmFullDown);
+        // if (left)
+        //   setLeftArmEncoder(KArmFullDown);
+        // else
+        //   setRightArmEncoder(KArmFullDown);
 
         // Does not allow the arm to move any further down
         if (newSpeed > 0)
@@ -214,23 +220,23 @@ public class ArmSubsystem extends Subsystem {
         pastDownLimit = true;
       }
     } 
-    else {
-      double KMidpoint = 100; // When the difference between the arm's position and the limit position is equal to this midpoint, speed will be 50%
+    // else {
+    //   double KMidpoint = 60; // When the difference between the arm's position and the limit position is equal to this midpoint, speed will be 50%
 
-      // Moves arm back down if the up limit has been passed
-      if (pos < KArmFullUp && pastUpLimit) {
-        newSpeed = (KArmFullUp - pos) * (1 / (2 * KMidpoint)); // Sets the speed proportionally to how far past the limit the arm is
-      } else {
-        pastUpLimit = false; // If the arm is not past the up limit (determined by the encoder's position), the boolean is set back to false
-      }
+    //   // Moves arm back down if the up limit has been passed
+    //   if (pos < KArmFullUp && pastUpLimit) {
+    //     newSpeed = (KArmFullUp - pos) * (1 / (2 * KMidpoint)); // Sets the speed proportionally to how far past the limit the arm is
+    //   } else {
+    //     pastUpLimit = false; // If the arm is not past the up limit (determined by the encoder's position), the boolean is set back to false
+    //   }
 
-      // Moves arm back up if the down limit has been passed
-      if (pos > KArmFullDown && pastDownLimit) {
-        newSpeed = (KArmFullDown - pos) * (1 / (2 * KMidpoint)); // Sets the speed proportionally to how far past the limit the arm is
-      } else {
-        pastDownLimit = false; // If the arm is not past the down limit (determined by the encoder's position), the boolean is set back to false
-      }
-    }
+    //   // Moves arm back up if the down limit has been passed
+    //   if (pos > KArmFullDown && pastDownLimit) {
+    //     newSpeed = (KArmFullDown - pos) * (1 / (2 * KMidpoint)); // Sets the speed proportionally to how far past the limit the arm is
+    //   } else {
+    //     pastDownLimit = false; // If the arm is not past the down limit (determined by the encoder's position), the boolean is set back to false
+    //   }
+    // }
 
     // Limits the speed to be between KArmSpeed and -KArmSpeed
     if (newSpeed > KArmSpeed)
@@ -244,7 +250,11 @@ public class ArmSubsystem extends Subsystem {
       SmartDashboard.putNumber("Corrected right side speed: ", newSpeed);
     }
 
-    return speed;
+    SmartDashboard.putBoolean("Past up limit: ", pastUpLimit);
+    SmartDashboard.putBoolean("Past down limit: ", pastDownLimit);
+
+    //return speed;
+    return newSpeed;
   }
 
   // /**
@@ -287,8 +297,9 @@ public class ArmSubsystem extends Subsystem {
     int leftError = target - getLeftArmEncoder();
     int rightError = target - getRightArmEncoder();
 
-    double[] speeds = controlVel(new double[]{KPpos * leftError, KPpos * rightError});
-    moveArm(speeds[0], speeds[1]);
+    //double[] speeds = controlVel(new double[]{KPpos * leftError, KPpos * rightError});
+    //moveArm(speeds[0], speeds[1]);
+    moveArm(KPpos * leftError, KPpos * rightError);
 
     if (Math.abs(leftError) > Math.abs(rightError))
       return Math.abs(leftError);
