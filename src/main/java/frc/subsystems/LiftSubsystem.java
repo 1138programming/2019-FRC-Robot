@@ -14,19 +14,19 @@ public class LiftSubsystem extends Subsystem {
   /**
    * public static final int KLiftTalon = 7; private TalonSRX liftMotor;
    */
-  public static final double KLiftSpeed = .65; 
+  public static final double KLiftSpeed = .95; 
 
   public static enum LiftPosition { UNKNOWN, FULLDOWN, CARGO, SHIP, FULLUP }
 
 
   private static final double KLiftFullDown = 0; 
   private static final double KLiftShip = 14950; //Haven't checked this one yet
-  private static final double KLiftCargo = 23500;
-  private static final double KLiftFullUp = 23500;
+  private static final double KLiftCargo = 23200;
+  private static final double KLiftFullUp = 23200;
   
   private static final double KLiftTopLimitHuntRange = 22000; //??
   private static final double KLiftIsAboveArm = 15000; //check
-  private static final double KLiftBottomLimitHuntRange = 600;
+  private static final double KLiftBottomLimitHuntRange = 700;
 
   public static final double KMotorOffset = 0.05;
 
@@ -65,7 +65,7 @@ public class LiftSubsystem extends Subsystem {
   }
 
   public void setLiftEncoder(int position) {
-    LiftTalon.getSensorCollection().setQuadraturePosition(position, 0);
+    LiftTalon.setSelectedSensorPosition(position);
   }
 
   public void zeroLiftEncoder() {
@@ -95,9 +95,9 @@ public class LiftSubsystem extends Subsystem {
   }
 
   public LiftPosition getLiftPosition() {
-    if(getLiftEncoder() <= KLiftTopLimitHuntRange)
+    if(getLiftEncoder() >= KLiftTopLimitHuntRange)
       return LiftPosition.FULLUP;
-    else if(getLiftEncoder() >= KLiftBottomLimitHuntRange)
+    else if(getLiftEncoder() <= KLiftBottomLimitHuntRange)
       return LiftPosition.FULLDOWN;
     else
       return LiftPosition.UNKNOWN;
@@ -128,10 +128,12 @@ public class LiftSubsystem extends Subsystem {
 
   public void moveLift(double desiredSpeed) {
     if(desiredSpeed != 0) {
+      SmartDashboard.putNumber("lift move lift", desiredSpeed);
       desiredSpeed = (enforceLiftLimits(desiredSpeed));
+      SmartDashboard.putNumber("lift move lift", desiredSpeed);
 
       if(isInHuntRange()) {
-        desiredSpeed = desiredSpeed/2;
+        desiredSpeed = desiredSpeed/4;
         SmartDashboard.putString("lift", "hunting");
       }
       else
@@ -141,6 +143,7 @@ public class LiftSubsystem extends Subsystem {
       //     (getLiftEncoder() >= KLiftIsAboveArm)) {
       //  desiredSpeed = 0;
       //}
+      SmartDashboard.putNumber("Lift Encoder", getLiftEncoder());
     }
     
     LiftTalon.set(ControlMode.PercentOutput, desiredSpeed + KMotorOffset);
@@ -155,8 +158,12 @@ public class LiftSubsystem extends Subsystem {
   }
 
   private double moveLiftWithEncoders(double position) {
+    if (!Robot.ARM_SUBSYSTEM.armReset())
+      return 0;
+      
     double error = position - getLiftEncoder();
     double speed = error * KLiftSpeed * KP;
+
     if (speed > KLiftSpeed)
       speed = KLiftSpeed;
     else if (speed < -KLiftSpeed)

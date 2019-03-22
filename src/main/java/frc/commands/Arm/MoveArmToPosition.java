@@ -12,7 +12,7 @@ public class MoveArmToPosition extends Command {
 	private double error;
 	private Command commandToCancel;
 
-	private static final double allowableError = 50;
+	private static final double allowableError = 25;
 
 	public MoveArmToPosition(int target) {
 		requires(Robot.ARM_SUBSYSTEM);
