@@ -115,7 +115,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    LIFT_SUBSYSTEM.zeroLiftEncoder();
+    LIFT_SUBSYSTEM.setLiftEncoder(0);
     ARM_SUBSYSTEM.setLeftArmEncoder(0);
     ARM_SUBSYSTEM.setRightArmEncoder(0);
     pdp.voltageSpikeOccured = false;

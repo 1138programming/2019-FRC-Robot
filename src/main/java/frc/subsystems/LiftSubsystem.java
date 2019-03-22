@@ -14,10 +14,7 @@ public class LiftSubsystem extends Subsystem {
   /**
    * public static final int KLiftTalon = 7; private TalonSRX liftMotor;
    */
-  public static final double KLiftSpeed = .95; 
-
-  public static enum LiftPosition { UNKNOWN, FULLDOWN, CARGO, SHIP, FULLUP }
-
+  public static final double KLiftSpeed = .95;
 
   private static final double KLiftFullDown = 0; 
   private static final double KLiftShip = 14950; //Haven't checked this one yet
@@ -34,7 +31,7 @@ public class LiftSubsystem extends Subsystem {
 
   //Talon config
   private final TalonSRX LiftTalon;
-  private static final int KLiftTalon = 7; 
+  private static final int KLiftTalon = 7;
 
   //Limit config
   private final DigitalInput TopLimit, BottomLimit;
@@ -68,41 +65,6 @@ public class LiftSubsystem extends Subsystem {
     LiftTalon.setSelectedSensorPosition(position);
   }
 
-  public void zeroLiftEncoder() {
-    setLiftEncoder(0);
-  }
-
-  private void setLiftEncoder(LiftPosition position)
-  {
-    switch (position)
-    {
-      case FULLDOWN:
-        setLiftEncoder((int)KLiftFullDown);
-        break;
-      case SHIP:
-        setLiftEncoder((int)KLiftShip);
-        break;
-      case CARGO:
-        setLiftEncoder((int)KLiftCargo);
-        break;
-      case FULLUP:
-        setLiftEncoder((int)KLiftFullUp);
-        break;
-      default:
-        setLiftEncoder(1/0);
-        break;
-    }
-  }
-
-  public LiftPosition getLiftPosition() {
-    if(getLiftEncoder() >= KLiftTopLimitHuntRange)
-      return LiftPosition.FULLUP;
-    else if(getLiftEncoder() <= KLiftBottomLimitHuntRange)
-      return LiftPosition.FULLDOWN;
-    else
-      return LiftPosition.UNKNOWN;
-  }
-
   public boolean topLimitClosed() {
     return !TopLimit.get();
   }
@@ -111,50 +73,25 @@ public class LiftSubsystem extends Subsystem {
     return !BottomLimit.get();
   }
 
-  private double enforceLiftLimits(double targetSpeed) {
-    if(topLimitClosed()) {
-			if (targetSpeed > 0) 
-				targetSpeed = 0;
-		  setLiftEncoder(LiftPosition.FULLUP);
-		} 
-		else if(bottomLimitClosed()) {
-			if (targetSpeed < 0)
-				targetSpeed = 0;
-      setLiftEncoder(LiftPosition.FULLDOWN);
-    }
-    
-    return targetSpeed;
+  private double correctSpeed(double speed) {
+    double newSpeed = speed;
+
+    if ()
+
+    if (newSpeed > KLiftSpeed)
+      newSpeed = KLiftSpeed;
+    else if (speed < -KLiftSpeed)
+      newSpeed = -KLiftSpeed;
+
+    return newSpeed;
   }
 
-  public void moveLift(double desiredSpeed) {
-    if(desiredSpeed != 0) {
-      SmartDashboard.putNumber("lift move lift", desiredSpeed);
-      desiredSpeed = (enforceLiftLimits(desiredSpeed));
-      SmartDashboard.putNumber("lift move lift", desiredSpeed);
-
-      if(isInHuntRange()) {
-        desiredSpeed = desiredSpeed/4;
-        SmartDashboard.putString("lift", "hunting");
-      }
-      else
-        SmartDashboard.putString("lift", "not hunting");
-
-      // if (((Robot.ARM_SUBSYSTEM.getRightArmEncoder() + Robot.ARM_SUBSYSTEM.getLeftArmEncoder())/2 <= Robot.ARM_SUBSYSTEM.KArmIsBelowLift) && 
-      //     (getLiftEncoder() >= KLiftIsAboveArm)) {
-      //  desiredSpeed = 0;
-      //}
-      SmartDashboard.putNumber("Lift Encoder", getLiftEncoder());
-    }
-    
-    LiftTalon.set(ControlMode.PercentOutput, desiredSpeed + KMotorOffset);
+  public void moveLift(double speed) {    
+    LiftTalon.set(ControlMode.PercentOutput, correctSpeed(speed));
   }
 
-  public void moveLiftUNSAFELY(double speed) {
+  public void move(double speed) {
     LiftTalon.set(ControlMode.PercentOutput, speed);
-  }
-
-  private boolean isInHuntRange() {
-    return ((getLiftEncoder() >= KLiftTopLimitHuntRange) || (getLiftEncoder() <= KLiftBottomLimitHuntRange));
   }
 
   private double moveLiftWithEncoders(double position) {
@@ -164,32 +101,8 @@ public class LiftSubsystem extends Subsystem {
     double error = position - getLiftEncoder();
     double speed = error * KLiftSpeed * KP;
 
-    if (speed > KLiftSpeed)
-      speed = KLiftSpeed;
-    else if (speed < -KLiftSpeed)
-      speed = -KLiftSpeed;
-
-    //speed = enforceLiftLimits(speed);
-    //LiftTalon.set(ControlMode.PercentOutput, speed);
     moveLift(speed);
 
     return error;
-  }
-
-  public double moveLiftToPosition(LiftPosition position) {
-    switch (position)
-    {
-      case FULLDOWN:
-        return moveLiftWithEncoders(KLiftFullDown);
-      case CARGO:
-        return moveLiftWithEncoders(KLiftCargo);
-      case SHIP:
-        return moveLiftWithEncoders(KLiftShip);
-      case FULLUP:
-        return moveLiftWithEncoders(KLiftFullUp);
-      default:
-        //Should really throw an exception;
-        return 1/0;
-    }
   }
 }
