@@ -15,7 +15,6 @@ import frc.subsystems.CollectorSubsystem;
 import frc.subsystems.DriveSubsystem;
 import frc.subsystems.HatchSubsystem;
 import frc.subsystems.LiftSubsystem;
-import frc.subsystems.LiftSubsystem.LiftPosition;
 import frc.subsystems.PDP;
 import frc.subsystems.PneumaticsSubsystem;
 
@@ -52,7 +51,7 @@ public class Robot extends TimedRobot {
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
-    Robot.LIFT_SUBSYSTEM.zeroLiftEncoder();
+    Robot.LIFT_SUBSYSTEM.setLiftEncoder(0);
   }
 
   /**

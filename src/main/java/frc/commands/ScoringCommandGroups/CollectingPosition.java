@@ -7,7 +7,7 @@ import frc.commands.Collector.CollectWithButtons;
 import frc.commands.Lift.MoveLiftToPosition;
 import frc.robot.Robot;
 import frc.subsystems.ArmSubsystem;
-import frc.subsystems.LiftSubsystem.LiftPosition;
+import frc.subsystems.LiftSubsystem;
 
 public class CollectingPosition extends CommandGroup {
 	int c = 0;
@@ -20,7 +20,7 @@ public class CollectingPosition extends CommandGroup {
 		// requires(Robot.LIFT_SUBSYSTEM);
 
 		addSequential(new MoveArmToPosition(ArmSubsystem.KArmMiddle));
-		addSequential(new MoveLiftToPosition(LiftPosition.FULLDOWN));
+		addSequential(new MoveLiftToPosition(LiftSubsystem.KLiftFullDown));
 		addSequential(new CollectWithButtons(Robot.oi.btnX));
 		SmartDashboard.putBoolean("bumpswitch", Robot.CARRIAGE_SUBSYSTEM.bumpSwitchClosed());
 		SmartDashboard.putNumber("amount cycled entered", c);

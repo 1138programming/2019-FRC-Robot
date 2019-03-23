@@ -27,7 +27,7 @@ public class ResetLift extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(!Robot.LIFT_SUBSYSTEM.bottomLimitClosed())
+    if(!Robot.LIFT_SUBSYSTEM.getBottomLimit())
     Robot.LIFT_SUBSYSTEM.moveLift(-KResetLiftSpeed);
   else
     Robot.LIFT_SUBSYSTEM.moveLift(0);
@@ -36,7 +36,7 @@ public class ResetLift extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Robot.LIFT_SUBSYSTEM.bottomLimitClosed();
+    return Robot.LIFT_SUBSYSTEM.getBottomLimit();
   }
 
   // Called once after isFinished returns true

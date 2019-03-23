@@ -13,7 +13,7 @@ import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.Lift.MoveLiftToPosition;
 import frc.robot.Robot;
 import frc.subsystems.ArmSubsystem;
-import frc.subsystems.LiftSubsystem.LiftPosition;
+import frc.subsystems.LiftSubsystem;
 
 public class CollectingPositionPostMortem extends Command {
   
@@ -29,7 +29,7 @@ public class CollectingPositionPostMortem extends Command {
     requires(Robot.LIFT_SUBSYSTEM);
     
     moveArmToMiddle = new MoveArmToPosition(ArmSubsystem.KArmMiddle);
-    moveLiftToCargoPos = new MoveLiftToPosition(LiftPosition.CARGO);
+    moveLiftToCargoPos = new MoveLiftToPosition(LiftSubsystem.KLiftCargo);
     moveArmFullUp = new MoveArmToPosition(ArmSubsystem.KArmFullUp);
 
     moveArmToMiddle.removeRequirements();

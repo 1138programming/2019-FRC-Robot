@@ -8,6 +8,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Arm.ArmWithJoysticks;
@@ -28,6 +30,7 @@ public class ArmSubsystem extends Subsystem {
   // Encoder position for when the arm should slow down
   private static final int KBottomHuntRange = 400;
   private static final int KTopHuntRange = 400;
+  private static final double KMinHuntSpeed = 0.25;
 
   public static final double KClimbArmRatioForFull = 0.3239294403;
 
@@ -41,9 +44,15 @@ public class ArmSubsystem extends Subsystem {
   private static final int KLeftLimit = 6;
   private static final int KRightLimit = 7;
 
-  // Keeps track of the arm's state. Might help protect against encoder drift
-  private static boolean pastUpLimit = false;
-  private static boolean pastDownLimit = false;
+  // Gyro config
+  private final ADXRS450_Gyro gyro;
+  private static final Port KGyroSPIPort = Port.kOnboardCS0;
+
+  // Keeps track of the arm's state in addition to the limit Might help protect against encoder drift
+  private static boolean leftPastUpLimit = false;
+  private static boolean leftPastDownLimit = false;
+  private static boolean rightPastUpLimit = false;
+  private static boolean rightPastDownLimit = false;
 
   public static boolean armHasBeenReset = false;
 
@@ -69,6 +78,9 @@ public class ArmSubsystem extends Subsystem {
 
     ArmLeft.setSensorPhase(true);
     ArmRight.setSensorPhase(true); //false on practice, true on comp
+
+    gyro = new ADXRS450_Gyro(KGyroSPIPort);
+    gyro.calibrate();
   }
 
   @Override
@@ -134,6 +146,13 @@ public class ArmSubsystem extends Subsystem {
   }
 
   /**
+   * @return - The angle the gyro is at
+   */
+  public double getAngle() {
+    return gyro.getAngle();
+  }
+
+  /**
    * @return - The state of the right limit switch. True indicates it is close
    */
   public boolean getRightLimit() {
@@ -166,8 +185,14 @@ public class ArmSubsystem extends Subsystem {
    */
   private double correctSpeed(double speed, boolean left) {
     double newSpeed = speed; // Stores the new speed
-    double pos; // Store the position of the chosen side
+    int pos; // Store the position of the chosen side
     boolean limit; // Store the state of the given side's limit switch
+
+    // Limits the speed to be between KArmSpeed and -KArmSpeed
+    if (newSpeed > KArmSpeed)
+      newSpeed = KArmSpeed;
+    if (newSpeed < -KArmSpeed)
+      newSpeed = -KArmSpeed;
 
     if (!armHasBeenReset) {
       return -Math.abs(speed) * KArmNotReset;
@@ -183,16 +208,17 @@ public class ArmSubsystem extends Subsystem {
     // If the position of the given side is within the hunt range (a.k.a. close to the limit switch)
     // then the speed will be slowed proportionally to how close it is to the limit.
     if (pos < (KArmFullUp + KTopHuntRange) && speed < 0)
-      newSpeed *= (pos - KArmFullUp) / (4 * KTopHuntRange) + 0.25;
+      newSpeed *= ((pos - KArmFullUp) / (KTopHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
     if (pos > (KArmFullDown - KBottomHuntRange) && speed > 0)
-      newSpeed *= (KArmFullDown - pos) / (4 * KBottomHuntRange) + 0.25;
+      newSpeed *= ((KArmFullDown - pos) / (KBottomHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
 
-    double KOffFull = 100;
-    if (left) {
-      newSpeed += (getRightArmEncoder() - pos) * (1 / KOffFull);
-    } else {
-      newSpeed += (getLeftArmEncoder() - pos) * (1 / KOffFull);
-    }
+    // If one side of the arm is in front of the other, that side will slow down and the other side will speed up
+    // double KOffFull = 80;
+    // if (left) {
+    //   newSpeed += (getRightArmEncoder() - pos) * (1 / KOffFull);
+    // } else {
+    //   newSpeed += (getLeftArmEncoder() - pos) * (1 / KOffFull);
+    // }
 
     // Gets the state of the arm's limit switch based on which side has been chosen
     if (left) {
@@ -203,7 +229,7 @@ public class ArmSubsystem extends Subsystem {
       SmartDashboard.putBoolean("Right limit is: ", limit);
     }
 
-    // Resets encoders and limits speed if the limit switch is activates
+    // Resets encoders and limits speed if the limit switch is activated
     if (limit) {
       double upDist = Math.abs(pos - KArmFullUp); // Distance to the up limit switch
       double downDist = Math.abs(KArmFullDown - pos); // Distance to the down limit switch
@@ -211,58 +237,79 @@ public class ArmSubsystem extends Subsystem {
 
       if (closerToUp) {
         // Resets the given side's encoder to the up limit
-        if (left)
+        if (left) {
           setLeftArmEncoder(KArmFullUp);
-        else
+          // Records that the up limit switch has been passed
+          leftPastUpLimit = true;
+        } else {
           setRightArmEncoder(KArmFullUp);
+          // Records that the up limit switch has been passed
+          rightPastUpLimit = true;
+        }
 
         // Does not allow the arm to move any further up
         if (newSpeed < 0)
           newSpeed = 0;
-
-        // Records that the up limit switch has been passed
-        pastUpLimit = true;
       } 
       else {
         // Resets the given side's encoder to the down limit
-        if (left)
+        if (left) {
           setLeftArmEncoder(KArmFullDown);
-        else
+          // Records that the down limit switch has been passed
+          leftPastDownLimit = true;
+        } else {
           setRightArmEncoder(KArmFullDown);
+          // Records that the down limit switch has been passed
+          rightPastDownLimit = true;
+        }
 
         // Does not allow the arm to move any further down
         if (newSpeed > 0)
           newSpeed = 0;
-
-        // Records that the down limit switch has been passed
-        pastDownLimit = true;
       }
     } 
     else {
       double KFullAt = 120; // When the difference between the arm's position and the limit position is equal to KFullAt, speed will be 100%
+      boolean pastUpLimit, pastDownLimit;
+
+      if (left) {
+        pastUpLimit = leftPastUpLimit;
+        pastDownLimit = leftPastDownLimit;
+      } else {
+        pastUpLimit = rightPastUpLimit;
+        pastDownLimit = rightPastDownLimit;
+      }
 
       // Moves arm back down if the up limit has been passed
       if (pos < KArmFullUp && pastUpLimit) {
-        if (speed <= 0)
+        if (newSpeed <= 0)
           newSpeed = (KArmFullUp - pos) * (1 / KFullAt); // Sets the speed proportionally to how far past the limit the arm is
       } else {
-        pastUpLimit = false; // If the arm is not past the up limit (determined by the encoder's position), the boolean is set back to false
+        // If the arm is not past the up limit (determined by the encoder's position), the boolean is set back to false
+        if (left)
+          leftPastUpLimit = false;
+        else
+          rightPastUpLimit = false;
       }
 
       // Moves arm back up if the down limit has been passed
       if (pos > KArmFullDown && pastDownLimit) {
-        if (speed >= 0)
+        if (newSpeed >= 0)
           newSpeed = (KArmFullDown - pos) * (1 / KFullAt); // Sets the speed proportionally to how far past the limit the arm is
       } else {
-        pastDownLimit = false; // If the arm is not past the down limit (determined by the encoder's position), the boolean is set back to false
+        // If the arm is not past the down limit (determined by the encoder's position), the boolean is set back to false
+        if (left)
+          leftPastDownLimit = false;
+        else
+          rightPastDownLimit = false;
       }
     }
 
     // Limits the speed to be between KArmSpeed and -KArmSpeed
-    if (newSpeed > KArmSpeed)
-      newSpeed = KArmSpeed;
-    if (newSpeed < -KArmSpeed)
-      newSpeed = -KArmSpeed;
+    // if (newSpeed > KArmSpeed)
+    //   newSpeed = KArmSpeed;
+    // if (newSpeed < -KArmSpeed)
+    //   newSpeed = -KArmSpeed;
 
     if (left) {
       SmartDashboard.putNumber("Corrected left side speed: ", newSpeed);
@@ -270,24 +317,9 @@ public class ArmSubsystem extends Subsystem {
       SmartDashboard.putNumber("Corrected right side speed: ", newSpeed);
     }
 
-    SmartDashboard.putBoolean("Past up limit: ", pastUpLimit);
-    SmartDashboard.putBoolean("Past down limit: ", pastDownLimit);
-
     //return speed;
     return newSpeed;
   }
-
-  // /**
-  //  * Moves both sides of the arm with one speed. Used with joysticks
-  //  * @param speed - Speed to use for both sides of the arm
-  //  */
-  // public void moveArmForJoysticks(double speed) {
-  //   // If the arm is in its starting position, it has been reset
-  //   if (!armHasBeenReset && inStartPos())
-  //     armHasBeenReset = true;
-
-  //   move(correctSpeed(speed, true), correctSpeed(speed, false));
-  // }
 
   /**
    * Moves each side of the arm with separate speeds
