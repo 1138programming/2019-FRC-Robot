@@ -206,11 +206,17 @@ public class ArmSubsystem extends Subsystem {
     }
 
     // If the position of the given side is within the hunt range (a.k.a. close to the limit switch)
-    // then the speed will be slowed proportionally to how close it is to the limit.
-    if (pos < (KArmFullUp + KTopHuntRange) && speed < 0)
-      newSpeed *= ((pos - KArmFullUp) / (KTopHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
-    if (pos > (KArmFullDown - KBottomHuntRange) && speed > 0)
-      newSpeed *= ((KArmFullDown - pos) / (KBottomHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+    // then the speed will be capped to a speed proportional to how close it is to the limit.
+    if (pos < (KArmFullUp + KTopHuntRange)) {
+      double maxHuntSpeed = -((pos - KArmFullUp) / (KTopHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+      if (newSpeed < maxHuntSpeed)
+        newSpeed = maxHuntSpeed;
+    }
+    if (pos > (KArmFullDown - KBottomHuntRange)) {
+      double maxHuntSpeed = ((KArmFullDown - pos) / (KBottomHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+      if (newSpeed > maxHuntSpeed)
+        newSpeed = maxHuntSpeed;
+    }
 
     // If one side of the arm is in front of the other, that side will slow down and the other side will speed up
     // double KOffFull = 80;

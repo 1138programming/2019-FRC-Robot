@@ -47,7 +47,7 @@ public class LiftSubsystem extends Subsystem {
   public static boolean pastBottomLimit = false;
 
   private static final int maxAdditions = 100; // Maximum number of errors to keep track of
-  private final ArrayDeque errors;
+  private final ArrayDeque<Double> errors;
 
   public LiftSubsystem() {
     LiftTalon = new TalonSRX(KLiftTalon); 
@@ -62,9 +62,10 @@ public class LiftSubsystem extends Subsystem {
 
     LiftTalon.setSensorPhase(true);
 
+    // Initializes ArrayDeque for the integral window
     errors = new ArrayDeque<Double>();
     for (int i = 0; i < maxAdditions; i++) {
-      errors.add(0); // Start integral at 0
+      errors.add(0.0); // Start integral at 0
     }
   }
 
@@ -173,7 +174,7 @@ public class LiftSubsystem extends Subsystem {
     integral = 0;
     errors.clear();
     for (int i = 0; i < maxAdditions; i++) {
-      errors.add(0); // Start integral at 0
+      errors.add(0.0); // Start integral at 0
     }
   }
 
@@ -185,12 +186,12 @@ public class LiftSubsystem extends Subsystem {
     long time = System.currentTimeMillis();
     long dt = time - lastTime;
 
+    // Handles calculating the integral window to use as the integral
     integral += error * (dt / 1000);
     integral -= (double)errors.pollFirst();
+    errors.addLast((double)(error * (dt / 1000)));
 
-    errors.addLast(error * (dt / 1000));
-
-    double speed = error * KLiftSpeed * KP + integral * KI;
+    double speed = error * KP + integral * KI;
 
     if (speed >= 0 && speed < KMotorOffset)
       speed += KMotorOffset;
