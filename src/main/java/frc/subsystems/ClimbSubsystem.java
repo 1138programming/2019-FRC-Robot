@@ -18,8 +18,9 @@ public class ClimbSubsystem extends Subsystem {
 
   public static final double KClimbSpeed = 1.0;
 
-  private final TalonSRX ClimbTalon; 
+  private final TalonSRX ClimbTalon, ClimbTalonTwo;
   private static final int KClimbTalon = 6;
+  private static final int KClimbTalon2 = 10;
 
   private final DigitalInput TopClimbLimit, BottomClimbLimit;
   private static final int KTopClimbLimit = 4;
@@ -31,6 +32,7 @@ public class ClimbSubsystem extends Subsystem {
 
   public ClimbSubsystem() {
     ClimbTalon = new TalonSRX(KClimbTalon);
+    ClimbTalonTwo = new TalonSRX(KClimbTalon2);
 
     TopClimbLimit = new DigitalInput(KTopClimbLimit);
     BottomClimbLimit = new DigitalInput(KBottomClimbLimit);
@@ -64,6 +66,7 @@ public class ClimbSubsystem extends Subsystem {
     double desiredSpeed = speed;
     //enforceLimits(desiredSpeed);
     ClimbTalon.set(ControlMode.PercentOutput, desiredSpeed);
+    ClimbTalonTwo.set(ControlMode.PercentOutput, desiredSpeed);
   }
 
   public double[] getGyroValues() {

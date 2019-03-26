@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Lift.LiftWithJoysticks;
 import frc.robot.Robot;
 
+import java.util.ArrayDeque;
+
 public class LiftSubsystem extends Subsystem {
   /**
    * public static final int KLiftTalon = 7; private TalonSRX liftMotor;
@@ -44,6 +46,9 @@ public class LiftSubsystem extends Subsystem {
   public static boolean pastTopLimit = false;
   public static boolean pastBottomLimit = false;
 
+  private static final int maxAdditions = 100; // Maximum number of errors to keep track of
+  private final ArrayDeque errors;
+
   public LiftSubsystem() {
     LiftTalon = new TalonSRX(KLiftTalon); 
 
@@ -56,6 +61,11 @@ public class LiftSubsystem extends Subsystem {
     setLiftEncoder(0);
 
     LiftTalon.setSensorPhase(true);
+
+    errors = new ArrayDeque<Double>();
+    for (int i = 0; i < maxAdditions; i++) {
+      errors.add(0); // Start integral at 0
+    }
   }
 
   @Override
@@ -92,10 +102,12 @@ public class LiftSubsystem extends Subsystem {
     else if (newSpeed < -KLiftSpeed)
       newSpeed = -KLiftSpeed;
 
-    if (pos > (KLiftFullUp - KTopHuntRange) && speed > 0)
+    if (pos > (KLiftFullUp - KTopHuntRange) && speed > 0) {
       newSpeed *= ((KLiftFullUp - pos) / (KTopHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
-    if (pos < (KLiftFullDown + KBottomHuntRange) && speed < 0)
+    }
+    if (pos < (KLiftFullDown + KBottomHuntRange) && speed < 0) {
       newSpeed *= ((pos - KLiftFullDown) / (KBottomHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+    }
 
     if (newSpeed >= 0 && newSpeed < KMotorOffset)
       newSpeed = KMotorOffset;
@@ -153,14 +165,16 @@ public class LiftSubsystem extends Subsystem {
     move(correctSpeed(speed));
   }
 
-  private static final int maxAdditions = 100;
-  private double[] errors = new double[maxAdditions];
+  //private double[] errors = new double[maxAdditions];
   private double integral = 0;
   private long lastTime = System.currentTimeMillis();
 
   public void initMoveTo() {
-    errors = new double[maxAdditions];
     integral = 0;
+    errors.clear();
+    for (int i = 0; i < maxAdditions; i++) {
+      errors.add(0); // Start integral at 0
+    }
   }
 
   public double moveLiftTo(int target) {
@@ -172,11 +186,9 @@ public class LiftSubsystem extends Subsystem {
     long dt = time - lastTime;
 
     integral += error * (dt / 1000);
-    integral -= errors[0];
+    integral -= (double)errors.pollFirst();
 
-    double[] newErrors = new double[maxAdditions];
-    System.arraycopy(errors, 1, newErrors, 0, 99);
-    newErrors[maxAdditions - 1] = error * (dt / 1000);
+    errors.addLast(error * (dt / 1000));
 
     double speed = error * KLiftSpeed * KP + integral * KI;
 
@@ -189,7 +201,6 @@ public class LiftSubsystem extends Subsystem {
     moveLift(speed);
 
     lastTime = time;
-    errors = newErrors;
 
     return error;
   }
