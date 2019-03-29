@@ -36,6 +36,8 @@ public class ClimbSubsystem extends Subsystem {
 
     TopClimbLimit = new DigitalInput(KTopClimbLimit);
     BottomClimbLimit = new DigitalInput(KBottomClimbLimit);
+
+    // ClimbTalonTwo.follow(ClimbTalon);
     
     Pigeon = new PigeonIMU(KPigeon);
   }

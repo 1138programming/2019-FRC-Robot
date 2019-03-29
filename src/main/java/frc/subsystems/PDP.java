@@ -22,7 +22,7 @@ public class PDP extends Subsystem {
   private static final int KPDP = 0;
   private final PowerDistributionPanel PDPInstance;
   public static boolean voltageSpikeOccured = false;
-  public static final double voltageThreshold = 8;
+  public static final double voltageThreshold = 7;
 
   public PDP() 
   {

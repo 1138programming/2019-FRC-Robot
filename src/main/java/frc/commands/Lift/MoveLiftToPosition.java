@@ -10,7 +10,7 @@ public class MoveLiftToPosition extends Command {
 	double error;
 	int target;
 
-	private static final double allowableError = 10;
+	private static final double allowableError = 25;
 
 	public MoveLiftToPosition(int target) {
 		requires(Robot.LIFT_SUBSYSTEM);

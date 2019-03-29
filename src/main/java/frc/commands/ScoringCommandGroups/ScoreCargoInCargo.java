@@ -28,10 +28,10 @@ public class ScoreCargoInCargo extends CommandGroup {
 		// addSequential(new MoveArmToPosition(ArmSubsystem.KArmFullUp));
 		// addParallel(holdLiftPosition);
 
-		HoldLiftPosition holdLiftPosition = new HoldLiftPosition();
+		// HoldLiftPosition holdLiftPosition = new HoldLiftPosition();
 		addSequential(new MoveArmToPosition(ArmSubsystem.KArmMiddle));
 		addSequential(new MoveLiftToPosition(LiftSubsystem.KLiftCargo));
 		addSequential(new MoveArmToPosition(ArmSubsystem.KArmFullUp));
-		addParallel(holdLiftPosition);
+		// addParallel(holdLiftPosition);
 	}
 }

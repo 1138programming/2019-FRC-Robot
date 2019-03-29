@@ -24,8 +24,8 @@ public class LiftSubsystem extends Subsystem {
   public static final int KLiftFullUp = 23200;
   
   private static final int KLiftIsAboveArm = 15000; //check
-  private static final int KTopHuntRange = 5000; //??
-  private static final int KBottomHuntRange = 5500;
+  private static final int KTopHuntRange = 3000; //??
+  private static final int KBottomHuntRange = 3500;
   private static final double KMinHuntSpeed = 0.25;
 
   public static final double KMotorOffset = 0.05;
@@ -103,12 +103,23 @@ public class LiftSubsystem extends Subsystem {
     else if (newSpeed < -KLiftSpeed)
       newSpeed = -KLiftSpeed;
 
-    if (pos > (KLiftFullUp - KTopHuntRange) && speed > 0) {
-      newSpeed *= ((KLiftFullUp - pos) / (KTopHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+    if (pos > (KLiftFullUp - KTopHuntRange)) {
+      double maxHuntSpeed = (((KLiftFullUp - pos) / (KTopHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+      if (newSpeed > maxHuntSpeed)
+        newSpeed = maxHuntSpeed;
     }
-    if (pos < (KLiftFullDown + KBottomHuntRange) && speed < 0) {
-      newSpeed *= ((pos - KLiftFullDown) / (KBottomHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+    if (pos < (KLiftFullDown + KBottomHuntRange)) {
+      double maxHuntSpeed = (((pos - KLiftFullDown) / (KBottomHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+      if (newSpeed < -maxHuntSpeed)
+        newSpeed = -maxHuntSpeed;
     }
+
+    // if (pos > (KLiftFullUp - KTopHuntRange) && speed > 0) {
+    //   newSpeed *= (((KLiftFullUp - pos) / (KTopHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+    // }
+    // if (pos < (KLiftFullDown + KBottomHuntRange) && speed < 0) {
+    //   newSpeed *= (((pos - KLiftFullDown) / (KBottomHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+    // }
 
     if (newSpeed >= 0 && newSpeed < KMotorOffset)
       newSpeed = KMotorOffset;
@@ -150,10 +161,10 @@ public class LiftSubsystem extends Subsystem {
     // }
 
     // Limits the speed to be between KLiftSpeed and -KLiftSpeed
-    // if (newSpeed > KLiftSpeed)
-    //   newSpeed = KLiftSpeed;
-    // else if (newSpeed < -KLiftSpeed)
-    //   newSpeed = -KLiftSpeed;
+    if (newSpeed > KLiftSpeed)
+      newSpeed = KLiftSpeed;
+    else if (newSpeed < -KLiftSpeed)
+      newSpeed = -KLiftSpeed;
 
     SmartDashboard.putNumber("Lift corrected speed is: ", newSpeed);
     SmartDashboard.putNumber("Lift encoder value is: ", getLiftEncoder());

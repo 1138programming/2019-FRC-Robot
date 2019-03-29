@@ -17,7 +17,7 @@ import frc.robot.Robot;
 
 public class ArmSubsystem extends Subsystem {
   private static final double KArmSpeed = 1; // Max speed of arm when controlled by autonomous functions/macros=
-  private static final double KArmNotReset = .25; // Max speed of arm when it has not yet been reset
+  private static final double KArmNotResetSpeed = .25; // Max speed of arm when it has not yet been reset
   public static final double KArmIsBelowLift = 965;
 
   // Encoder positions for arm in relationship to 0 (full up)
@@ -45,8 +45,8 @@ public class ArmSubsystem extends Subsystem {
   private static final int KRightLimit = 7;
 
   // Gyro config
-  private final ADXRS450_Gyro gyro;
-  private static final Port KGyroSPIPort = Port.kOnboardCS0;
+  // private final ADXRS450_Gyro gyro;
+  // private static final Port KGyroSPIPort = Port.kOnboardCS0;
 
   // Keeps track of the arm's state in addition to the limit Might help protect against encoder drift
   private static boolean leftPastUpLimit = false;
@@ -79,8 +79,8 @@ public class ArmSubsystem extends Subsystem {
     ArmLeft.setSensorPhase(true);
     ArmRight.setSensorPhase(true); //false on practice, true on comp
 
-    gyro = new ADXRS450_Gyro(KGyroSPIPort);
-    gyro.calibrate();
+    // gyro = new ADXRS450_Gyro(KGyroSPIPort);
+    // gyro.calibrate();
   }
 
   @Override
@@ -148,9 +148,9 @@ public class ArmSubsystem extends Subsystem {
   /**
    * @return - The angle the gyro is at
    */
-  public double getAngle() {
-    return gyro.getAngle();
-  }
+  // public double getAngle() {
+  //   return gyro.getAngle();
+  // }
 
   /**
    * @return - The state of the right limit switch. True indicates it is close
@@ -194,8 +194,8 @@ public class ArmSubsystem extends Subsystem {
     if (newSpeed < -KArmSpeed)
       newSpeed = -KArmSpeed;
 
-    if (!armHasBeenReset) {
-      return -Math.abs(speed) * KArmNotReset;
+    if (!armReset()) {
+      return -Math.abs(speed) * KArmNotResetSpeed;
     }
 
     // Gets the position of the arm based on which side has been chosen
@@ -208,12 +208,12 @@ public class ArmSubsystem extends Subsystem {
     // If the position of the given side is within the hunt range (a.k.a. close to the limit switch)
     // then the speed will be capped to a speed proportional to how close it is to the limit.
     if (pos < (KArmFullUp + KTopHuntRange)) {
-      double maxHuntSpeed = -((pos - KArmFullUp) / (KTopHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
-      if (newSpeed < maxHuntSpeed)
-        newSpeed = maxHuntSpeed;
+      double maxHuntSpeed = (((pos - KArmFullUp) / (KTopHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+      if (newSpeed < -maxHuntSpeed)
+        newSpeed = -maxHuntSpeed;
     }
     if (pos > (KArmFullDown - KBottomHuntRange)) {
-      double maxHuntSpeed = ((KArmFullDown - pos) / (KBottomHuntRange) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+      double maxHuntSpeed = (((KArmFullDown - pos) / (KBottomHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
       if (newSpeed > maxHuntSpeed)
         newSpeed = maxHuntSpeed;
     }
@@ -286,6 +286,7 @@ public class ArmSubsystem extends Subsystem {
         pastDownLimit = rightPastDownLimit;
       }
 
+      SmartDashboard.putBoolean("up limit", pastUpLimit);
       // Moves arm back down if the up limit has been passed
       if (pos < KArmFullUp && pastUpLimit) {
         if (newSpeed <= 0)
@@ -312,10 +313,10 @@ public class ArmSubsystem extends Subsystem {
     }
 
     // Limits the speed to be between KArmSpeed and -KArmSpeed
-    // if (newSpeed > KArmSpeed)
-    //   newSpeed = KArmSpeed;
-    // if (newSpeed < -KArmSpeed)
-    //   newSpeed = -KArmSpeed;
+    if (newSpeed > KArmSpeed)
+      newSpeed = KArmSpeed;
+    if (newSpeed < -KArmSpeed)
+      newSpeed = -KArmSpeed;
 
     if (left) {
       SmartDashboard.putNumber("Corrected left side speed: ", newSpeed);
@@ -334,7 +335,7 @@ public class ArmSubsystem extends Subsystem {
    */
   public void moveArm(double leftSpeed, double rightSpeed) {
     // If the arm is in its starting position, it has been reset
-    if (!armHasBeenReset && inStartPos())
+    if (!armReset() && inStartPos())
       armHasBeenReset = true; 
         
     move(correctSpeed(leftSpeed, true), correctSpeed(rightSpeed, false));
@@ -370,20 +371,20 @@ public class ArmSubsystem extends Subsystem {
    * @param targets - The target velocities to drive the arm at
    * @return - The motor outputs calculated by the P loop
    */
-  private double[] controlVel(double[] targets) {
-    double KPvel = 0.005;
+  // private double[] controlVel(double[] targets) {
+  //   double KPvel = 0.005;
 
-    double leftError = targets[0] - getLeftVelocity();
-    double rightError = targets[1] - getRightVelocity();
+  //   double leftError = targets[0] - getLeftVelocity();
+  //   double rightError = targets[1] - getRightVelocity();
 
-    return new double[]{KPvel * leftError, KPvel * rightError};
-  }
+  //   return new double[]{KPvel * leftError, KPvel * rightError};
+  // }
 
   /**
    * Checks if the robot is in its starting position. This means the limits are closed and the encoders are at 0
    * @return - True if the robot is in starting positin, false otherwise
    */
-  private boolean inStartPos() {
+  public boolean inStartPos() {
     return getLeftLimit() && getRightLimit() && (getLeftArmEncoder() <= 0) && (getRightArmEncoder() <= 0);
   }
 

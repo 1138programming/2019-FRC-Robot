@@ -24,7 +24,9 @@ import frc.commands.Lift.MoveLiftToPosition;
 import frc.commands.Arm.MoveArmToPosition;
 //import frc.commands.ScoringCommandGroups.CollectCargo;
 import frc.commands.Hatch.ScoreHatch;
+import frc.commands.Hatch.AttainHatch;
 import frc.commands.ScoringCommandGroups.CollectingPosition;
+import frc.commands.ScoringCommandGroups.EjectHatchAndThenRetractEjector;
 import frc.commands.ScoringCommandGroups.ResetRobot;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
@@ -111,6 +113,7 @@ public class OI {
 
     SmartDashboard.putNumber("Throttle channel is: ", logitech.getThrottleChannel());
 
+    //xbox = new XboxController(KXboxArms);
     xbox = new XboxController(KXboxArms);
     stick = new Joystick(KStick);
 
@@ -158,14 +161,16 @@ public class OI {
     //btn3.whenPressed(new Diagnostic());
     
     btn1.whileHeld(new ClimbDown());
-    //btn2.whenPressed(new NintendoSwitch());
+    btn7.whenPressed(new NintendoSwitch());
     btn3.whileHeld(new ClimbUp());
     btn5.whenPressed(new ShiftDrive());
     //btn6.whenPressed(climbToTopHab); 
     btn6.whileHeld(driveBaseOffPlatform);
+    btn2.whenPressed(new EjectHatchAndThenRetractEjector());
+    btn4.whenPressed(new AttainHatch());
     // btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
-    btn9.whileHeld(new X_TableLeft());
-    btn10.whileHeld(climbToTopHab);
+    // btn9.whileHeld(new X_TableLeft());
+    // btn10.whileHeld(climbToTopHab);
 
     //Xbox
     btnLB.whileHeld(new CollectorBackwards());
@@ -222,7 +227,7 @@ public class OI {
       return 0; 
   }
 
-  public double getRightXbox() {
+  p  public double getRightXbox() {
     if(xbox.getY(Hand.kRight) > KDeadZone || xbox.getY(Hand.kRight) < -KDeadZone) 
       return xbox.getY(Hand.kRight);
     else 
@@ -235,6 +240,7 @@ public class OI {
     else 
       return 0;
   }
+
 
   // Start the command when the button is pressed and let it run the command
   // until it is finished as determined by it's isFinished method.

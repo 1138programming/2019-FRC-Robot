@@ -23,38 +23,39 @@ public class AttainHatch extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    switch ((int)(Math.floor(timeSinceInitialized() * (1000 / msDelay)))) {
-      case 1:
-        if (c == 1) {
-          Robot.HATCH_SUBSYSTEM.moveHatchMechanism(false);
-          c++;
-        }
-        break;
-      case 2:
-        if (c == 2) {
-          Robot.HATCH_SUBSYSTEM.YMechanismForward();
-          c++;
-        }
-        break;
-      case 3:
-        if (c == 3) {
-          Robot.HATCH_SUBSYSTEM.moveHatchMechanism(true);
-          c++;
-        }
-        break;
-      case 4:
-        if (c == 4) {
-          Robot.HATCH_SUBSYSTEM.YMechanismBackward();
-          c++;
-        }
-        break;
-    }
+    Robot.HATCH_SUBSYSTEM.GrabberForward();
+    // switch ((int)(Math.floor(timeSinceInitialized() * (1000 / msDelay)))) {
+    //   case 1:
+    //     if (c == 1) {
+    //       Robot.HATCH_SUBSYSTEM.moveHatchMechanism(false);
+    //       c++;
+    //     }
+    //     break;
+    //   case 2:
+    //     if (c == 2) {
+    //       Robot.HATCH_SUBSYSTEM.EjectorForward();
+    //       c++;
+    //     }
+    //     break;
+    //   case 3:
+    //     if (c == 3) {
+    //       Robot.HATCH_SUBSYSTEM.moveHatchMechanism(true);
+    //       c++;
+    //     }
+    //     break;
+    //   case 4:
+    //     if (c == 4) {
+    //       Robot.HATCH_SUBSYSTEM.EjectorReverse();
+    //       c++;
+    //     }
+    //     break;
+    // }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return c >= 5 || timeSinceInitialized() > 6;
+    return true;
   }
 
   // Called once after isFinished returns true

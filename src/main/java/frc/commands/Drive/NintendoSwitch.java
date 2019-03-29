@@ -26,12 +26,12 @@ int SwitchCase = 0;
     switch (SwitchCase) {
         case 1: 
 			Robot.CAMERA.switchToCamera2();
-			// Robot.DRIVE_SUBSYSTEM.switchDriveBase(true);
+			Robot.DRIVE_SUBSYSTEM.switchDriveBase(true);
 			SwitchCase++;
             break;
         case 3:
 			Robot.CAMERA.switchToCamera1();
-			// Robot.DRIVE_SUBSYSTEM.switchDriveBase(false);
+			Robot.DRIVE_SUBSYSTEM.switchDriveBase(false);
             SwitchCase = 0;
             break;
         default:

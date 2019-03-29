@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
     pdp = new PDP();
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
+    SmartDashboard.putString("Robot Encoders", "NOT ALIGNED");
     SmartDashboard.putData("Auto mode", m_chooser);
     Robot.LIFT_SUBSYSTEM.setLiftEncoder(0);
   }
@@ -117,6 +118,9 @@ public class Robot extends TimedRobot {
     LIFT_SUBSYSTEM.setLiftEncoder(0);
     ARM_SUBSYSTEM.setLeftArmEncoder(0);
     ARM_SUBSYSTEM.setRightArmEncoder(0);
+    if (Robot.ARM_SUBSYSTEM.inStartPos()) {
+      SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED - READY TO GO");
+    }
     pdp.voltageSpikeOccured = false;
     ARM_SUBSYSTEM.lock();
     //SmartDashboard.putString("Robot Encoders", "NOT ALIGNED");
@@ -128,13 +132,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (Robot.ARM_SUBSYSTEM.getLeftLimit() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.getRightLimit() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) {
+    if (Robot.ARM_SUBSYSTEM.inStartPos()) {
       SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED - READY TO GO");
-    double[] yawpitchroll = new double[3];
-    Robot.CLIMB_SUBSYSTEM.Pigeon.getYawPitchRoll(yawpitchroll);
-    SmartDashboard.putNumber("yaw", yawpitchroll[0]);
-    SmartDashboard.putNumber("pitch", yawpitchroll[1]);
-    SmartDashboard.putNumber("roll", yawpitchroll[2]);
+    // double[] yawpitchroll = new double[3];
+    // Robot.CLIMB_SUBSYSTEM.Pigeon.getYawPitchRoll(yawpitchroll);
+    // SmartDashboard.putNumber("yaw", yawpitchroll[0]);
+    // SmartDashboard.putNumber("pitch", yawpitchroll[1]);
+    // SmartDashboard.putNumber("roll", yawpitchroll[2]);
     }
 
     // if ((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 

@@ -24,30 +24,14 @@ public class ScoreHatch extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (timeSinceInitialized() - timeout > 0) {
-      switch (c) {
-        case 0:
-          Robot.HATCH_SUBSYSTEM.YMechanismForward();
-          break;
-        case 1:
-          Robot.HATCH_SUBSYSTEM.moveHatchMechanism(false);
-          break;
-        case 2:
-          Robot.HATCH_SUBSYSTEM.YMechanismBackward();
-          break;
-      }
-
-      if (c < 2)
-        timeout = KDelays[c] + timeSinceInitialized();
-
-      c++;
-    }
+    Robot.HATCH_SUBSYSTEM.GrabberReverse();
+    Robot.HATCH_SUBSYSTEM.EjectorForward();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return c >= 3;
+    return true;
   }
 
   // Called once after isFinished returns true

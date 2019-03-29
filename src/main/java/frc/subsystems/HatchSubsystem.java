@@ -23,16 +23,17 @@ public class HatchSubsystem extends Subsystem {
 	 * 
 	 * private DoubleSolenoid Hatch;
 	*/
+	public static final int KSolenoid2 = 2;		//Grabber
 	public static final int KSolenoid3 = 3;
-	public static final int KSolenoid4 = 4;
+	public static final int KSolenoid4 = 4;		//Ejector
 	public static final int KSolenoid5 = 5;
 
-	private Solenoid HatchMechanism;
-	private DoubleSolenoid YMechanism;
+	private DoubleSolenoid Grabber;
+	private DoubleSolenoid Ejector;
 	 
 	public HatchSubsystem() {
-		HatchMechanism = new Solenoid(KSolenoid3);
-		YMechanism = new DoubleSolenoid(KSolenoid4, KSolenoid5);
+		Grabber = new DoubleSolenoid(KSolenoid2, KSolenoid3);
+		Ejector = new DoubleSolenoid(KSolenoid4, KSolenoid5);
 	}
 
 	@Override
@@ -40,23 +41,27 @@ public class HatchSubsystem extends Subsystem {
 		setDefaultCommand(new HatchOff());
 	}
 
-	public void moveHatchMechanism(boolean status) {
-		if(status != HatchMechanism.get()) {
-			HatchMechanism.set(status);
-		}
-		else {
-		}
+	public void EjectorForward() {
+		Ejector.set(Value.kForward);
 	}
 
-	public void YMechanismForward() {
-		YMechanism.set(Value.kForward);
+	public void EjectorReverse() {
+		Ejector.set(Value.kReverse);
 	}
 
-	public void YMechanismBackward() {
-		YMechanism.set(Value.kReverse);
+	public void EjectorOff() {
+		Ejector.set(Value.kOff);
 	}
 
-	public void YMechanismOff() {
-		YMechanism.set(Value.kOff);
+	public void GrabberForward() {
+		Grabber.set(Value.kForward);
+	}
+
+	public void GrabberReverse() {
+		Grabber.set(Value.kReverse);
+	}
+
+	public void GrabberOff() {
+		Grabber.set(Value.kOff);
 	}
 }

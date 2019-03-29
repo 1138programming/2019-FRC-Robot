@@ -76,6 +76,7 @@ public class DriveSubsystem extends Subsystem {
   }
 
   public void baseDrive(double leftSpeed, double rightSpeed) {
+    SmartDashboard.putBoolean("Reversed?", isReversed);
     if (isReversed) {
       leftSpeed = -leftSpeed;
       rightSpeed = -rightSpeed;
@@ -105,13 +106,7 @@ public class DriveSubsystem extends Subsystem {
 
   public void driveBaseInSandstorm()
   {
-    double speed;
-    if (isReversed)
-       speed = -KDriveSpeed;
-    else
-        speed = KDriveSpeed;
-
-    baseDrive(KDriveSpeed, KDriveSpeed);
+    baseDrive(-KDriveSpeed, -KDriveSpeed);
   }
 
   public void switchDriveBase(boolean switchButton) {
