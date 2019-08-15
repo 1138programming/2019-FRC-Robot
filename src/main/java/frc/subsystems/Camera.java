@@ -12,31 +12,37 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Camera extends Subsystem
 {
-    //private static CameraServer cam;
+    // private static CameraServer cam;
     private final UsbCamera camera1;
     private final UsbCamera camera2;
 
-    // private MjpegServer server;
-    private final CameraServer server1;
+
+    private MjpegServer mjpegServer;
+    private final CameraServer server;
 	
 	@Override
-	protected void initDefaultCommand() 
+	protected   void initDefaultCommand() 
 	{
         //setDefaultCommand(new CameraStart());
 	}
 
 	public Camera() {
-        // camera1 = new UsbCamera("USB Camera 0", 0);
-        // camera2 = new UsbCamera("Camera 2", 1);
+        server = CameraServer.getInstance();
+        mjpegServer = server.addSwitchedCamera("Camera");
 
-        server1 = CameraServer.getInstance();
-        
         camera1 = new UsbCamera("USB Camera 0", 0);
         camera2 = new UsbCamera("USB Camera 1", 1);
-        server1.addCamera(camera2);
-        MjpegServer server = server1.addServer("serve_ USB Camera 1");
-        server.setSource(camera2);
-        CameraServerSharedStore.getCameraServerShared().reportUsbCamera(camera2.getHandle());
+
+        mjpegServer.setSource(camera1);
+        // server1.startAutomaticCapture(0);
+        // server1.startAutomaticCapture(1);
+        // server = server1.addSwitchedCamera("USB Camera");
+
+        // server.setSource(camera1);
+        // server1.addCamera(camera2);
+        // MjpegServer server = server1.addServer("serve_ USB Camera 1");
+        // server.setSource(camera2);
+        // CameraServerSharedStore.getCameraServerShared().reportUsbCamera(camera2.getHandle());
         
         // camera1.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
         // camera2.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
@@ -48,12 +54,11 @@ public class Camera extends Subsystem
 
     public void switchToCamera1() {
         // SmartDashboard.putString("Setting camera", "1");
-        //server.setSource(camera1);
-        
+        mjpegServer.setSource(camera1);
     }
     
     public void switchToCamera2() {
         // SmartDashboard.putString("Setting camera", "2");
-        //server.setSource(camera2);
+        mjpegServer.setSource(camera2);
     }
 }

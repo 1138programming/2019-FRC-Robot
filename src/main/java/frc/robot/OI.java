@@ -227,7 +227,7 @@ public class OI {
       return 0; 
   }
 
-  p  public double getRightXbox() {
+  public double getRightXbox() {
     if(xbox.getY(Hand.kRight) > KDeadZone || xbox.getY(Hand.kRight) < -KDeadZone) 
       return xbox.getY(Hand.kRight);
     else 
