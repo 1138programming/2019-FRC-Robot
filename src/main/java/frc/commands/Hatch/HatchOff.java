@@ -19,14 +19,13 @@ public class HatchOff extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.HATCH_SUBSYSTEM.EjectorOff();
-    Robot.HATCH_SUBSYSTEM.GrabberOff();
+    // Robot.HATCH_SUBSYSTEM.HatchSolenoidOff();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true

@@ -26,7 +26,6 @@ import frc.commands.Arm.MoveArmToPosition;
 import frc.commands.Hatch.ScoreHatch;
 import frc.commands.Hatch.AttainHatch;
 import frc.commands.ScoringCommandGroups.CollectingPosition;
-import frc.commands.ScoringCommandGroups.EjectHatchAndThenRetractEjector;
 import frc.commands.ScoringCommandGroups.ResetRobot;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
@@ -166,7 +165,6 @@ public class OI {
     btn5.whenPressed(new ShiftDrive());
     //btn6.whenPressed(climbToTopHab); 
     btn6.whileHeld(driveBaseOffPlatform);
-    btn2.whenPressed(new EjectHatchAndThenRetractEjector());
     btn4.whenPressed(new AttainHatch());
     // btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
     // btn9.whileHeld(new X_TableLeft());
