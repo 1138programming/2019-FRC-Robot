@@ -4,6 +4,8 @@ package frc.commands.Hatch;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class HatchOff extends Command {
   public HatchOff() {
@@ -19,13 +21,15 @@ public class HatchOff extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    // Robot.HATCH_SUBSYSTEM.HatchSolenoidOff();
+    SmartDashboard.putBoolean("please work", true);
+    Robot.HATCH_SUBSYSTEM.HatchSolenoidOff();
+    Robot.HATCH_SUBSYSTEM.HatchMotorStop();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true
@@ -37,5 +41,6 @@ public class HatchOff extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    SmartDashboard.putBoolean("please work plz", true);
   }
 }

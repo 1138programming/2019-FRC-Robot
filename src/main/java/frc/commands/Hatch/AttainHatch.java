@@ -4,31 +4,34 @@ package frc.commands.Hatch;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.subsystems.HatchSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class AttainHatch extends Command {
-  // private static final int msDelay = 1000;
-  // private int c = 0;
-
   public AttainHatch() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.HATCH_SUBSYSTEM);
   }
 
-  @Override 
+  // Called just before this Command runs the first time
+  @Override
   protected void initialize() {
   }
 
+  // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //Robot.HATCH_SUBSYSTEM.moveHatchMechanism(true, HatchSubsystem.KHatchSpeed);
+    Robot.HATCH_SUBSYSTEM.moveHatchMechanismToAttain();
+
   }
 
+  // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true; 
+    return false;
   }
 
+  // Called once after isFinished returns true
   @Override
   protected void end() {
   }
@@ -37,5 +40,6 @@ public class AttainHatch extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    SmartDashboard.putBoolean("please work plz", true);
   }
 }

@@ -8,6 +8,7 @@
 package frc.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Hatch.HatchOff;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -36,7 +37,7 @@ public class HatchSubsystem extends Subsystem {
 	public static final int KSolenoid4 = 4;
 	public static final int KSolenoid5 = 5;
 
-	public static final int KSparkMax1 = 0; 
+	public static final int KSparkMax1 = 10; 
 	//public static final int KSparkMax2 = 2; 
 
 	private DoubleSolenoid HatchSolenoid;
@@ -47,7 +48,7 @@ public class HatchSubsystem extends Subsystem {
 	
 	public HatchSubsystem() {
 		HatchSolenoid = new DoubleSolenoid(KSolenoid3, KSolenoid6);
-		HatchMotor1 = new CANSparkMax(KSparkMax1, MotorType.kBrushless);
+		HatchMotor1 = new CANSparkMax(KSparkMax1, CANSparkMaxLowLevel.MotorType.kBrushless);
 		// HatchMotor2 = new CANSparkMax(KSparkMax2, MotorType.kBrushless);
 		// YMechanism = new DoubleSolenoid(KSolenoid4, KSolenoid5);
 	}
@@ -57,15 +58,16 @@ public class HatchSubsystem extends Subsystem {
 		setDefaultCommand(new HatchOff());
 	}
 
-	public void moveHatchMechanism(boolean isForward, double speed) {
-		double desiredSpeed = speed;
-		if (isForward) {
-			HatchSolenoid.set(Value.kForward);
-		} else {
-			HatchSolenoid.set(Value.kReverse);
-		}
-		//HatchMotor1.set(desiredSpeed);
-		// HatchMotor2.set(-desiredSpeed);
+	public void moveHatchMechanismToAttain() {
+		HatchSolenoid.set(Value.kReverse);
+		HatchMotor1.set(KHatchSpeed);
+		//HatchMotor2.set(-desiredSpeed);
+	}
+
+	public void moveHatchMechanismToEject() {
+		HatchSolenoid.set(Value.kForward);
+		HatchMotor1.set(-KHatchSpeed);
+		//HatchMotor2.set(-desiredSpeed);
 	}
 
 	public void HatchSolenoidForward() {
@@ -78,5 +80,13 @@ public class HatchSubsystem extends Subsystem {
 
 	public void HatchSolenoidOff() {
 		HatchSolenoid.set(Value.kOff);
+	}
+
+	public void HatchMotorMove(double speed) {
+		HatchMotor1.set(speed);
+	}
+
+	public void HatchMotorStop() {
+		HatchMotor1.set(0);
 	}
 }

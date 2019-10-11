@@ -21,7 +21,7 @@ public class CarriageSubsystem extends Subsystem {
   public static final double KCarriageSpeedIn = 0.5;
 
   //Victor Config
-  private final CANSparkMax Carriage; 
+  //private final CANSparkMax Carriage; 
   private static final int KCarriage = 8;
 
   //Bump Switch config
@@ -29,7 +29,7 @@ public class CarriageSubsystem extends Subsystem {
   private static final int KBumpSwitchChannel = 5;
 
   public CarriageSubsystem() {
-    Carriage = new CANSparkMax(KCarriage, MotorType.kBrushless);
+    //Carriage = new CANSparkMax(KCarriage, MotorType.kBrushless);
     BumpSwitch = new DigitalInput(KBumpSwitchChannel);
   }
   
@@ -39,7 +39,7 @@ public class CarriageSubsystem extends Subsystem {
   }
   
   public void moveCarriage(double speed) {
-    Carriage.set(speed);
+    //Carriage.set(speed);
   }
 
   public boolean bumpSwitchClosed() {

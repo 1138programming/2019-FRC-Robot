@@ -20,11 +20,11 @@ import frc.commands.Drive.DriveBaseOffPlatform;
 import frc.commands.Drive.NintendoSwitch;
 import frc.commands.Drive.ShiftDrive;
 import frc.commands.Hatch.AttainHatch;
+import frc.commands.Hatch.EjectHatch;
+import frc.commands.Hatch.HatchOff;
 import frc.commands.Lift.MoveLiftToPosition;
 import frc.commands.Arm.MoveArmToPosition;
 //import frc.commands.ScoringCommandGroups.CollectCargo;
-import frc.commands.Hatch.ScoreHatch;
-import frc.commands.Hatch.AttainHatch;
 import frc.commands.ScoringCommandGroups.CollectingPosition;
 import frc.commands.ScoringCommandGroups.ResetRobot;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
@@ -87,7 +87,8 @@ public class OI {
 	private static final int KButtonX = 3;
 	private static final int KButtonY = 4;
 	private static final int KLeftBumper = 5;
-	private static final int KRightBumper = 6;
+  private static final int KRightBumper = 6;
+  private static final int KSwitchButton = 7;
 	private static final int KStartButton = 8;
 	private static final int KLeftTrigger = 9;
   private static final int KRightTrigger = 10;
@@ -103,7 +104,7 @@ public class OI {
   public static Joystick logitech, stick;
   public static XboxController xbox;
 	public static JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10; // Logitech Button
-  public static JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnStrt, btnLT, btnRT; // Xbox Buttons
+  public static JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnSwtch, btnStrt, btnLT, btnRT; // Xbox Buttons
   public static JoystickButton btn2Stick, btn3Stick, btn4Stick, btn5Stick, btn6Stick, btn9Stick; // Stick Buttons
 
   public OI() {
@@ -134,7 +135,8 @@ public class OI {
 		btnX = new JoystickButton(xbox, KButtonX);
 		btnY = new JoystickButton(xbox, KButtonY);
 		btnLB = new JoystickButton(xbox, KLeftBumper);
-		btnRB = new JoystickButton(xbox, KRightBumper);
+    btnRB = new JoystickButton(xbox, KRightBumper);
+    btnSwtch = new JoystickButton(xbox, KSwitchButton);
 		btnStrt = new JoystickButton(xbox, KStartButton);
 		btnLT = new JoystickButton(xbox, KLeftTrigger);
     btnRT = new JoystickButton(xbox, KRightTrigger);
@@ -165,7 +167,6 @@ public class OI {
     btn5.whenPressed(new ShiftDrive());
     //btn6.whenPressed(climbToTopHab); 
     btn6.whileHeld(driveBaseOffPlatform);
-    btn4.whenPressed(new AttainHatch());
     // btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
     // btn9.whileHeld(new X_TableLeft());
     // btn10.whileHeld(climbToTopHab);
@@ -177,6 +178,10 @@ public class OI {
     btnB.whileHeld(new CarriageOuttake());
     btnX.whenPressed(collectingPosition);
     btnY.whenPressed(scoreCargoInCargo);
+    
+    btnSwtch.whileHeld(new AttainHatch());
+    btnStrt.whileHeld(new EjectHatch());
+
 
     //Stick
     btn3Stick.whenPressed(resetRobot);

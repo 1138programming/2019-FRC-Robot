@@ -5,31 +5,30 @@ package frc.commands.Hatch;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.subsystems.HatchSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class ScoreHatch extends Command {
-
-  public ScoreHatch() {
+public class EjectHatch extends Command {
+  // private static final int msDelay = 1000;
+  // private int c = 0;
+  public EjectHatch() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.HATCH_SUBSYSTEM);
   }
 
-  @Override
+  @Override 
   protected void initialize() {
   }
 
-  // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.HATCH_SUBSYSTEM.moveHatchMechanism(false, -HatchSubsystem.KHatchSpeed);
+      Robot.HATCH_SUBSYSTEM.moveHatchMechanismToEject();
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
     return true; 
   }
 
-  // Called once after isFinished returns true
   @Override
   protected void end() {
   }
