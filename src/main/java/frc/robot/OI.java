@@ -8,29 +8,17 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.commands.ClimbToTopHab;
-import frc.commands.Diagnostic;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Carriage.CarriageIntake;
 import frc.commands.Carriage.CarriageOuttake;
-import frc.commands.Climb.ClimbDown;
-import frc.commands.Climb.ClimbUp;
 import frc.commands.Collector.CollectorBackwards;
 import frc.commands.Collector.CollectorForward;
-import frc.commands.Drive.DriveBaseOffPlatform;
-import frc.commands.Drive.NintendoSwitch;
 import frc.commands.Drive.ShiftDrive;
 import frc.commands.Hatch.AttainHatch;
 import frc.commands.Hatch.EjectHatch;
-import frc.commands.Hatch.HatchOff;
-import frc.commands.Lift.MoveLiftToPosition;
-import frc.commands.Arm.MoveArmToPosition;
-//import frc.commands.ScoringCommandGroups.CollectCargo;
 import frc.commands.ScoringCommandGroups.CollectingPosition;
-import frc.commands.ScoringCommandGroups.ResetRobot;
 import frc.commands.ScoringCommandGroups.ScoreCargoInCargo;
 import frc.commands.ScoringCommandGroups.ScoreCargoInShip;
-import frc.commands.X_Table.X_TableLeft;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class OI {
@@ -93,29 +81,16 @@ public class OI {
 	private static final int KLeftTrigger = 9;
   private static final int KRightTrigger = 10;
 
-  //Stick Button Constants
-  private static final int KBtn2Stick = 2;
-  private static final int KBtn3Stick = 3;
-  private static final int KBtn4Stick = 4;
-  private static final int KBtn5Stick = 5;
-  private static final int KBtn6Stick = 6;
-  private static final int KBtn9Stick = 9;
-
   public static Joystick logitech, stick;
   public static XboxController xbox;
 	public static JoystickButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10; // Logitech Button
   public static JoystickButton btnA, btnB, btnX, btnY, btnLB, btnRB, btnSwtch, btnStrt, btnLT, btnRT; // Xbox Buttons
-  public static JoystickButton btn2Stick, btn3Stick, btn4Stick, btn5Stick, btn6Stick, btn9Stick; // Stick Buttons
 
   public OI() {
     //Controllers 
     logitech = new Joystick(KLogitechDrive);
 
-    SmartDashboard.putNumber("Throttle channel is: ", logitech.getThrottleChannel());
-
-    //xbox = new XboxController(KXboxArms);
     xbox = new XboxController(KXboxArms);
-    stick = new Joystick(KStick);
 
     //Logitech Buttons
 		btn1 = new JoystickButton(logitech, KButton1);
@@ -141,35 +116,14 @@ public class OI {
 		btnLT = new JoystickButton(xbox, KLeftTrigger);
     btnRT = new JoystickButton(xbox, KRightTrigger);
 
-    //Stick Buttons
-    btn2Stick = new JoystickButton(stick, KBtn2Stick);
-    btn3Stick = new JoystickButton(stick, KBtn3Stick);
-    btn4Stick = new JoystickButton(stick, KBtn4Stick);
-    btn5Stick = new JoystickButton(stick, KBtn5Stick);
-    btn6Stick = new JoystickButton(stick, KBtn6Stick);
-    btn9Stick = new JoystickButton(stick, KBtn9Stick);
-
     //Button Assigned Commands 
     // Create command groups. We do it this way so we can interrupt it with the Trigger class.
     CollectingPosition collectingPosition = new CollectingPosition();
     ScoreCargoInCargo scoreCargoInCargo = new ScoreCargoInCargo();
     ScoreCargoInShip scoreCargoInShip = new ScoreCargoInShip();
-    ResetRobot resetRobot = new ResetRobot();
-    ClimbToTopHab climbToTopHab = new ClimbToTopHab();
-    DriveBaseOffPlatform driveBaseOffPlatform = new DriveBaseOffPlatform();
 
     //Logitech
-    //btn3.whenPressed(new Diagnostic());
-    
-    btn1.whileHeld(new ClimbDown());
-    btn7.whenPressed(new NintendoSwitch());
-    btn3.whileHeld(new ClimbUp());
     btn5.whenPressed(new ShiftDrive());
-    //btn6.whenPressed(climbToTopHab); 
-    btn6.whileHeld(driveBaseOffPlatform);
-    // btn8.whenPressed(new ScoreHatch()); //Bring climb mechanism up needs to be here
-    // btn9.whileHeld(new X_TableLeft());
-    // btn10.whileHeld(climbToTopHab);
 
     //Xbox
     btnLB.whileHeld(new CollectorBackwards());
@@ -182,21 +136,10 @@ public class OI {
     btnSwtch.whileHeld(new AttainHatch());
     btnStrt.whileHeld(new EjectHatch());
 
-
-    //Stick
-    btn3Stick.whenPressed(resetRobot);
-    btn4Stick.whileHeld(new ClimbDown());
-    btn5Stick.whenPressed(scoreCargoInShip);
-    btn6Stick.whileHeld(new ClimbUp());
-    btn9Stick.whileHeld(new ClimbToTopHab());
-
     // Cancel command groups
     btnStrt.cancelWhenPressed(scoreCargoInCargo);
     btnStrt.cancelWhenPressed(collectingPosition);
     btnStrt.cancelWhenPressed(scoreCargoInShip);
-    btnStrt.cancelWhenPressed(resetRobot);
-
-    btnStrt.cancelWhenPressed(climbToTopHab);
   }
 
   public double getRightAxis() {

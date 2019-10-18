@@ -9,8 +9,6 @@ import frc.commands.Lift.LiftStop;
 import frc.subsystems.ArmSubsystem;
 import frc.subsystems.Camera;
 import frc.subsystems.CarriageSubsystem;
-import frc.subsystems.XTableSubsystem;
-import frc.subsystems.ClimbSubsystem;
 import frc.subsystems.CollectorSubsystem;
 import frc.subsystems.DriveSubsystem;
 import frc.subsystems.HatchSubsystem;
@@ -31,8 +29,6 @@ public class Robot extends TimedRobot {
   public static CarriageSubsystem CARRIAGE_SUBSYSTEM = new CarriageSubsystem();
   public static LiftSubsystem LIFT_SUBSYSTEM = new LiftSubsystem();
   public static CollectorSubsystem COLLECTOR_SUBSYSTEM = new CollectorSubsystem();
-  public static ClimbSubsystem CLIMB_SUBSYSTEM = new ClimbSubsystem();
-  public static XTableSubsystem X_TABLE_SUBSYSTEM = new XTableSubsystem();
   public static PneumaticsSubsystem PNEMATICSSUBSYSTEM = new PneumaticsSubsystem();
   public static HatchSubsystem HATCH_SUBSYSTEM = new HatchSubsystem(); 
   public static OI oi;
@@ -48,10 +44,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     oi = new OI();
     pdp = new PDP();
-    //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
-    // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putString("Robot Encoders", "NOT ALIGNED");
-    SmartDashboard.putData("Auto mode", m_chooser);
     Robot.LIFT_SUBSYSTEM.setLiftEncoder(0);
   }
 
@@ -122,9 +114,7 @@ public class Robot extends TimedRobot {
       SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED - READY TO GO");
     }
     pdp.voltageSpikeOccured = false;
-    ARM_SUBSYSTEM.lock();
-    //SmartDashboard.putString("Robot Encoders", "NOT ALIGNED");
-      
+    ARM_SUBSYSTEM.lock();      
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -134,30 +124,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     if (Robot.ARM_SUBSYSTEM.inStartPos()) {
       SmartDashboard.putString("Robot Encoders", "FULLY ALIGNED - READY TO GO");
-    // double[] yawpitchroll = new double[3];
-    // Robot.CLIMB_SUBSYSTEM.Pigeon.getYawPitchRoll(yawpitchroll);
-    // SmartDashboard.putNumber("yaw", yawpitchroll[0]);
-    // SmartDashboard.putNumber("pitch", yawpitchroll[1]);
-    // SmartDashboard.putNumber("roll", yawpitchroll[2]);
     }
-
-    // if ((!Robot.ARM_SUBSYSTEM.leftLimitClosed() || Robot.ARM_SUBSYSTEM.getLeftArmEncoder() != 0 || 
-    //   !Robot.ARM_SUBSYSTEM.rightLimitClosed() || Robot.ARM_SUBSYSTEM.getRightArmEncoder() != 0) && 
-    //   armHasBeenReset == false && oi.getRightXbox() <= 0) {
-    //     ARM_SUBSYSTEM.moveArm(0);
-    // }
-    // else if ((Robot.ARM_SUBSYSTEM.leftLimitClosed() && Robot.ARM_SUBSYSTEM.getLeftArmEncoder() == 0 && Robot.ARM_SUBSYSTEM.rightLimitClosed() && Robot.ARM_SUBSYSTEM.getRightArmEncoder() == 0) && armHasBeenReset == false) {
-    //   armHasBeenReset = true;
-    // }
-
-    // if (((Robot.ARM_SUBSYSTEM.getRightArmPosition() == ArmPosition.FULLUP) || 
-    //     (Robot.ARM_SUBSYSTEM.getLeftArmPosition() == ArmPosition.FULLUP)) && 
-    //      ((Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.FULLUP) || 
-    //      (Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.SHIP) || 
-    //      (Robot.LIFT_SUBSYSTEM.getLiftPosition() == LiftPosition.CARGO))) {
-    
-    // }
-
     Scheduler.getInstance().run();    
   }
 

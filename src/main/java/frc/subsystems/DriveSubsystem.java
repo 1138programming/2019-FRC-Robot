@@ -1,7 +1,6 @@
 package frc.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -60,11 +59,6 @@ public class DriveSubsystem extends Subsystem {
     driveRightFront.setInverted(true);
     driveRightRear.setInverted(true);
 
-    // driveLeftFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-    // driveLeftFront.setSelectedSensorPosition(0);
-    // driveRightFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-    // driveRightFront.setSelectedSensorPosition(0);
-
     shifterSolenoid = new DoubleSolenoid(KShifterSolenoid1, KShifterSolenoid2);
 
     Accel = new AnalogAccelerometer(KAccelerometer);
@@ -72,7 +66,7 @@ public class DriveSubsystem extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-   setDefaultCommand(new DriveWithJoysticks()/*ArcadeDriveWithJoy()*/); //Arcade Drive is for Gio, pretty much everyone else uses Tank (DriveWithJoysticks)
+   setDefaultCommand(new DriveWithJoysticks()); //Arcade Drive is for Gio, pretty much everyone else uses Tank (DriveWithJoysticks)
   }
 
   public void baseDrive(double leftSpeed, double rightSpeed) {
@@ -88,21 +82,6 @@ public class DriveSubsystem extends Subsystem {
     driveRightFront.set(ControlMode.PercentOutput, rightSpeed);
     driveLeftFront.set(ControlMode.PercentOutput, leftSpeed);
   }
-
-  // public double driveBaseToPosition(double position)
-  // {
-  //   double error = position - (getRightFrontEncoder() - getLeftFrontEncoder())/2;
-  //   double speed = KDriveSpeed * error * KP;
-
-  //   if (speed > KDriveSpeed)
-  //     speed = KDriveSpeed;
-  //   else if (speed < -KDriveSpeed)
-  //     speed = -KDriveSpeed;
-    
-  //   baseDrive(speed, speed);
-
-  //   return error;
-  // }
 
   public void driveBaseInSandstorm()
   {
@@ -134,16 +113,6 @@ public class DriveSubsystem extends Subsystem {
 	{
 		driveLeftFront.getSensorCollection().setQuadraturePosition(0, 0);
 		driveRightFront.getSensorCollection().setQuadraturePosition(0, 0);
-	}
-
-  // This sets the motion control mode for the left side of the base
-	public void setLeftMotionControl(ControlMode mode, double value) {
-		this.driveLeftFront.set(mode, value);
-	}
-	
-	// This sets the motion control mode for the right side of the base
-	public void setRightMotionControl(ControlMode mode, double value) {
-		this.driveRightFront.set(mode, value);
 	}
   
   public void driveClearSticky() {

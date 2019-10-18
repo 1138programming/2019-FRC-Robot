@@ -1,9 +1,7 @@
 package frc.subsystems;
 
-//import com.ctre.phoenix.motorcontrol.ControlMode;
-//import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.revrobotics.*;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -21,7 +19,7 @@ public class CarriageSubsystem extends Subsystem {
   public static final double KCarriageSpeedIn = 0.5;
 
   //Victor Config
-  //private final CANSparkMax Carriage; 
+  private final TalonSRX Carriage; 
   private static final int KCarriage = 8;
 
   //Bump Switch config
@@ -29,7 +27,7 @@ public class CarriageSubsystem extends Subsystem {
   private static final int KBumpSwitchChannel = 5;
 
   public CarriageSubsystem() {
-    //Carriage = new CANSparkMax(KCarriage, MotorType.kBrushless);
+    Carriage = new TalonSRX(KCarriage);
     BumpSwitch = new DigitalInput(KBumpSwitchChannel);
   }
   
@@ -39,7 +37,7 @@ public class CarriageSubsystem extends Subsystem {
   }
   
   public void moveCarriage(double speed) {
-    //Carriage.set(speed);
+    Carriage.set(ControlMode.PercentOutput, speed);
   }
 
   public boolean bumpSwitchClosed() {

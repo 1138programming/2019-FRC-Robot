@@ -1,19 +1,13 @@
 package frc.subsystems;
 
-import javax.lang.model.util.ElementScanner6;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Arm.ArmWithJoysticks;
-import frc.robot.Robot;
 
 public class ArmSubsystem extends Subsystem {
   private static final double KArmSpeed = 1; // Max speed of arm when controlled by autonomous functions/macros=
@@ -43,10 +37,6 @@ public class ArmSubsystem extends Subsystem {
   private final DigitalInput LeftLimit, RightLimit;
   private static final int KLeftLimit = 6;
   private static final int KRightLimit = 7;
-
-  // Gyro config
-  // private final ADXRS450_Gyro gyro;
-  // private static final Port KGyroSPIPort = Port.kOnboardCS0;
 
   // Keeps track of the arm's state in addition to the limit Might help protect against encoder drift
   private static boolean leftPastUpLimit = false;
@@ -78,9 +68,6 @@ public class ArmSubsystem extends Subsystem {
 
     ArmLeft.setSensorPhase(true);
     ArmRight.setSensorPhase(true); //false on practice, true on comp
-
-    // gyro = new ADXRS450_Gyro(KGyroSPIPort);
-    // gyro.calibrate();
   }
 
   @Override
@@ -92,7 +79,6 @@ public class ArmSubsystem extends Subsystem {
    * @return - The value of the left arm encoder
    */
   public int getLeftArmEncoder() {
-    //return ArmLeft.getSensorCollection().getQuadraturePosition();
     return ArmLeft.getSelectedSensorPosition();
   }
 
@@ -100,7 +86,6 @@ public class ArmSubsystem extends Subsystem {
    * @return - The velocity of the left arm motor
    */
   public int getLeftVelocity() {
-    //return ArmLeft.getSensorCollection().getQuadratureVelocity();
     return ArmLeft.getSelectedSensorVelocity();
   }
 
@@ -117,7 +102,6 @@ public class ArmSubsystem extends Subsystem {
    * @return - The value of the right arm encoder
    */
   public int getRightArmEncoder() {
-    //return ArmRight.getSensorCollection().getQuadraturePosition();
     return ArmRight.getSelectedSensorPosition();
   }
 
@@ -125,7 +109,6 @@ public class ArmSubsystem extends Subsystem {
    * @return - The velocity of the right arm motor
    */
   public int getRightVelocity() {
-    //return ArmRight.getSensorCollection().getQuadratureVelocity();
     return ArmRight.getSelectedSensorVelocity();
   }
 
@@ -134,7 +117,6 @@ public class ArmSubsystem extends Subsystem {
    * @param position - The value we want the encoder to have.
    */
   public void setRightArmEncoder(int position) {
-    //ArmRight.getSensorCollection().setQuadraturePosition(position, 0);
     ArmRight.setSelectedSensorPosition(position);
   }
 
@@ -144,13 +126,6 @@ public class ArmSubsystem extends Subsystem {
   public boolean getLeftLimit() {
     return !LeftLimit.get();
   }
-
-  /**
-   * @return - The angle the gyro is at
-   */
-  // public double getAngle() {
-  //   return gyro.getAngle();
-  // }
 
   /**
    * @return - The state of the right limit switch. True indicates it is close
@@ -217,14 +192,6 @@ public class ArmSubsystem extends Subsystem {
       if (newSpeed > maxHuntSpeed)
         newSpeed = maxHuntSpeed;
     }
-
-    // If one side of the arm is in front of the other, that side will slow down and the other side will speed up
-    // double KOffFull = 80;
-    // if (left) {
-    //   newSpeed += (getRightArmEncoder() - pos) * (1 / KOffFull);
-    // } else {
-    //   newSpeed += (getLeftArmEncoder() - pos) * (1 / KOffFull);
-    // }
 
     // Gets the state of the arm's limit switch based on which side has been chosen
     if (left) {
@@ -356,8 +323,6 @@ public class ArmSubsystem extends Subsystem {
     int leftError = target - getLeftArmEncoder();
     int rightError = target - getRightArmEncoder();
 
-    //double[] speeds = controlVel(new double[]{KPpos * leftError, KPpos * rightError});
-    //moveArm(speeds[0], speeds[1]);
     moveArm(KPpos * leftError, KPpos * rightError);
 
     if (Math.abs(leftError) > Math.abs(rightError))
@@ -365,20 +330,6 @@ public class ArmSubsystem extends Subsystem {
     else
       return Math.abs(rightError);
   }
-
-  /**
-   * Uses a P loop to move the arm at a target velocity
-   * @param targets - The target velocities to drive the arm at
-   * @return - The motor outputs calculated by the P loop
-   */
-  // private double[] controlVel(double[] targets) {
-  //   double KPvel = 0.005;
-
-  //   double leftError = targets[0] - getLeftVelocity();
-  //   double rightError = targets[1] - getRightVelocity();
-
-  //   return new double[]{KPvel * leftError, KPvel * rightError};
-  // }
 
   /**
    * Checks if the robot is in its starting position. This means the limits are closed and the encoders are at 0

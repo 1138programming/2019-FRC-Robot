@@ -114,13 +114,6 @@ public class LiftSubsystem extends Subsystem {
         newSpeed = -maxHuntSpeed;
     }
 
-    // if (pos > (KLiftFullUp - KTopHuntRange) && speed > 0) {
-    //   newSpeed *= (((KLiftFullUp - pos) / (KTopHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
-    // }
-    // if (pos < (KLiftFullDown + KBottomHuntRange) && speed < 0) {
-    //   newSpeed *= (((pos - KLiftFullDown) / (KBottomHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
-    // }
-
     if (newSpeed >= 0 && newSpeed < KMotorOffset)
       newSpeed = KMotorOffset;
 
@@ -140,25 +133,6 @@ public class LiftSubsystem extends Subsystem {
 
       pastBottomLimit = true;
     } 
-    // else {
-    //   double KFullAt = 120;
-
-    //   // Moves the lift back down if the up limit has been passed
-    //   if (pos > KLiftFullUp && pastTopLimit) {
-    //     if (newSpeed >= 0)
-    //       newSpeed = (KLiftFullUp - pos) * (1 / KFullAt);
-    //   } else {
-    //     pastTopLimit = false;
-    //   }
-
-    //   // Moves the lift back up if the bottom limit has been passed
-    //   if (pos < KLiftFullDown && pastBottomLimit) {
-    //     if (newSpeed >= 0)
-    //       newSpeed = (KLiftFullDown - pos) * (1 / KFullAt);
-    //   } else {
-    //     pastBottomLimit = false;
-    //   }
-    // }
 
     // Limits the speed to be between KLiftSpeed and -KLiftSpeed
     if (newSpeed > KLiftSpeed)
@@ -170,14 +144,12 @@ public class LiftSubsystem extends Subsystem {
     SmartDashboard.putNumber("Lift encoder value is: ", getLiftEncoder());
 
     return newSpeed;
-    //return speed;
   }
 
   public void moveLift(double speed) {    
     move(correctSpeed(speed));
   }
 
-  //private double[] errors = new double[maxAdditions];
   private double integral = 0;
   private long lastTime = System.currentTimeMillis();
 
