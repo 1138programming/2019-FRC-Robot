@@ -1,110 +1,219 @@
 package frc.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.commands.Lift.LiftWithJoysticks;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.commands.Lift.LiftStop;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.commands.Lift.LiftWithJoysticks;
+import frc.robot.Robot;
+
+import java.util.ArrayDeque;
 
 public class LiftSubsystem extends Subsystem {
-  /** 
-   * public static final int KLiftTalon = 7; 
-   * private TalonSRX liftMotor;
+  /**
+   * public static final int KLiftTalon = 7; private TalonSRX liftMotor;
    */
-  public static final int KLiftTalon = 7; 
-  public static final double KLiftSpeed = .5; 
+  public static final double KLiftSpeed = .95;
 
-  private DigitalInput topLimit, bottomLimit;
+  public static final int KLiftFullDown = 0; 
+  public static final int KLiftShip = 14950; //Haven't checked this one yet
+  public static final int KLiftCargo = 23200;
+  public static final int KLiftFullUp = 23200;
+  
+  private static final int KLiftIsAboveArm = 15000; //check
+  private static final int KTopHuntRange = 3000; //??
+  private static final int KBottomHuntRange = 3500;
+  private static final double KMinHuntSpeed = 0.25;
 
-  public static final double KLiftFullDown = 0; 
-  public static final double KLiftCargo = 24000;
-  public static final double KLiftShip = 12500; //Haven't checked this one yet
-  public static final int KLiftTopReset = 23500;
-  public static final int KLiftBottomReset = 0;
   public static final double KMotorOffset = 0.05;
 
-  private static final double KP = 0.00025;
+  private static final double KP = 0.0005;
+  private static final double KI = 0.0001;
 
-  private TalonSRX liftMotor;
+  //Talon config
+  private final TalonSRX LiftTalon;
+  private static final int KLiftTalon = 7;
+
+  //Limit config
+  private final DigitalInput TopLimit, BottomLimit;
+  private static final int KTopLimit = 9;
+  private static final int KBottomLimit = 8;
+
+  // Keeps track of the lift's state in addition to the limits. Might help protect against encoder drift
+  public static boolean pastTopLimit = false;
+  public static boolean pastBottomLimit = false;
+
+  private static final int maxAdditions = 100; // Maximum number of errors to keep track of
+  private final ArrayDeque<Double> errors;
 
   public LiftSubsystem() {
-    liftMotor = new TalonSRX(KLiftTalon); 
-    liftMotor.setSensorPhase(true);
-    liftMotor.setInverted(true);
-    liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-    liftMotor.getSensorCollection().setQuadraturePosition(0, 0);
+    LiftTalon = new TalonSRX(KLiftTalon); 
 
-    topLimit = new DigitalInput(9);
-    bottomLimit = new DigitalInput(8);
+    TopLimit = new DigitalInput(KTopLimit);
+    BottomLimit = new DigitalInput(KBottomLimit);
+
+    LiftTalon.setInverted(true);
+
+    LiftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    setLiftEncoder(0);
+
+    LiftTalon.setSensorPhase(true);
+
+    // Initializes ArrayDeque for the integral window
+    errors = new ArrayDeque<Double>();
+    for (int i = 0; i < maxAdditions; i++) {
+      errors.add(0.0); // Start integral at 0
+    }
   }
 
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new LiftWithJoysticks());
   }
-  
-  public void moveLift(double speed) {
-    liftMotor.set(ControlMode.PercentOutput, speed);
-  }
 
   public int getLiftEncoder() {
-    //return liftMotor.getSelectedSensorPosition(0);
-    return liftMotor.getSelectedSensorPosition();
+    return LiftTalon.getSelectedSensorPosition();
   }
 
-  public void resetLiftEncoder() {
-    liftMotor.getSensorCollection().setQuadraturePosition(0,0);
+  public void setLiftEncoder(int position) {
+    LiftTalon.setSelectedSensorPosition(position);
   }
 
-  public double moveLiftWithEncoders(double position) {
-    double error = position - liftMotor.getSensorCollection().getQuadraturePosition();
-    SmartDashboard.putNumber("error", error);
-    double speed = error * KLiftSpeed * KP;
-    SmartDashboard.putNumber("speed", speed);
+  public boolean getTopLimit() {
+    return !TopLimit.get();
+  }
 
-    if (speed > KLiftSpeed)
-      speed = KLiftSpeed;
-    else if (speed < -KLiftSpeed)
-      speed = -KLiftSpeed;
+  public boolean getBottomLimit() {
+    return !BottomLimit.get();
+  }
 
-    SmartDashboard.putNumber("speed 2", speed);
+  private void move(double speed) {
+    LiftTalon.set(ControlMode.PercentOutput, speed);
+  }
 
-    speed = checkLimits(speed);
-    liftMotor.set(ControlMode.PercentOutput, speed);
+  private double correctSpeed(double speed) {
+    double newSpeed = speed;
+    int pos = getLiftEncoder();
+
+    if (newSpeed > KLiftSpeed)
+      newSpeed = KLiftSpeed;
+    else if (newSpeed < -KLiftSpeed)
+      newSpeed = -KLiftSpeed;
+
+    if (pos > (KLiftFullUp - KTopHuntRange)) {
+      double maxHuntSpeed = (((KLiftFullUp - pos) / (KTopHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+      if (newSpeed > maxHuntSpeed)
+        newSpeed = maxHuntSpeed;
+    }
+    if (pos < (KLiftFullDown + KBottomHuntRange)) {
+      double maxHuntSpeed = (((pos - KLiftFullDown) / (KBottomHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+      if (newSpeed < -maxHuntSpeed)
+        newSpeed = -maxHuntSpeed;
+    }
+
+    // if (pos > (KLiftFullUp - KTopHuntRange) && speed > 0) {
+    //   newSpeed *= (((KLiftFullUp - pos) / (KTopHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+    // }
+    // if (pos < (KLiftFullDown + KBottomHuntRange) && speed < 0) {
+    //   newSpeed *= (((pos - KLiftFullDown) / (KBottomHuntRange)) * (1 - KMinHuntSpeed)) + KMinHuntSpeed;
+    // }
+
+    if (newSpeed >= 0 && newSpeed < KMotorOffset)
+      newSpeed = KMotorOffset;
+
+    // Resets encoders and limits speed if the limit switches are activated
+    if (getTopLimit()) {
+      setLiftEncoder(KLiftFullUp);
+
+      if (newSpeed > 0)
+        newSpeed = KMotorOffset;
+
+      pastTopLimit = true;
+    } else if (getBottomLimit()) {
+      setLiftEncoder(KLiftFullDown);
+
+      if (newSpeed < KMotorOffset)
+        newSpeed = KMotorOffset;
+
+      pastBottomLimit = true;
+    } 
+    // else {
+    //   double KFullAt = 120;
+
+    //   // Moves the lift back down if the up limit has been passed
+    //   if (pos > KLiftFullUp && pastTopLimit) {
+    //     if (newSpeed >= 0)
+    //       newSpeed = (KLiftFullUp - pos) * (1 / KFullAt);
+    //   } else {
+    //     pastTopLimit = false;
+    //   }
+
+    //   // Moves the lift back up if the bottom limit has been passed
+    //   if (pos < KLiftFullDown && pastBottomLimit) {
+    //     if (newSpeed >= 0)
+    //       newSpeed = (KLiftFullDown - pos) * (1 / KFullAt);
+    //   } else {
+    //     pastBottomLimit = false;
+    //   }
+    // }
+
+    // Limits the speed to be between KLiftSpeed and -KLiftSpeed
+    if (newSpeed > KLiftSpeed)
+      newSpeed = KLiftSpeed;
+    else if (newSpeed < -KLiftSpeed)
+      newSpeed = -KLiftSpeed;
+
+    SmartDashboard.putNumber("Lift corrected speed is: ", newSpeed);
+    SmartDashboard.putNumber("Lift encoder value is: ", getLiftEncoder());
+
+    return newSpeed;
+    //return speed;
+  }
+
+  public void moveLift(double speed) {    
+    move(correctSpeed(speed));
+  }
+
+  //private double[] errors = new double[maxAdditions];
+  private double integral = 0;
+  private long lastTime = System.currentTimeMillis();
+
+  public void initMoveTo() {
+    integral = 0;
+    errors.clear();
+    for (int i = 0; i < maxAdditions; i++) {
+      errors.add(0.0); // Start integral at 0
+    }
+  }
+
+  public double moveLiftTo(int target) {
+    if (!Robot.ARM_SUBSYSTEM.armReset())
+      return 0;
+    
+    int error = target - getLiftEncoder();
+    long time = System.currentTimeMillis();
+    long dt = time - lastTime;
+
+    // Handles calculating the integral window to use as the integral
+    integral += error * (dt / 1000);
+    integral -= (double)errors.pollFirst();
+    errors.addLast((double)(error * (dt / 1000)));
+
+    double speed = error * KP + integral * KI;
+
+    if (speed >= 0 && speed < KMotorOffset)
+      speed += KMotorOffset;
+
+    SmartDashboard.putNumber("Target speed is: ", speed);
+    SmartDashboard.putNumber("Integral is: ", integral);
+
+    moveLift(speed);
+
+    lastTime = time;
 
     return error;
-  }
-
-  public boolean topLimitClosed() {
-    return !topLimit.get();
-  }
-
-  public boolean bottomLimitClosed() {
-    return !bottomLimit.get();
-  }
-
-  public void topLimitReset() {
-    liftMotor.getSensorCollection().setQuadraturePosition(KLiftTopReset, 0);
-  }
-
-  public void bottomLimitReset() {
-    liftMotor.getSensorCollection().setQuadraturePosition(KLiftBottomReset, 0);
-  }
-
-  public double checkLimits(double targetSpeed) {
-    if(topLimitClosed() == true) {
-			if (targetSpeed > 0) 
-				targetSpeed = 0;
-			topLimitReset();
-		} 
-		else if(bottomLimitClosed() == true) {
-			if (targetSpeed < 0)
-				targetSpeed = 0;
-			bottomLimitReset();
-    }
-    return targetSpeed;
   }
 }

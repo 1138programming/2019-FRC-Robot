@@ -28,24 +28,15 @@ public class CollectWithButtons extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(button == Robot.oi.btnX)
-    {
       Robot.COLLECTOR_SUBSYSTEM.moveCollector(-Robot.COLLECTOR_SUBSYSTEM.KCollecterSpeed);
       Robot.CARRIAGE_SUBSYSTEM.moveCarriage(Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeedIn);
-      Robot.LIFT_SUBSYSTEM.moveLift(LiftSubsystem.KMotorOffset);
-    }
-    else if(button == Robot.oi.btnY)
-    {
-      Robot.COLLECTOR_SUBSYSTEM.moveCollector(Robot.COLLECTOR_SUBSYSTEM.KCollecterSpeed);
-      Robot.CARRIAGE_SUBSYSTEM.moveCarriage(-Robot.CARRIAGE_SUBSYSTEM.KCarriageSpeedOut);
-      Robot.LIFT_SUBSYSTEM.moveLift(LiftSubsystem.KMotorOffset);
-    }
+      Robot.LIFT_SUBSYSTEM.moveLift(0);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return !button.get();
+    return !button.get() || Robot.CARRIAGE_SUBSYSTEM.bumpSwitchClosed();
   }
 
   // Called once after isFinished returns true

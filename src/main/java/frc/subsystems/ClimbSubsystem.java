@@ -1,39 +1,80 @@
 package frc.subsystems;
 
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
+import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.commands.Climb.ClimbReset;
+import edu.wpi.first.wpilibj.DigitalInput;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 public class ClimbSubsystem extends Subsystem {
   /**
-   * public static final int KClimb = 6;
-   * public static final double KClimbSpeed = 1.0;
+   * public static final int KClimb = 6; public static final double KClimbSpeed =
+   * 1.0;
    * 
-   * private TalonSRX climb;
+   * Rate for arm in relation to climb: .3239294403
    */
-  public static final int KClimbMaster = 6;
-  // public static final int KClimbSlave = 7;
+
   public static final double KClimbSpeed = 1.0;
 
-  private TalonSRX climbMaster; 
-  // private VictorSPX climbSlave;
+  private final TalonSRX ClimbTalon, ClimbTalonTwo;
+  private static final int KClimbTalon = 6;
+  private static final int KClimbTalon2 = 10;
+
+  private final DigitalInput TopClimbLimit, BottomClimbLimit;
+  private static final int KTopClimbLimit = 4;
+  private static final int KBottomClimbLimit = 3;
+
+   // Pigeon IMU config
+   public final PigeonIMU Pigeon;
+   private static final int KPigeon = 12;
 
   public ClimbSubsystem() {
-    climbMaster = new TalonSRX(KClimbMaster);
-    // climbSlave = new VictorSPX(KClimbSlave);
+    ClimbTalon = new TalonSRX(KClimbTalon);
+    ClimbTalonTwo = new TalonSRX(KClimbTalon2);
 
-    // climbSlave.follow(climbMaster);
+    TopClimbLimit = new DigitalInput(KTopClimbLimit);
+    BottomClimbLimit = new DigitalInput(KBottomClimbLimit);
+
+    // ClimbTalonTwo.follow(ClimbTalon);
+    
+    Pigeon = new PigeonIMU(KPigeon);
   }
+
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new ClimbReset());
   }
   
+  private boolean topLimitClosed() {
+    return !TopClimbLimit.get();
+  }
+
+  private boolean bottomLimitClosed() {
+    return !BottomClimbLimit.get();
+  }
+
+  // private double enforceLimits(double desiredSpeed) {
+  //   if(topLimitClosed() && desiredSpeed > 0) 
+  //     desiredSpeed = 0;
+  //   else if(bottomLimitClosed() && desiredSpeed < 0) 
+  //     desiredSpeed = 0;
+
+  //   return desiredSpeed;
+  // }
+
   public void moveClimb(double speed) {
-    climbMaster.set(ControlMode.PercentOutput, speed);
+    double desiredSpeed = speed;
+    //enforceLimits(desiredSpeed);
+    ClimbTalon.set(ControlMode.PercentOutput, desiredSpeed);
+    ClimbTalonTwo.set(ControlMode.PercentOutput, desiredSpeed);
+  }
+
+  public double[] getGyroValues() {
+    double ypr_value[];
+    ypr_value = new double[3];
+    Pigeon.getYawPitchRoll(ypr_value);
+    return ypr_value;
   }
 }

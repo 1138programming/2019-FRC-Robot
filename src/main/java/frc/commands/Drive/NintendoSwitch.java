@@ -12,7 +12,7 @@ int SwitchCase = 0;
 
 	public NintendoSwitch() {
 		requires(Robot.CAMERA);
-		requires(Robot.DRIVE_SUBSYSTEM);
+		// requires(Robot.DRIVE_SUBSYSTEM);
 	}
 
 	@Override

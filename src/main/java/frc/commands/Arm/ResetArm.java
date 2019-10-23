@@ -5,18 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.commands.Lift;
+package frc.commands.Arm;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.subsystems.LiftSubsystem;
 
-public class HoldLiftPosition extends Command {
-  public HoldLiftPosition() {
+public class ResetArm extends Command {
+  public ResetArm() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.LIFT_SUBSYSTEM);
   }
 
   // Called just before this Command runs the first time
@@ -27,13 +24,16 @@ public class HoldLiftPosition extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.LIFT_SUBSYSTEM.moveLift(LiftSubsystem.KMotorOffset);
+    if(Robot.ARM_SUBSYSTEM.getLeftLimit() == false && Robot.ARM_SUBSYSTEM.getRightLimit() == false)
+      Robot.ARM_SUBSYSTEM.moveArm(-.25, -.25);
+    else
+      Robot.ARM_SUBSYSTEM.moveArm(0, 0);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

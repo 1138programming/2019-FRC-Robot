@@ -5,18 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.commands.Lift;
+package frc.commands.Arm;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.subsystems.LiftSubsystem;
 
-public class HoldLiftPosition extends Command {
-  public HoldLiftPosition() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Robot.LIFT_SUBSYSTEM);
+public class MoveArmWithClimbToTopHab extends Command {
+  double error;
+  public MoveArmWithClimbToTopHab() {
+    requires(Robot.ARM_SUBSYSTEM);
+    requires(Robot.CLIMB_SUBSYSTEM);
   }
 
   // Called just before this Command runs the first time
@@ -27,7 +26,7 @@ public class HoldLiftPosition extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.LIFT_SUBSYSTEM.moveLift(LiftSubsystem.KMotorOffset);
+    // SmartDashboard.putNumber("Gyro heading is: ", Robot.ARM_SUBSYSTEM.getAngle());
   }
 
   // Make this return true when this Command no longer needs to run execute()

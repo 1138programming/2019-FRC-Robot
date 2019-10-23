@@ -7,33 +7,36 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class MoveLiftToPosition extends Command {
-	double liftPosition;
 	double error;
+	int target;
 
-	public MoveLiftToPosition(double liftPosition) {
-        requires(Robot.LIFT_SUBSYSTEM);
-		this.liftPosition = liftPosition;
+	private static final double allowableError = 25;
+
+	public MoveLiftToPosition(int target) {
+		requires(Robot.LIFT_SUBSYSTEM);
+		this.target = target;
 	}
 
-	public MoveLiftToPosition(double liftPosition, boolean runOnce) {
+	public MoveLiftToPosition(int target, boolean runOnce) {
         requires(Robot.LIFT_SUBSYSTEM);
-		this.liftPosition = liftPosition;
+		this.target = target;
 	}
 
 	@Override
 	protected void initialize() {
+		Robot.LIFT_SUBSYSTEM.initMoveTo();
 	}
 
 	@Override
 	protected void execute() {
-		error = Robot.LIFT_SUBSYSTEM.moveLiftWithEncoders(liftPosition);
-		SmartDashboard.putNumber("Lift Encoder", Robot.LIFT_SUBSYSTEM.getLiftEncoder());
+		error = Robot.LIFT_SUBSYSTEM.moveLiftTo(target);
 		SmartDashboard.putNumber("error", error);
+		SmartDashboard.putNumber("Lift Encoder", Robot.LIFT_SUBSYSTEM.getLiftEncoder());
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(error) < 600;
+		return Math.abs(error) < allowableError;
 	}
 
 	@Override
@@ -43,5 +46,9 @@ public class MoveLiftToPosition extends Command {
 
 	@Override
 	protected void interrupted() {
+	}
+
+	public void removeRequirements() {
+		this.clearRequirements();
 	}
 }
